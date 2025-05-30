@@ -1,0 +1,122 @@
+id,name,time_create
+2,Conseil régional (CR),2021-10-15T09:31:15+00:00
+3,Conseil départemental (CD),2021-10-15T09:31:21+00:00
+4,EPCI (hors métropoles) OU Établissement public territorial (EPT),2021-10-15T09:32:01+00:00
+5,Métropole,2021-10-15T09:32:32+00:00
+8,Pays OU Pôle d'équilibre territorial et rural (PETR),2021-10-15T09:34:26+00:00
+9,Parc naturel régional (PNR),2021-10-15T09:34:42+00:00
+11,Opérateur public de services numériques (OPSN),2021-10-15T09:41:06+00:00
+12,ADEME - Direction régionale,2021-10-15T11:07:45+00:00
+13,Agence Locale de l'Energie et du Climat (ALEC),2021-10-15T11:08:04+00:00
+14,Agence d'attractivité / developpement éco / tourisme,2021-10-15T11:08:28+00:00
+15,Agence d'Information sur le Logement (ADIL),2021-10-15T11:08:48+00:00
+16,Agence régionale de santé (ARS),2021-10-15T11:09:01+00:00
+17,Agence Régionale pour la Biodiversité et l'Environnement (ARBE),2021-10-15T11:09:26+00:00
+18,Agence Technique Départementale (ATD),2021-10-15T11:09:32+00:00
+19,Agence de l'eau,2021-10-15T11:09:39+00:00
+21,"Conseil d'architecture, d'urbanisme et de l'environnement (CAUE / URCAUE)",2021-10-15T11:10:06+00:00
+22,Chambre d'agriculture départementale OU régionale,2021-10-15T11:14:34+00:00
+23,Chambre Régionale de l'Économie Sociale et Solidaire (CRESS),2021-10-15T11:16:01+00:00
+24,Commissariat de massif,2021-10-15T11:16:19+00:00
+25,"Direction Départementale de l'Emploi, du Travail, des Solidarités et de la Protection des Populations (DDETSPP)",2021-10-15T11:16:25+00:00
+27,Direction Départementale des Territoires / et de la Mer (DDT/DDTM),2021-10-15T11:16:41+00:00
+28,"Direction régionale de l'Alimentation, de l'Agriculture et de la Forêt (DRAAF)",2021-10-15T11:16:45+00:00
+29,"Direction régionale de l’Economie, de l’Emploi, du Travail et des Solidarités (DREETS)",2021-10-15T11:16:49+00:00
+30,"Directions régionales de l’environnement, de l’aménagement et du logement (DEAL / DREAL / DRIEAT)",2021-10-15T11:16:56+00:00
+31,"Direction régionale de la Jeunesse, des Sports et de la Cohésion sociale (DRJSCS)",2021-10-15T11:17:00+00:00
+32,Direction régionale des Affaires culturelles (DRAC),2021-10-15T11:17:05+00:00
+35,"Service départemental à la jeunesse, à l'engagement et aux sports (SDJES)",2021-10-15T11:18:15+00:00
+36,Établissement public foncier (EPF),2021-10-15T11:18:25+00:00
+37,"Délégation régionale académique à la jeunesse, à l'engagement et aux sports (DRAJES)",2021-10-15T11:18:37+00:00
+38,Préfécture de département OU sous préfecture,2021-10-15T11:18:50+00:00
+39,Préfecture de région,2021-10-15T11:18:55+00:00
+43,Entreprise publique locale (EPL) - Société (anonyme) d’économie mixte locale (SEML / SAEML),2021-10-15T11:20:16+00:00
+44,Syndicat mixte,2021-10-15T11:20:50+00:00
+45,Association nationale,2021-10-15T11:20:55+00:00
+46,Établissement public national (autre),2021-10-15T11:20:59+00:00
+48,ADEME - GENERIQUE,2021-10-15T11:21:07+00:00
+50,Agences d'urbanismes - GENERIQUE,2021-10-15T11:21:17+00:00
+51,Agences régionales de santé (ARS) - GENERIQUE,2021-10-15T11:21:21+00:00
+53,Structures porteuses du dispositif locale d'accompagnement (DLA) - GENERIQUE,2021-10-15T11:25:42+00:00
+54,Banque des territoires (BdT),2021-10-15T11:25:47+00:00
+55,Banque Européenne d'Investissement (BEI),2021-10-15T11:25:56+00:00
+56,Banque Publique d'Investissement (BPI),2021-10-15T11:26:02+00:00
+57,Bureau d'étude,2021-10-15T11:26:21+00:00
+58,Caisse d'allocations familiales (CAF),2021-10-15T11:26:26+00:00
+59,Caisse d'assurance retraite et de la santé au travail (CARSAT),2021-10-15T11:26:33+00:00
+60,Caisse de retraite OU de prévoyance,2021-10-15T11:26:50+00:00
+61,Caisse Nationale d'Assurance Vieillesse (CNAV),2021-10-15T11:26:54+00:00
+62,Caisse nationale de retraites des agents des collectivités locales (CNRACL),2021-10-15T11:26:58+00:00
+63,Caisse nationale de solidarité pour l'autonomie (CNSA),2021-10-15T11:27:02+00:00
+64,"Conseils d'architecture, d'urbanisme et de l'environnement (CAUE/URCAUE) - GENERIQUE",2021-10-15T11:27:38+00:00
+66,CEREMA,2021-10-15T11:28:04+00:00
+67,Chambres d'Agriculture - GENERIQUE,2021-10-15T11:28:09+00:00
+68,Chambres de commerce et d'industrie (CCI) - GENERIQUE,2021-10-15T11:28:14+00:00
+69,Chambres de métiers et de l'artisanat (CMA) - GENERIQUE,2021-10-15T11:28:18+00:00
+70,Chambres régionales de l'économie sociale et solidaire (CRESS) - GENERIQUE,2021-10-15T11:28:22+00:00
+71,Conseils départementaux (CD) - GENERIQUE,2021-10-15T11:28:27+00:00
+72,Conseils régionaux (CR) - GENERIQUE,2021-10-15T11:31:53+00:00
+73,Commission européenne,2021-10-15T11:31:57+00:00
+74,Conservatoire national des arts et métiers (CNAM),2021-10-15T11:32:02+00:00
+75,Direction / délégation / mission  interministérielle et Secrétariat général,2021-10-15T11:32:08+00:00
+76,Secrétariat général,2021-10-15T11:32:12+00:00
+77,"Directions Départementales de l'Emploi, du Travail, des Solidarités et de la Protection des Populations (DDETS / DDETSPP) - GENERIQUE",2021-10-15T11:32:50+00:00
+78,Directions départementales des territoires / et de la mer (DDT/DDTM) - GENERIQUE,2021-10-15T11:33:02+00:00
+79,"Directions Régionales de l’Alimentation, de l’Agriculture et de la Forêt (DRAAF) - GENERIQUE",2021-10-15T11:33:11+00:00
+80,"Directions régionales de l’Economie, de l’Emploi, du Travail et des Solidarités (DREETS) - GENERIQUE",2021-10-15T11:33:15+00:00
+81,"Directions régionales de l’environnement, de l’aménagement et du logement (DEAL / DREAL / DRIEAT) - GENERIQUE",2021-10-15T11:33:21+00:00
+82,"Directions régionales de la jeunesse, des sports et de la cohésion sociale (DRJSCS) - GENERIQUE",2021-10-15T11:33:29+00:00
+83,Directions Régionales des Affaires Culturelles (DRAC) - GENERIQUE,2021-10-15T11:33:35+00:00
+84,Directions Régionales et Interdépartementales de l'Environnement et de l'Energie (DRIEE) - GENERIQUE,2021-10-15T11:33:42+00:00
+85,Établissements publics fonciers (EPF) - GENERIQUE,2021-10-15T11:33:49+00:00
+86,Agence Nationale de l'Habitat (ANAH),2021-10-15T11:37:27+00:00
+87,Préfecture de département - GENERIQUE,2021-10-15T11:37:38+00:00
+88,Préfecture de région - GENERIQUE,2021-10-15T11:38:04+00:00
+90,Fédération,2021-10-15T11:38:15+00:00
+91,Fondation ou institut,2021-10-15T11:38:28+00:00
+93,Ministère de l'Agriculture et de la Souveraineté alimentaire,2021-10-15T11:38:37+00:00
+94,"Ministère de l'Économie, des Finances et de la Souveraineté industrielle et numérique",2021-10-15T11:38:41+00:00
+95,Ministère de l'Éducation nationale et de la Jeunesse,2021-10-15T11:38:49+00:00
+96,Ministère de l'Enseignement supérieur et de la Recherche,2021-10-15T11:38:53+00:00
+97,Ministère de l'Europe et des Affaires étrangères,2021-10-15T11:38:57+00:00
+98,Ministère de la Cohésion des Territoires et des Relations avec les Collectivités Territoriales (MCTRCT),2021-10-15T11:39:01+00:00
+99,Ministère de la Culture,2021-10-15T11:39:05+00:00
+100,Ministère de la Mer,2021-10-15T11:39:10+00:00
+101,Ministère de la Transformation et de la Fonction publiques (MTFP),2021-10-15T11:39:39+00:00
+102,Ministère de la Transition Ecologique (MTE),2021-10-15T11:39:45+00:00
+103,Ministère des Armées,2021-10-15T11:39:57+00:00
+104,Ministère des Outre-mer,2021-10-15T11:40:01+00:00
+105,Ministère de la Santé et de la Prévention,2021-10-15T11:40:12+00:00
+106,"Ministère du Travail, du Plein emploi et de l'Insertion",2021-10-15T11:40:30+00:00
+107,Office du Développement Agricole et Rural (ODARC),2021-10-15T11:41:07+00:00
+109,Agence Locale de l'Energie et du Climat (ALEC) - GENERIQUE,2021-10-15T12:17:50+00:00
+110,Caisses d'assurance retraite et de la santé au travail (CARSAT) - GENERIQUE,2021-10-15T14:32:59+00:00
+111,Entreprise,2021-10-19T12:56:03+00:00
+112,Commune,2021-10-19T12:58:06+00:00
+113,Syndicat départemental d'énergie (SDE),2021-10-19T13:02:21+00:00
+114,Agence nationale de la cohésion des territoires (ANCT),2021-10-19T14:33:29+00:00
+115,"Ministère délégué à l'égalité entre les femmes et les hommes, à la Diversité et à l’Égalité des chances",2021-10-19T16:00:37+00:00
+116,Banque,2021-10-19T16:00:59+00:00
+117,Office français de la biodiversité (OFB),2021-10-19T16:25:20+00:00
+118,Ministère de l'intérieur,2021-10-19T16:39:19+00:00
+119,Banque des territoires (BdT) - régionale,2021-10-19T16:50:49+00:00
+120,Agence d'Information sur le Logement (ADIL) - GENERIQUE,2021-10-19T18:04:54+00:00
+121,Association locale,2021-10-20T13:37:00+00:00
+122,Agence de l'eau - GENERIQUE,2021-10-20T16:30:17+00:00
+123,Agence d'urbanisme,2021-10-20T19:39:01+00:00
+124,Comité départemental olympique et sportif (CDOS),2021-11-12T12:06:38+00:00
+125,Fédération sportive,2022-02-14T17:35:45+00:00
+126,Agence départementale d'insertion (ADI),2022-04-21T14:31:39+00:00
+128,Chambre de commerce et d'industrie (CCI),2022-06-27T16:35:28+00:00
+129,Centres permanents d'Initiatives pour l'Environnement (CPIE),2022-06-27T16:36:16+00:00
+131,Ministère des Sports et des Jeux Olympiques et Paralympiques,2022-07-04T17:33:15+00:00
+137,Bailleur social,2022-10-21T11:43:49+00:00
+138,"Ministère des solidarités, de l'autonomie et des personnes handicapées",2022-11-28T16:23:28+00:00
+140,Caisse nationale d'allocations familiales (CNAF),2023-04-06T17:37:36+00:00
+142,"Délégations Régionales Académiques à la Jeunesse, à l'Engagement et aux Sport (DRAJES) - GENERIQUE",2023-05-30T16:10:43+00:00
+143,Ministère de la justice,2023-06-06T15:31:52+00:00
+148,Établissement public local (autre),2023-06-15T10:35:10+00:00
+149,Chambre des métiers et de l'artisanat,2023-06-29T15:50:33+00:00
+150,Centre Communal d'Action Sociale (CCAS),2023-08-16T10:08:19+00:00
+151,Centres régionaux information jeunesse (CRIJ),2024-01-30T15:34:44+00:00
+152,Groupe d'Action Locale (GAL),2024-08-22T12:38:57+00:00

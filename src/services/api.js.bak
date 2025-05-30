@@ -1,0 +1,1197 @@
+/**
+ * Services API pour le frontend React - Adapté pour le backend Express
+ * 
+ * Ce fichier remplacera le fichier api.js existant dans le frontend
+ * pour se connecter au nouveau backend Express au lieu de Xano.
+ */
+
+// URL de base du backend Express
+const API_BASE_URL = 'http://localhost:3000';
+const AIDES_TERRITOIRES_API_BASE = 'https://aides-territoires.beta.gouv.fr/api';
+const AIDES_TERRITOIRES_API = `${AIDES_TERRITOIRES_API_BASE}/aids/`;
+const AIDES_TERRITOIRES_AUTH_API = `${AIDES_TERRITOIRES_API_BASE}/connexion/`;
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+
+// Récupérer les clés API depuis les variables d'environnement
+const AIDES_API_KEY = import.meta.env.VITE_AIDES_TERRITOIRES_API_KEY;
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
+// Variable pour stocker le token JWT d'Aides Territoires (valide 24h)
+let aidesToken = null;
+let aidesTokenExpiry = null;
+
+// Fonction pour obtenir un token JWT valide via le proxy backend
+export const getAidesToken = async () => {
+  // Si on a déjà un token valide, on le retourne
+  const now = new Date();
+  if (aidesToken && aidesTokenExpiry && aidesTokenExpiry > now) {
+    return aidesToken;
+  }
+  
+  try {
+    console.log('Obtention d\'un nouveau token Aides Territoires via proxy');
+    const response = await fetchWithAuth(`${API_BASE_URL}/proxy/aides-territoires/token`, {
+      method: 'POST'
+    });
+    
+    if (!response.success) {
+      throw new Error(response.error || 'Erreur inconnue');
+    }
+    
+    const data = response.data;
+    aidesToken = data.token;
+    
+    // Le token est valide pendant 24h, on le garde 23h pour être sûr
+    aidesTokenExpiry = new Date();
+    aidesTokenExpiry.setHours(aidesTokenExpiry.getHours() + 23);
+    
+    return aidesToken;
+  } catch (error) {
+    console.error('Erreur lors de l\'obtention du token Aides Territoires:', error);
+    throw error;
+  }
+};
+
+let authToken = null;
+
+export const setAuthToken = (token) => {
+  authToken = token;
+  localStorage.setItem('authToken', token);
+};
+
+export const getStoredToken = () => {
+  return localStorage.getItem('authToken');
+};
+
+export const clearAuthToken = () => {
+  authToken = null;
+  localStorage.removeItem('authToken');
+};
+
+const fetchWithAuth = async (url, options = {}) => {
+  const token = authToken || getStoredToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  const response = await fetch(url, { ...options, headers });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `HTTP error ${response.status}`);
+  }
+  return await response.json();
+};
+
+// Authentification
+export const login = async (email, password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Login failed');
+    }
+    
+    const data = await response.json();
+    
+    if (data.success && data.data.token) {
+      setAuthToken(data.data.token);
+      return {
+        authToken: data.data.token,
+        user: data.data.user,
+        organisations: data.data.organisations
+      };
+    } else {
+      throw new Error('Format de réponse invalide');
+    }
+  } catch (error) {
+    console.error('Erreur de connexion:', error);
+    throw error;
+  }
+};
+
+export const signup = async (email, password, full_name, organisation) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        email, 
+        password, 
+        full_name,
+        organisation
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Signup failed');
+    }
+    
+    const data = await response.json();
+    
+    if (data.success && data.data.token) {
+      setAuthToken(data.data.token);
+      return {
+        authToken: data.data.token,
+        user: data.data.user,
+        organisation: data.data.organisation
+      };
+    } else {
+      throw new Error('Format de réponse invalide');
+    }
+  } catch (error) {
+    console.error('Erreur d\'inscription:', error);
+    throw error;
+  }
+};
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Forgot password request failed');
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Erreur lors de la demande de réinitialisation:', error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (email, reset_code, new_password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        email, 
+        reset_code, 
+        new_password 
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Password reset failed');
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Erreur lors de la réinitialisation du mot de passe:', error);
+    throw error;
+  }
+};
+
+export const getMe = async () => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/auth/me`);
+    // La réponse du backend contient { success: true, data: { user, organisations } }
+    // Nous devons la transformer pour qu'elle soit compatible avec le contexte d'authentification
+    return {
+      user: response.data.user,
+      organisations: response.data.organisations
+    };
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations utilisateur:', error);
+    throw error;
+  }
+};
+
+// Organisations
+export const createOrganisation = async (organisationData) => {
+  return await fetchWithAuth(`${API_BASE_URL}/organisations`, {
+    method: 'POST',
+    body: JSON.stringify(organisationData)
+  });
+};
+
+export const getOrganisations = async () => {
+  return await fetchWithAuth(`${API_BASE_URL}/organisations`);
+};
+
+export const getOrganisation = async (organisationId) => {
+  return await fetchWithAuth(`${API_BASE_URL}/organisations/${organisationId}`);
+};
+
+export const updateOrganisation = async (organisationId, data) => {
+  try {
+    console.log(`Tentative de mise à jour de l'organisation ${organisationId} avec les données:`, data);
+    
+    if (!organisationId) {
+      throw new Error("ID d'organisation non valide");
+    }
+    
+    // Envoyer les données telles quelles, sans mapping
+    // Le backend s'attend à recevoir les noms de champs du formulaire (nom, adresse, etc.)
+    console.log(`Envoi des données au backend:`, data);
+    
+    // Appel à l'API pour mettre à jour l'organisation
+    const response = await fetchWithAuth(`${API_BASE_URL}/organisations/${organisationId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    });
+    
+    console.log(`Organisation mise à jour avec succès:`, response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la mise à jour de l'organisation ${organisationId}:`, error);
+    throw error;
+  }
+};
+
+export const updateUserOrganisation = async (userId, organisationId) => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/users/${userId}/organisation`, {
+      method: 'PATCH',
+      body: JSON.stringify({ organisation_id: organisationId })
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de l'association de l'organisation ${organisationId} à l'utilisateur ${userId}:`, error);
+    throw error;
+  }
+};
+
+// Projets
+export const getProjects = async () => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects`);
+    return response.data || [];
+  } catch (error) {
+    console.error('Erreur lors de la récupération des projets:', error);
+    throw error;
+  }
+};
+
+export const getProject = async (projectId) => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la récupération du projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+export const createProject = async (projectData, organisationId) => {
+  try {
+    // Ajouter l'ID de l'organisation aux données du projet
+    const dataWithOrg = {
+      ...projectData,
+      organisation_id: organisationId
+    };
+    
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects`, {
+      method: 'POST',
+      body: JSON.stringify(dataWithOrg)
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la création du projet:', error);
+    throw error;
+  }
+};
+
+export const updateProject = async (projectId, projectData) => {
+  try {
+    // Cette route n'existe pas encore dans notre backend Express
+    // Nous pouvons l'ajouter plus tard si nécessaire
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(projectData)
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la mise à jour du projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+export const createProjectFromInvite = async (description, organisationId) => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects/from-invite`, {
+      method: 'POST',
+      body: JSON.stringify({
+        description,
+        organisation_id: organisationId
+      })
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la création du projet depuis l\'invite:', error);
+    throw error;
+  }
+};
+
+// Aides
+export const getProjectAides = async (projectId) => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/aides`);
+    return response.data || [];
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des aides du projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+export const linkAideToProject = async (projectId, aideData) => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/aides`, {
+      method: 'POST',
+      body: JSON.stringify(aideData)
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de l'association de l'aide au projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+// Aides Territoires API via proxy backend
+export const searchAidesTerritoires = async (params = {}) => {
+  try {
+    // Construire l'URL avec les paramètres
+    const url = new URL(`${API_BASE_URL}/proxy/aides-territoires/aids`);
+    
+    // Ajouter les paramètres à l'URL
+    Object.keys(params).forEach(key => {
+      // Gestion spéciale pour les tableaux (comme targeted_audiences)
+      if (Array.isArray(params[key])) {
+        // Pour les tableaux, on ajoute chaque valeur comme un paramètre séparé
+        // Le backend s'occupera de les transmettre correctement à l'API
+        params[key].forEach(value => {
+          url.searchParams.append(key, value);
+        });
+      } else {
+        url.searchParams.append(key, params[key]);
+      }
+    });
+    
+    console.log(`Appel au proxy Aides-Territoires: ${url.toString()}`);
+    const response = await fetchWithAuth(url.toString());
+    
+    if (!response.success) {
+      throw new Error(response.error || 'Erreur inconnue');
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la recherche d\'aides:', error);
+    throw error;
+  }
+};
+
+// Fonction pour récupérer les informations d'un financeur
+export const getBackerInfo = async (backerId) => {
+  try {
+    console.log(`Récupération des informations du financeur ${backerId}`);
+    const response = await fetchWithAuth(`${API_BASE_URL}/proxy/aides-territoires/backers/${backerId}`);
+    
+    if (!response.success) {
+      throw new Error(response.error || 'Erreur lors de la récupération du financeur');
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la récupération du financeur ${backerId}:`, error);
+    return null;
+  }
+};
+
+// Fonction pour enrichir une aide avec les informations du financeur
+export const enrichAideWithBackerInfo = async (aide) => {
+  try {
+    // Si l'aide a déjà un financeur, on ne fait rien
+    if (aide.financeur) {
+      return aide;
+    }
+    
+    // Si l'aide a un ID de financeur
+    if (aide.aid_financers) {
+      let financeurId = aide.aid_financers;
+      
+      // Si c'est un tableau, on prend le premier
+      if (Array.isArray(financeurId) && financeurId.length > 0) {
+        financeurId = financeurId[0];
+      }
+      
+      // Récupérer les informations du financeur
+      if (financeurId) {
+        const financeur = await getBackerInfo(financeurId);
+        if (financeur) {
+          return {
+            ...aide,
+            financeur: financeur.name,
+            financeur_id: financeurId,
+            financeur_slug: financeur.slug
+          };
+        }
+      }
+    }
+    
+    // Si on n'a pas pu récupérer le financeur, on retourne l'aide telle quelle
+    return aide;
+  } catch (error) {
+    console.error('Erreur lors de l\'enrichissement de l\'aide avec les informations du financeur:', error);
+    return aide;
+  }
+};
+
+// Fonction complète d'analyse de projet et recherche d'aides
+export const analyserProjetEtAides = async (project) => {
+  try {
+    console.log('Début de l\'analyse du projet:', project.id);
+    
+    // Étape 1: Analyse sémantique via OpenAI
+    const analyseSemantique = await reformulateProjectV2(project.description);
+    
+    // Mise à jour du projet avec les résultats de l'analyse
+    const projetMisAJour = {
+      ...project,
+      title: analyseSemantique.title,
+      reformulation: analyseSemantique.reformulation,
+      keywords: analyseSemantique.keywords,
+      id_categories_aides_territoire: analyseSemantique.groupes_pertinents // Utiliser le nom correct de la colonne
+    };
+    
+    // Étape 2: Extraction des sous-catégories
+    const sousCategories = await getSousCategoriesFromGroupes(analyseSemantique.groupes_pertinents);
+    
+    // Étape 3: Appel réel à l'API Aides-Territoires
+    const categoriesIds = sousCategories.map(sc => sc.id);
+    
+    // Mapper le type d'organisation aux valeurs acceptées par l'API
+    const mapOrganisationTypeToOrganizationTypeSlugs = (orgType) => {
+      switch (orgType?.toLowerCase()) {
+        case 'association':
+          return ['association'];
+        case 'entreprise':
+          return ['entreprise'];
+        case 'collectivite':
+          return ['commune', 'epci', 'departement', 'region'];
+        default:
+          return ['association']; // Valeur par défaut
+      }
+    };
+    
+    // Utiliser le type d'organisation pour déterminer les publics cibles
+    const organisationType = project.organisation?.type || 'association';
+    const organizationTypeSlugs = mapOrganisationTypeToOrganizationTypeSlugs(organisationType);
+    
+    // Récupérer la région/département si disponible
+    const perimeter = project.organisation?.region || project.organisation?.departement || '';
+    
+    const aidesReelles = await searchAidesTerritoires({
+      category_ids: categoriesIds, // Utiliser le bon paramètre et envoyer comme tableau
+      organization_type_slugs: organizationTypeSlugs,
+      perimeter: perimeter
+    });
+    
+    // Pré-filtrage algorithmique des aides
+    const aidesPreFiltrees = preFilterAides(
+      aidesReelles.results || [],
+      projetMisAJour.reformulation,
+      projetMisAJour.keywords
+    );
+    
+    console.log(`Nombre d'aides après pré-filtrage: ${aidesPreFiltrees.length}`);
+    
+    // Déterminer le nombre maximum d'aides à envoyer à OpenAI
+    const MAX_AIDES_FOR_OPENAI = determineMaxAidesForOpenAI(aidesPreFiltrees);
+    
+    // Étape 4: Filtrage des aides via OpenAI
+    let aidesFiltrees = await filterAidesFromAPI(
+      projetMisAJour.reformulation,
+      projetMisAJour.keywords,
+      aidesPreFiltrees.slice(0, MAX_AIDES_FOR_OPENAI)
+    );
+    
+    // Étape 5: Enrichir les aides avec les informations des financeurs
+    console.log('Enrichissement des aides avec les informations des financeurs...');
+    const aidesEnrichies = [];
+    for (const aide of aidesFiltrees) {
+      const aideEnrichie = await enrichAideWithBackerInfo(aide);
+      aidesEnrichies.push(aideEnrichie);
+    }
+    
+    // Résultat final
+    return {
+      projet: projetMisAJour,
+      aides: aidesEnrichies,
+      sousCategories
+    };
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'analyse du projet:', error);
+    throw error;
+  }
+};
+
+// Fonction d'analyse sémantique du projet (Étape 1)
+const reformulateProjectV2 = async (projectDescription) => {
+  try {
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: `Tu es un expert en financement public. À partir de la description suivante, reformule professionnellement le projet pour une lecture institutionnelle, puis identifie les groupes thématiques d'aides publiques les plus pertinents et propose des mots-clés de recherche.
+
+Voici la liste des groupes disponibles :
+- Culture et identité collective / patrimoine / sports
+- Développement économique / production et consommation
+- Eau et milieux aquatiques
+- Énergies / Déchets
+- Fonctions support
+- Mobilité / transports
+- Nature / environnement
+- Solidarités / lien social
+- Urbanisme / logement / aménagement
+
+Description brute du projet :
+${projectDescription}
+
+Réponds avec un objet JSON :
+{
+  "title": "Titre du projet",
+  "reformulation": "Texte professionnel et clair",
+  "keywords": ["mot-clé1", "mot-clé2", ...],
+  "groupes_pertinents": ["Groupe1", "Groupe2", ...]
+}`
+          }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Format de réponse OpenAI invalide');
+    }
+    
+    // Extraire et parser la réponse JSON
+    let parsedResponse;
+    try {
+      const content = data.choices[0].message.content;
+      // Extraire le JSON si la réponse contient du texte avant ou après
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      const jsonString = jsonMatch ? jsonMatch[0] : content;
+      parsedResponse = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error('Erreur lors du parsing de la réponse JSON:', parseError);
+      // Fallback si le parsing échoue
+      return {
+        title: "Titre non disponible",
+        reformulation: data.choices[0].message.content,
+        keywords: [],
+        groupes_pertinents: []
+      };
+    }
+    
+    return parsedResponse;
+  } catch (error) {
+    console.error('Erreur lors de l\'analyse sémantique:', error);
+    throw error;
+  }
+};
+
+// Fonction d'extraction des sous-catégories (Étape 2)
+const getSousCategoriesFromGroupes = async (groupes) => {
+  // Définir la constante en dehors des blocs try/catch pour qu'elle soit accessible partout
+  const MAX_SOUS_CATEGORIES = 6;
+  
+  try {
+    console.log('Groupes pour recherche de sous-catégories:', groupes);
+    
+    // Utiliser directement le mapping statique au lieu d'appeler l'API
+    // Définir le mapping statique des groupes aux sous-catégories
+    const mappingGroupesSousCategories = {
+      "Culture et identité collective / patrimoine / sports": [
+        { id: 104, sous_categorie: "Culture et identité collective" },
+        { id: 105, sous_categorie: "Patrimoine" },
+        { id: 106, sous_categorie: "Sports" }
+      ],
+      "Développement économique / production et consommation": [
+        { id: 107, sous_categorie: "Développement économique" },
+        { id: 108, sous_categorie: "Production et consommation" }
+      ],
+      "Eau et milieux aquatiques": [
+        { id: 109, sous_categorie: "Eau" },
+        { id: 110, sous_categorie: "Milieux aquatiques" }
+      ],
+      "Énergies / Déchets": [
+        { id: 111, sous_categorie: "Énergies" },
+        { id: 112, sous_categorie: "Déchets" }
+      ],
+      "Fonctions support": [
+        { id: 113, sous_categorie: "Fonctions support" }
+      ],
+      "Mobilité / transports": [
+        { id: 114, sous_categorie: "Mobilité" },
+        { id: 115, sous_categorie: "Transports" }
+      ],
+      "Nature / environnement": [
+        { id: 116, sous_categorie: "Nature" },
+        { id: 117, sous_categorie: "Environnement" }
+      ],
+      "Solidarités / lien social": [
+        { id: 118, sous_categorie: "Solidarités" },
+        { id: 119, sous_categorie: "Lien social" }
+      ],
+      "Urbanisme / logement / aménagement": [
+        { id: 120, sous_categorie: "Urbanisme" },
+        { id: 121, sous_categorie: "Logement" },
+        { id: 122, sous_categorie: "Aménagement" }
+      ]
+    };
+    
+    // Récupérer les sous-catégories correspondant aux groupes
+    let sousCategories = [];
+    groupes.forEach(groupe => {
+      if (mappingGroupesSousCategories[groupe]) {
+        sousCategories = [...sousCategories, ...mappingGroupesSousCategories[groupe]];
+      }
+    });
+    
+    // Limiter à 6 sous-catégories maximum
+    if (sousCategories.length > MAX_SOUS_CATEGORIES) {
+      console.log(`Limitation du nombre de sous-catégories de ${sousCategories.length} à ${MAX_SOUS_CATEGORIES}`);
+      sousCategories = sousCategories.slice(0, MAX_SOUS_CATEGORIES);
+    }
+    
+    console.log('Sous-catégories trouvées:', sousCategories);
+    return sousCategories;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des sous-catégories:', error);
+    return [];
+  }
+};
+
+// Fonction de simulation d'aides types via OpenAI (Étape 3)
+const _simulateProbableAides = async (reformulation, keywords, sousCategories) => {
+  try {
+    const sousCategoriesToString = sousCategories
+      .map(sc => sc.sous_categorie)
+      .join('\n- ');
+      
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: `Tu es un expert en dispositifs publics. À partir d'un projet reformulé, de mots-clés et d'un ensemble de sous-catégories, propose une liste d'aides publiques types plausibles dans Aides-Territoires.
+
+Reformulation du projet :
+${reformulation}
+
+Mots-clés : ${Array.isArray(keywords) ? keywords.join(', ') : keywords}
+
+Sous-catégories concernées :
+- ${sousCategoriesToString}
+
+Pour chaque aide plausible, indique :
+- "titre"
+- "description"
+- "sous_categorie_associée"
+- "publics_visés"
+- "mots_cles_utiles"
+
+Réponds avec un tableau JSON.`
+          }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Format de réponse OpenAI invalide');
+    }
+    
+    // Extraire et parser la réponse JSON
+    let parsedResponse;
+    try {
+      const content = data.choices[0].message.content;
+      // Extraire le JSON si la réponse contient du texte avant ou après
+      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      const jsonString = jsonMatch ? jsonMatch[0] : content;
+      parsedResponse = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error('Erreur lors du parsing de la réponse JSON:', parseError);
+      return [];
+    }
+    
+    return parsedResponse;
+  } catch (error) {
+    console.error('Erreur lors de la simulation d\'aides:', error);
+    return [];
+  }
+};
+
+// Fonction de filtrage des aides via OpenAI (Étape 5)
+const filterAidesFromAPI = async (reformulation, keywords, aides) => {
+  try {
+    // Vérifier et logger les IDs des aides
+    console.log('Vérification des IDs des aides avant filtrage:');
+    aides.slice(0, 10).forEach((aide, index) => {
+      console.log(`Aide #${index} - ID: ${aide.id || 'MANQUANT'}, Nom: ${aide.name || 'Non défini'}`);
+    });
+    
+    // Compter les aides sans ID
+    const aidesWithoutId = aides.filter(aide => !aide.id).length;
+    if (aidesWithoutId > 0) {
+      console.warn(`ATTENTION - ${aidesWithoutId} aides n'ont pas d'ID sur un total de ${aides.length}`);
+    } else {
+      console.log(`Toutes les aides (${aides.length}) ont un ID valide`);
+    }
+    
+    // Limiter le nombre d'aides pour éviter de dépasser la limite de tokens
+    const MAX_AIDES = 20;
+    const aidesToProcess = aides.slice(0, MAX_AIDES);
+    
+    // Préparation des données d'aides pour le prompt - version simplifiée
+    const aidesData = aidesToProcess.map(aide => ({
+      id: aide.id,
+      titre: aide.name || aide.titre || 'Aide sans titre',
+      description: aide.description ? aide.description.substring(0, 200) + '...' : 'Pas de description disponible',
+      publics_vises: Array.isArray(aide.targeted_audiences) ? aide.targeted_audiences.slice(0, 3) : [],
+      url: aide.url || '',
+      backer: aide.backer || null // Ajout de l'organisme porteur
+    }));
+    
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo-16k",
+        messages: [
+          {
+            role: "system",
+            content: `Voici un projet reformulé avec ses mots-clés. Voici une liste d'aides publiques récupérées via Aides-Territoires. Identifie les aides réellement pertinentes pour ce projet.
+
+Projet :
+${reformulation}
+
+Mots-clés :
+${Array.isArray(keywords) ? keywords.join(', ') : keywords}
+
+Aides récupérées :
+${JSON.stringify(aidesData)}
+
+Pour chaque aide :
+- Classe-la selon sa pertinence : "forte", "moyenne", "faible"
+- Justifie cette évaluation brièvement
+- Vérifie que l'aide contient au moins un des mots-clés (ou leurs synonymes)
+
+Réponds avec un tableau JSON.`
+          }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Format de réponse OpenAI invalide');
+    }
+    
+    // Extraire et parser la réponse JSON
+    let parsedResponse;
+    try {
+      const content = data.choices[0].message.content;
+      // Extraire le JSON si la réponse contient du texte avant ou après
+      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      const jsonString = jsonMatch ? jsonMatch[0] : content;
+      parsedResponse = JSON.parse(jsonString);
+      
+      // Enrichir les résultats avec les données complètes des aides originales
+      parsedResponse = parsedResponse.map(aideEvaluee => {
+        // Trouver l'aide originale correspondante
+        const aideOriginale = aidesToProcess.find(a => a.id === aideEvaluee.id);
+        
+        if (aideOriginale) {
+          // Conserver toutes les propriétés de l'aide originale et ajouter l'évaluation
+          return {
+            ...aideOriginale,
+            pertinence: aideEvaluee.pertinence || 'moyenne',
+            justification: aideEvaluee.justification || '',
+            mots_cles_matches: aideEvaluee.mots_cles_matches || []
+          };
+        }
+        
+        // Si l'aide n'est pas trouvée (cas rare), retourner l'aide évaluée telle quelle
+        return aideEvaluee;
+      });
+      
+      console.log(`${parsedResponse.length} aides filtrées et traitées avec succès`);
+    } catch (parseError) {
+      console.error('Erreur lors du parsing de la réponse JSON:', parseError);
+      return [];
+    }
+    
+    return parsedResponse;
+  } catch (error) {
+    console.error('Erreur lors du filtrage des aides:', error);
+    return [];
+  }
+};
+
+// Maintenir la fonction reformulateProject pour compatibilité (sera dépréciée)
+export const reformulateProject = async (projectDescription) => {
+  console.warn('La fonction reformulateProject est dépréciée. Utilisez analyserProjetEtAides à la place.');
+  try {
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: `Tu es un expert en rédaction de projets publics. Analyse la description du projet fournie et réponds avec un objet JSON contenant les éléments suivants :
+1. Un titre concis et accrocheur pour le projet (champ "title")
+2. Une reformulation professionnelle et convaincante de la description (champ "reformulation")
+3. Une liste de 5 à 8 mots-clés thématiques pertinents qui pourraient déclencher des aides publiques (champ "keywords" - tableau de chaînes)
+
+Format de réponse attendu :
+{
+  "title": "Titre du projet",
+  "reformulation": "Description reformulée...",
+  "keywords": ["mot-clé1", "mot-clé2", "mot-clé3", "mot-clé4", "mot-clé5"]
+}
+
+Assure-toi que les mots-clés correspondent à des thématiques d'aides publiques comme : innovation, ruralité, sport, jeunesse, social, environnement, culture, éducation, santé, etc.`
+          },
+          {
+            role: "user",
+            content: projectDescription
+          }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Format de réponse OpenAI invalide');
+    }
+    
+    // Extraire et parser la réponse JSON
+    let parsedResponse;
+    try {
+      const content = data.choices[0].message.content;
+      // Extraire le JSON si la réponse contient du texte avant ou après
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      const jsonString = jsonMatch ? jsonMatch[0] : content;
+      parsedResponse = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error('Erreur lors du parsing de la réponse JSON:', parseError);
+      // Fallback si le parsing échoue
+      return {
+        original: projectDescription,
+        reformulated: data.choices[0].message.content,
+        title: null,
+        keywords: []
+      };
+    }
+    
+    return {
+      original: projectDescription,
+      reformulated: parsedResponse.reformulation || data.choices[0].message.content,
+      title: parsedResponse.title || null,
+      keywords: parsedResponse.keywords || []
+    };
+  } catch (error) {
+    console.error('Erreur lors de la reformulation du projet:', error);
+    
+    // Gestion des différents types d'erreurs
+    if (error.message.includes('API key')) {
+      throw new Error('Problème avec la clé API OpenAI. Veuillez vérifier votre configuration.');
+    } else if (error.message.includes('429')) {
+      throw new Error('Limite de requêtes OpenAI atteinte. Veuillez réessayer plus tard.');
+    } else if (error.message.includes('5')) {
+      throw new Error('Problème avec les serveurs OpenAI. Veuillez réessayer plus tard.');
+    } else {
+      throw new Error('Impossible de reformuler le projet. Veuillez réessayer.');
+    }
+  }
+};
+
+// OpenAI API pour générer des mots-clés
+export const generateKeywords = async (projectDescription) => {
+  try {
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "Tu es un expert en analyse de projets publics. Extrais 5 à 8 mots-clés pertinents de la description du projet. Réponds uniquement avec les mots-clés séparés par des virgules, sans phrases ni explications."
+          },
+          {
+            role: "user",
+            content: projectDescription
+          }
+        ],
+        temperature: 0.5
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Format de réponse OpenAI invalide');
+    }
+    
+    // Traitement de la réponse pour obtenir une liste de mots-clés
+    const keywordsText = data.choices[0].message.content;
+    const keywords = keywordsText.split(',').map(keyword => keyword.trim()).filter(keyword => keyword);
+    
+    return keywords;
+  } catch (error) {
+    console.error('Erreur lors de la génération des mots-clés:', error);
+    
+    // Gestion des différents types d'erreurs
+    if (error.message.includes('API key')) {
+      throw new Error('Problème avec la clé API OpenAI. Veuillez vérifier votre configuration.');
+    } else if (error.message.includes('429')) {
+      throw new Error('Limite de requêtes OpenAI atteinte. Veuillez réessayer plus tard.');
+    } else if (error.message.includes('5')) {
+      throw new Error('Problème avec les serveurs OpenAI. Veuillez réessayer plus tard.');
+    } else {
+      throw new Error('Impossible de générer des mots-clés. Veuillez réessayer.');
+    }
+  }
+};
+
+// Gestion des fichiers joints aux projets
+export const uploadProjectFile = async (projectId, file) => {
+  try {
+    const token = authToken || getStoredToken();
+    
+    // Utiliser FormData pour envoyer le fichier
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await fetch(`${API_BASE_URL}/projects/${projectId}/files`, {
+      method: 'POST',
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : ''
+        // Ne pas définir Content-Type ici, il sera automatiquement défini avec le boundary pour le multipart/form-data
+      },
+      body: formData
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `HTTP error ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`Erreur lors de l'upload du fichier pour le projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+export const getProjectFiles = async (projectId) => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/files`);
+    return response.data || [];
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des fichiers du projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+export const deleteProjectFile = async (projectId, fileId) => {
+  try {
+    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/files/${fileId}`, {
+      method: 'DELETE'
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la suppression du fichier ${fileId} du projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+// Fonction de pré-filtrage algorithmique des aides
+const preFilterAides = (aides, reformulation, keywords) => {
+  // Convertir les mots-clés en tableau si nécessaire
+  const keywordsArray = Array.isArray(keywords) ? keywords : keywords.split(',').map(k => k.trim());
+  
+  // Extraire les mots significatifs de la reformulation (ignorer les mots vides)
+  const stopWords = ['le', 'la', 'les', 'un', 'une', 'des', 'et', 'ou', 'de', 'du', 'au', 'aux', 'ce', 'ces', 'cette', 'pour', 'par', 'dans', 'sur', 'avec'];
+  const reformulationWords = reformulation
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(word => word.length > 3 && !stopWords.includes(word));
+  
+  // Fonction pour calculer un score de pertinence amélioré
+  const calculateRelevanceScore = (aide) => {
+    let score = 0;
+    const title = (aide.name || '').toLowerCase();
+    const description = (aide.description || '').toLowerCase();
+    
+    // 1. Points pour les mots-clés exacts dans le titre (forte pondération)
+    keywordsArray.forEach(keyword => {
+      const keywordLower = keyword.toLowerCase();
+      if (title.includes(keywordLower)) {
+        score += 25; // Forte pondération pour les mots-clés dans le titre
+      }
+    });
+    
+    // 2. Points pour les mots-clés dans la description
+    keywordsArray.forEach(keyword => {
+      const keywordLower = keyword.toLowerCase();
+      if (description.includes(keywordLower)) {
+        score += 15;
+      }
+    });
+    
+    // 3. Points pour les mots significatifs de la reformulation dans le titre
+    reformulationWords.forEach(word => {
+      if (title.includes(word)) {
+        score += 5;
+      }
+    });
+    
+    // 4. Points pour les mots significatifs de la reformulation dans la description
+    reformulationWords.forEach(word => {
+      if (description.includes(word)) {
+        score += 2;
+      }
+    });
+    
+    // 5. Bonus pour les correspondances de phrases entières
+    keywordsArray.forEach(keyword => {
+      if (keyword.length > 10) { // Seulement pour les phrases plus longues
+        const keywordLower = keyword.toLowerCase();
+        // Utiliser une correspondance approximative
+        if (title.includes(keywordLower.substring(0, Math.floor(keywordLower.length * 0.7)))) {
+          score += 10;
+        }
+        if (description.includes(keywordLower.substring(0, Math.floor(keywordLower.length * 0.7)))) {
+          score += 5;
+        }
+      }
+    });
+    
+    // 6. Pénalité pour les aides très courtes (potentiellement moins informatives)
+    if (description.length < 100) {
+      score -= 10;
+    }
+    
+    return score;
+  };
+  
+  // Calculer le score pour chaque aide
+  const scoredAides = aides.map(aide => ({
+    ...aide,
+    relevanceScore: calculateRelevanceScore(aide)
+  }));
+  
+  // Trier par score de pertinence
+  const sortedAides = scoredAides.sort((a, b) => b.relevanceScore - a.relevanceScore);
+  
+  // Filtrer les aides avec un score minimum
+  // Le seuil est défini dynamiquement comme un pourcentage du score maximum
+  const maxScore = sortedAides.length > 0 ? sortedAides[0].relevanceScore : 0;
+  const threshold = Math.max(10, maxScore * 0.3); // Au moins 30% du score max ou 10 points
+  
+  return sortedAides.filter(aide => aide.relevanceScore >= threshold);
+};
+
+// Fonction pour déterminer le nombre maximum d'aides à envoyer à OpenAI
+const determineMaxAidesForOpenAI = (aides) => {
+  // Estimer la taille moyenne d'une aide en tokens
+  const estimatedTokensPerAide = 150; // Estimation approximative
+  
+  // Calculer combien d'aides peuvent tenir dans le contexte
+  // En gardant une marge pour le prompt et la réponse
+  const maxTokens = 14000; // Pour gpt-3.5-turbo-16k, en gardant une marge
+  const availableTokens = maxTokens - 1000; // Réserver 1000 tokens pour le prompt et autres
+  
+  const maxAides = Math.floor(availableTokens / estimatedTokensPerAide);
+  
+  // Limiter entre 20 et 100 aides
+  return Math.min(100, Math.max(20, Math.min(maxAides, aides.length)));
+};
