@@ -3,7 +3,7 @@
  * Gère les opérations liées aux aides et à l'API Aides Territoires
  */
 
-import { API_BASE_URL, fetchWithAuth } from './httpClient';
+import { fetchWithAuth } from './httpClient'; // API_BASE_URL n'est plus nécessaire ici
 import { 
   reformulateProjectInstitutional, 
   extractProjectKeywords, 
@@ -33,7 +33,7 @@ export const getAidesToken = async () => {
   
   try {
     console.log('Obtention d\'un nouveau token Aides Territoires via proxy');
-    const response = await fetchWithAuth(`${API_BASE_URL}/proxy/aides-territoires/token`, {
+    const response = await fetchWithAuth(`/api/proxy/aides-territoires/token`, { // Chemin relatif
       method: 'POST'
     });
     
@@ -63,25 +63,27 @@ export const getAidesToken = async () => {
  */
 export const searchAidesTerritoires = async (params = {}) => {
   try {
-    // Construire l'URL avec les paramètres
-    const url = new URL(`${API_BASE_URL}/proxy/aides-territoires/aids`);
+    // Construire le chemin relatif avec les paramètres
+    let relativePath = '/api/proxy/aides-territoires/aids';
+    const queryParams = new URLSearchParams();
     
-    // Ajouter les paramètres à l'URL
     Object.keys(params).forEach(key => {
-      // Gestion spéciale pour les tableaux (comme targeted_audiences)
       if (Array.isArray(params[key])) {
-        // Pour les tableaux, on ajoute chaque valeur comme un paramètre séparé
-        // Le backend s'occupera de les transmettre correctement à l'API
         params[key].forEach(value => {
-          url.searchParams.append(key, value);
+          queryParams.append(key, value);
         });
       } else {
-        url.searchParams.append(key, params[key]);
+        queryParams.append(key, params[key]);
       }
     });
+
+    const queryString = queryParams.toString();
+    if (queryString) {
+      relativePath += `?${queryString}`;
+    }
     
-    console.log(`Appel au proxy Aides-Territoires: ${url.toString()}`);
-    const response = await fetchWithAuth(url.toString());
+    console.log(`Appel au proxy Aides-Territoires (chemin relatif): ${relativePath}`);
+    const response = await fetchWithAuth(relativePath);
     
     if (!response.success) {
       throw new Error(response.error || 'Erreur inconnue');
@@ -102,7 +104,7 @@ export const searchAidesTerritoires = async (params = {}) => {
 export const getBackerInfo = async (backerId) => {
   try {
     console.log(`Récupération des informations du financeur ${backerId}`);
-    const response = await fetchWithAuth(`${API_BASE_URL}/proxy/aides-territoires/backers/${backerId}`);
+    const response = await fetchWithAuth(`/api/proxy/aides-territoires/backers/${backerId}`); // Chemin relatif
     
     if (!response.success) {
       throw new Error(response.error || 'Erreur lors de la récupération du financeur');
@@ -284,7 +286,7 @@ export const getCategoriesList = async () => {
     console.log('Récupération des catégories d\'aides depuis l\'API');
     
     // Utiliser fetchWithAuth pour appeler l'API backend
-    const response = await fetchWithAuth(`${API_BASE_URL}/categories/aides-territoire`);
+    const response = await fetchWithAuth(`/api/categories/aides-territoire`); // Chemin relatif
     
     if (!response.success) {
       throw new Error(response.error || 'Erreur lors de la récupération des catégories');

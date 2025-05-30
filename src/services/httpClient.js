@@ -3,8 +3,8 @@
  * Fournit des fonctions de base pour les requêtes HTTP avec authentification
  */
 
-// URL de base du backend Express
-export const API_BASE_URL = 'http://localhost:3000';
+// Plus besoin de API_BASE_URL ici, les appels seront relatifs au domaine courant.
+// La configuration du proxy Vite gérera la redirection en développement.
 
 // Gestion du token d'authentification
 let authToken = null;
@@ -35,13 +35,13 @@ export const clearAuthToken = () => {
 };
 
 /**
- * Effectue une requête HTTP avec authentification
- * @param {string} url - L'URL de la requête
+ * Effectue une requête HTTP avec authentification vers notre propre backend.
+ * @param {string} path - Le chemin de l'API (ex: '/api/proxy/some-route')
  * @param {Object} options - Les options de la requête fetch
  * @returns {Promise<Object>} La réponse JSON
  * @throws {Error} Si la requête échoue
  */
-export const fetchWithAuth = async (url, options = {}) => {
+export const fetchWithAuth = async (path, options = {}) => {
   const token = authToken || getStoredToken();
   const headers = {
     'Content-Type': 'application/json',
@@ -52,7 +52,9 @@ export const fetchWithAuth = async (url, options = {}) => {
     headers['Authorization'] = `Bearer ${token}`;
   }
   
-  const response = await fetch(url, { ...options, headers });
+  // En production sur Vercel, fetch(path) fonctionnera car le frontend et l'API sont sur le même domaine.
+  // En développement, le proxy Vite interceptera les requêtes vers 'path' (si configuré pour /api/*).
+  const response = await fetch(path, { ...options, headers });
   
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
