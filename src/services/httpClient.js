@@ -43,15 +43,23 @@ export const clearAuthToken = () => {
  */
 export const fetchWithAuth = async (path, options = {}) => {
   const token = authToken || getStoredToken();
-  const headers = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  };
+  const headers = { ...options.headers }; // Initialiser avec les headers optionnels
+
+  // Ne pas définir Content-Type si le corps est FormData, le navigateur s'en charge.
+  // Sinon, le définir par défaut à application/json si un corps est présent et n'est pas FormData.
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  }
   
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
   
+  // Si Content-Type est application/json et que le corps n'est pas FormData,
+  // s'assurer que le corps est stringifié s'il ne l'est pas déjà.
+  // Note: projectService.js s'occupe déjà de JSON.stringify pour les corps non-FormData.
+  // Cette logique est donc simplifiée ici.
+
   // En production sur Vercel, fetch(path) fonctionnera car le frontend et l'API sont sur le même domaine.
   // En développement, le proxy Vite interceptera les requêtes vers 'path' (si configuré pour /api/*).
   const response = await fetch(path, { ...options, headers });

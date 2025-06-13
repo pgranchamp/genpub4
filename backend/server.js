@@ -2,16 +2,19 @@
  * Serveur Express pour le projet Génie Public
  * Connecté à Supabase (PostgreSQL)
  */
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
 
 // Routes
-const authRoutes = require('./routes/auth');
-const organisationsRoutes = require('./routes/organisations');
-const projectsRoutes = require('./routes/projects');
-const proxyRoutes = require('./routes/proxy');
-const categoriesRoutes = require('./routes/categories');
+import authRoutes from './routes/auth.js';
+import organisationsRoutes from './routes/organisations.js';
+import projectsRoutes from './routes/projects.js';
+import proxyRoutes from './routes/proxy.js';
+import categoriesRoutes from './routes/categories.js';
+import onboardingRoutes from './routes/onboarding.js';
+import projectAnalysisRoutes from './routes/projectAnalysis.js';
+import aidesRoutes from './routes/aides.js';
 
 // Configuration
 const PORT = process.env.PORT || 3000;
@@ -28,14 +31,17 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/auth', authRoutes);
-app.use('/organisations', organisationsRoutes);
-app.use('/projects', projectsRoutes);
-app.use('/proxy', proxyRoutes);
-app.use('/categories', categoriesRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/organisations', organisationsRoutes);
+app.use('/api/projects', projectsRoutes);
+app.use('/api/proxy', proxyRoutes);
+app.use('/api/categories', categoriesRoutes);
+app.use('/api/onboarding', onboardingRoutes); // Utiliser la nouvelle route
+app.use('/api/project-analysis', projectAnalysisRoutes);
+app.use('/api/aides', aidesRoutes);
 
 // Route de base
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({
     message: 'API Génie Public',
     version: '1.0.0',

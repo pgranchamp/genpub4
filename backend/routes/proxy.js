@@ -2,12 +2,12 @@
  * Routes proxy pour les API externes
  * Permet de contourner les problèmes CORS en faisant transiter les requêtes par le backend
  */
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const asyncHandler = require('express-async-handler');
+import asyncHandler from 'express-async-handler';
 // Importer fetch depuis node-fetch
-const fetch = require('node-fetch').default;
-const { authenticate } = require('../middleware/auth');
+import fetch from 'node-fetch'; // .default n'est généralement pas nécessaire avec l'import ES6 pour node-fetch v3+
+import { authenticate } from '../middleware/auth.js'; // Ajout de .js
 
 /**
  * @route   POST /proxy/aides-territoires/token
@@ -20,7 +20,7 @@ router.post('/aides-territoires/token', authenticate, asyncHandler(async (req, r
     const response = await fetch('https://aides-territoires.beta.gouv.fr/api/connexion/', {
       method: 'POST',
       headers: {
-        'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY
+        'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY // eslint-disable-line no-undef
       }
     });
     
@@ -56,14 +56,14 @@ router.get('/aides-territoires/aids', authenticate, asyncHandler(async (req, res
   try {
     // Récupérer le token
     console.log('Proxy: Obtention d\'un token pour la recherche d\'aides');
-    console.log('Proxy: Clé API utilisée:', process.env.AIDES_TERRITOIRES_API_KEY ? 'Présente (masquée)' : 'Manquante');
+    console.log('Proxy: Clé API utilisée:', process.env.AIDES_TERRITOIRES_API_KEY ? 'Présente (masquée)' : 'Manquante'); // eslint-disable-line no-undef
     
     let token;
     try {
       const tokenResponse = await fetch('https://aides-territoires.beta.gouv.fr/api/connexion/', {
         method: 'POST',
         headers: {
-          'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY
+          'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY // eslint-disable-line no-undef
         }
       });
       
@@ -93,7 +93,7 @@ router.get('/aides-territoires/aids', authenticate, asyncHandler(async (req, res
     }
     
     // Construire l'URL avec les paramètres de requête
-    const url = new URL('https://aides-territoires.beta.gouv.fr/api/aids/');
+    const url = new URL('https://aides-territoires.beta.gouv.fr/api/aids/'); // URL est une globale en Node.js >= 10
     
     // Transférer tous les paramètres de requête
     console.log('Proxy: Paramètres reçus:', req.query);
@@ -127,36 +127,42 @@ router.get('/aides-territoires/aids', authenticate, asyncHandler(async (req, res
       delete req.query.category_ids; // Pour ne pas le traiter à nouveau
     }
 
-    // Traitement spécial pour perimeter_codes - les envoyer comme paramètres individuels avec []
-    // L'API Aides Territoires attend perimeter_codes[] pour chaque valeur
-    if (req.query.perimeter_codes) {
-      if (Array.isArray(req.query.perimeter_codes)) {
-        req.query.perimeter_codes.forEach(code => {
-          url.searchParams.append('perimeter_codes[]', code);
-        });
-      } else if (typeof req.query.perimeter_codes === 'string') {
-         // Si c'est une chaîne, on peut la splitter si elle contient des virgules, ou la passer telle quelle
-        const codes = req.query.perimeter_codes.split(',').map(s => s.trim()).filter(s => s);
-        codes.forEach(code => {
-          url.searchParams.append('perimeter_codes[]', code);
-        });
-      }
-      delete req.query.perimeter_codes; // Pour ne pas le traiter à nouveau
-    }
+    // Le traitement spécial pour perimeter_codes est supprimé.
+    // Nouvelle logique pour gérer correctement tous les paramètres, y compris ceux qui doivent être des tableaux avec []
     
-    // Traiter les autres paramètres restants
     Object.keys(req.query).forEach(key => {
       const value = req.query[key];
-      if (Array.isArray(value)) {
+      if (key === 'perimeter_codes' && Array.isArray(value)) {
+        // Si la clé est 'perimeter_codes' et que c'est un tableau (envoyé par aidesService.js)
+        // On l'ajoute à l'URL avec 'perimeter_codes[]' pour chaque valeur
+        value.forEach(code => {
+          url.searchParams.append('perimeter_codes[]', code);
+        });
+      } else if (key === 'organization_type_slugs' && Array.isArray(value)) {
+        // Aides Territoires attend organization_type_slugs[] pour plusieurs valeurs
+        value.forEach(slug => {
+          url.searchParams.append('organization_type_slugs[]', slug);
+        });
+      } else if (key === 'category_ids' && Array.isArray(value)) {
+        // Aides Territoires attend category_ids (sans []) pour plusieurs valeurs
+         value.forEach(id => {
+          url.searchParams.append('category_ids', id);
+        });
+      }
+      // Pour les autres paramètres qui sont des tableaux mais n'ont pas de traitement spécial
+      else if (Array.isArray(value)) { 
         value.forEach(v => {
           url.searchParams.append(key, v);
         });
-      } else {
+      } 
+      // Pour les paramètres simples
+      else if (value !== undefined && value !== null) {
         url.searchParams.append(key, value);
       }
     });
     
-    console.log(`Proxy: Appel à l'API Aides-Territoires: ${url.toString()}`);
+    const finalUrlToCall = url.toString();
+    console.log(`Proxy: URL FINALE construite pour l'appel à Aides-Territoires: ${finalUrlToCall}`);
     
     // Appeler l'API avec le token
     let aidsData;
@@ -164,10 +170,10 @@ router.get('/aides-territoires/aids', authenticate, asyncHandler(async (req, res
       console.log('Proxy: Début de l\'appel à l\'API Aides-Territoires');
       
       // Définir un timeout de 30 secondes
-      const controller = new AbortController();
+      const controller = new AbortController(); // AbortController est une globale en Node.js >= 15
       const timeoutId = setTimeout(() => controller.abort(), 30000);
       
-      const aidsResponse = await fetch(url.toString(), {
+      const aidsResponse = await fetch(finalUrlToCall, { // Utiliser finalUrlToCall
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -248,7 +254,7 @@ router.get('/aides-territoires/backers/:id', authenticate, asyncHandler(async (r
       const tokenResponse = await fetch('https://aides-territoires.beta.gouv.fr/api/connexion/', {
         method: 'POST',
         headers: {
-          'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY
+          'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY // eslint-disable-line no-undef
         }
       });
       
@@ -316,4 +322,4 @@ router.get('/aides-territoires/backers/:id', authenticate, asyncHandler(async (r
   }
 }));
 
-module.exports = router;
+export default router;

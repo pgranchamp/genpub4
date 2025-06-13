@@ -58,40 +58,92 @@ export const getAidesToken = async () => {
 /**
  * Recherche des aides dans l'API Aides Territoires
  * @param {Object} params - Les paramètres de recherche
- * @returns {Promise<Object>} Les résultats de la recherche
+ * @returns {Promise<Object>} Un objet contenant `count` (total d'aides correspondantes) et `results` (tableau agrégé des aides)
  * @throws {Error} Si la recherche échoue
  */
 export const searchAidesTerritoires = async (params = {}) => {
-  try {
-    // Construire le chemin relatif avec les paramètres
-    let relativePath = '/api/proxy/aides-territoires/aids';
-    const queryParams = new URLSearchParams();
-    
-    Object.keys(params).forEach(key => {
-      if (Array.isArray(params[key])) {
-        params[key].forEach(value => {
-          queryParams.append(key, value);
-        });
-      } else {
-        queryParams.append(key, params[key]);
-      }
-    });
+  console.log('[searchAidesTerritoires] Début de la recherche avec params:', JSON.stringify(params));
+  const MAX_TOTAL_RESULTS_TO_FETCH = 300; // Seuil pour éviter trop d'appels
+  let allResults = [];
+  let totalCount = 0;
+  let nextPageUrl = null;
 
-    const queryString = queryParams.toString();
-    if (queryString) {
-      relativePath += `?${queryString}`;
+  // Construire la query string initiale
+  const initialQueryParams = new URLSearchParams();
+  Object.keys(params).forEach(key => {
+    const value = params[key];
+    if (key === 'perimeter_codes' && Array.isArray(value)) {
+      value.forEach(v => initialQueryParams.append('perimeter_codes[]', v));
+    } else if (key === 'organization_type_slugs' && Array.isArray(value)) {
+      value.forEach(v => initialQueryParams.append('organization_type_slugs[]', v));
+    } else if (Array.isArray(value)) {
+      value.forEach(v => initialQueryParams.append(key, v));
+    } else if (value !== undefined && value !== null) {
+      initialQueryParams.append(key, value);
     }
-    
-    console.log(`Appel au proxy Aides-Territoires (chemin relatif): ${relativePath}`);
-    const response = await fetchWithAuth(relativePath);
-    
-    if (!response.success) {
-      throw new Error(response.error || 'Erreur inconnue');
-    }
-    
-    return response.data;
+  });
+
+  let currentPath = `/api/proxy/aides-territoires/aids?${initialQueryParams.toString()}`;
+  console.log(`[searchAidesTerritoires] Appel initial au proxy: ${currentPath}`);
+
+  try {
+    let pageCount = 0;
+    do {
+      pageCount++;
+      console.log(`[searchAidesTerritoires] Récupération page ${pageCount}, URL: ${currentPath}`);
+      const response = await fetchWithAuth(currentPath);
+
+      if (!response.success) {
+        console.error('[searchAidesTerritoires] Erreur réponse proxy:', response);
+        throw new Error(response.error || 'Erreur inconnue du proxy');
+      }
+      
+      const pageData = response.data;
+      if (!pageData || !pageData.results) {
+        console.error('[searchAidesTerritoires] Données de page invalides:', pageData);
+        throw new Error('Format de réponse Aides Territoires invalide.');
+      }
+
+      if (pageCount === 1) {
+        totalCount = pageData.count || 0;
+        console.log(`[searchAidesTerritoires] Total d'aides annoncé par l'API: ${totalCount}`);
+      }
+
+      allResults = allResults.concat(pageData.results);
+      console.log(`[searchAidesTerritoires] ${pageData.results.length} aides récupérées sur cette page. Total cumulé: ${allResults.length}`);
+
+      // Préparer pour la page suivante
+      if (pageData.next && allResults.length < MAX_TOTAL_RESULTS_TO_FETCH) {
+        const nextApiUrl = new URL(pageData.next);
+        const nextPageNumber = nextApiUrl.searchParams.get('page');
+
+        if (nextPageNumber) {
+          // Reconstruire l'URL pour le proxy en conservant les paramètres initiaux et en ajoutant la nouvelle page
+          const preservedQueryParams = new URLSearchParams(initialQueryParams); // Utiliser les paramètres initiaux
+          preservedQueryParams.set('page', nextPageNumber); // Mettre à jour ou ajouter le numéro de page
+          nextPageUrl = `/api/proxy/aides-territoires/aids?${preservedQueryParams.toString()}`;
+          console.log(`[searchAidesTerritoires] URL page suivante (proxy reconstruite): ${nextPageUrl}`);
+        } else {
+          // Si l'URL 'next' de l'API ne contient pas de paramètre 'page', c'est inattendu.
+          // On arrête la pagination pour éviter une boucle infinie ou des erreurs.
+          console.warn('[searchAidesTerritoires] L\'URL "next" de l\'API ne contient pas de numéro de page. Arrêt de la pagination.');
+          nextPageUrl = null;
+        }
+      } else {
+        nextPageUrl = null; // Pas de page suivante ou seuil atteint
+        if (allResults.length >= MAX_TOTAL_RESULTS_TO_FETCH) {
+          console.log(`[searchAidesTerritoires] Seuil de ${MAX_TOTAL_RESULTS_TO_FETCH} aides atteint. Arrêt de la pagination.`);
+        }
+      }
+      currentPath = nextPageUrl;
+
+    } while (nextPageUrl);
+
+    console.log(`[searchAidesTerritoires] Recherche terminée. Total récupéré: ${allResults.length} aides sur ${totalCount} annoncées.`);
+    return { count: totalCount, results: allResults };
+
   } catch (error) {
-    console.error('Erreur lors de la recherche d\'aides:', error);
+    console.error('[searchAidesTerritoires] Erreur majeure lors de la recherche paginée:', error);
     throw error;
   }
 };
@@ -362,6 +414,20 @@ export const analyserProjetComplet = async (project) => {
  * @returns {Promise<Object>} Les aides trouvées
  * @throws {Error} Si la recherche échoue
  */
+export const searchAndFilterAides = async (projectContext) => {
+  try {
+    console.log('[aidesService] Appel de search-and-filter avec le contexte:', projectContext);
+    const response = await fetchWithAuth(`/api/aides/search-and-filter`, {
+      method: 'POST',
+      body: JSON.stringify(projectContext)
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la recherche et du filtrage des aides via le backend:', error);
+    throw error;
+  }
+};
+
 export const rechercherAidesOptimisees = async (project) => {
   try {
     console.log('Début de la recherche d\'aides optimisée pour le projet:', project.id);
@@ -421,15 +487,34 @@ export const rechercherAidesOptimisees = async (project) => {
     
     // Mapper le type d'organisation aux valeurs acceptées par l'API
     const mapOrganisationTypeToOrganizationTypeSlugs = (orgType) => {
-      switch (orgType?.toLowerCase()) {
+      const lowerOrgType = orgType?.toLowerCase();
+      switch (lowerOrgType) {
         case 'association':
           return ['association'];
-        case 'entreprise':
-          return ['entreprise'];
-        case 'collectivite':
-          return ['commune', 'epci', 'departement', 'region'];
+        case 'entreprise': 
+        case 'entreprise_privee': // Votre type de base
+          return ['private-sector']; // Slug Aides Territoires pour "Entreprise privée"
+        case 'commune':
+          return ['commune'];
+        case 'epci': 
+          return ['epci']; // Établissement public de coopération intercommunale
+        case 'departement':
+          return ['department'];
+        case 'region':
+          return ['region'];
+        case 'collectivite_outre_mer': 
+          return ['public-org']; // Corrigé: Établissement public dont services de l'état
+        case 'etablissement_public_etat': 
+          return ['public-org']; 
+        case 'entreprise_publique_locale': 
+          return ['public-cies']; // Corrigé: Entreprises publique locale
+        case 'particulier':
+          return ['private-person'];
+        case 'agriculteur': 
+          return ['farmer']; // Ajout du slug pour agriculteur
         default:
-          return ['association']; // Valeur par défaut
+          console.warn(`Type d'organisation non mappé explicitement: ${orgType}. Aucun filtre organization_type_slugs ne sera appliqué.`);
+          return []; 
       }
     };
     
@@ -452,19 +537,34 @@ export const rechercherAidesOptimisees = async (project) => {
     console.log('Code INSEE du périmètre pour la recherche:', perimeterCode || 'Non spécifié');
     
     // Construire les paramètres de recherche
+    // 'project' est l'objet reçu par rechercherAidesOptimisees.
+    // Il peut contenir une propriété 'itemsPerPage' si elle a été ajoutée par la page de test,
+    // ou nous utilisons une valeur par défaut ou omettons le paramètre 'limit'.
+    
     const searchParams = {
       category_ids: categoriesIds,
-      organization_type_slugs: organizationTypeSlugs,
-      order_by: 'relevance', // Ajout du tri par pertinence
-      itemsPerPage: 10 // Utilisation de itemsPerPage au lieu de limit
+      order_by: project.order_by || 'relevance', // Utiliser l'ordre de tri du projet ou pertinence par défaut
     };
 
-    // Ajouter perimeter_codes seulement s'il est défini
-    if (perimeterCode) {
-      searchParams.perimeter_codes = [perimeterCode]; // Doit être un tableau, même avec un seul code
+    if (organizationTypeSlugs && organizationTypeSlugs.length > 0) {
+      searchParams.organization_type_slugs = organizationTypeSlugs;
+    }
+
+    // Gestion de itemsPerPage (qui deviendra 'limit')
+    // Si project.itemsPerPage est fourni et > 0, on l'utilise. Sinon, pas de 'limit'.
+    // Une valeur de 0 ou absente pour project.itemsPerPage signifie "pas de limite de notre part".
+    if (project.itemsPerPage && parseInt(project.itemsPerPage, 10) > 0) {
+      searchParams.limit = parseInt(project.itemsPerPage, 10);
+    }
+    // Si itemsPerPage n'est pas fourni dans project ou est <= 0, le paramètre 'limit' n'est pas ajouté,
+    // l'API Aides Territoires utilisera sa propre pagination par défaut.
+
+    // Utiliser perimeter_codes[] comme convenu, si perimeterCode est valide
+    if (perimeterCode && typeof perimeterCode === 'string' && perimeterCode.trim() !== '') {
+      searchParams.perimeter_codes = [perimeterCode.trim()]; 
     }
     
-    console.log('Paramètres de recherche envoyés au proxy:', searchParams);
+    console.log('Paramètres de recherche construits pour searchAidesTerritoires:', searchParams);
     
     // Appel à l'API Aides Territoires
     console.log('Appel à l\'API Aides Territoires');

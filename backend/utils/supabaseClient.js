@@ -1,8 +1,8 @@
 /**
  * Utilitaire pour interagir avec l'API REST de Supabase
  */
-const axios = require('axios');
-require('dotenv').config();
+import axios from 'axios';
+import 'dotenv/config';
 
 // Configuration de base pour les requêtes Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -92,7 +92,7 @@ const supabaseAdminRequest = async (method, endpoint, data = null, params = {}) 
   }
 };
 
-module.exports = {
+export {
   supabaseRequest,
   supabaseAdminRequest
 };

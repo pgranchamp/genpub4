@@ -1,0 +1,181 @@
+{
+  "name": "onboarding-zero",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "onboarding-zero",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "e2230e7f-ce05-4f30-8da2-1faee5c339fd",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1260,
+        -310
+      ],
+      "webhookId": "a19da925-414e-49b0-9d4a-b9d3679997c1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "prenom_utilisateur",
+              "name": "prenom_utilisateur",
+              "value": "={{ $json.body.firstName }}",
+              "type": "string"
+            },
+            {
+              "id": "conversation_count",
+              "name": "conversation_count",
+              "value": "={{ $json.body.conversationHistory ? $json.body.conversationHistory.length : 0 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "a57577ba-d90c-449a-a919-88b3d6ec63c3",
+      "name": "Extraire Données",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1040,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ab98bd9f-cd0e-4777-bc3e-3aefc38c9cd5",
+              "leftValue": "={{ $json.body.userMessage }}",
+              "rightValue": "start_onboarding_zero",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "fd32a9f5-a762-4d64-b530-a3237cf39c42",
+              "leftValue": "=",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -820,
+        -310
+      ],
+      "id": "6ebf9be0-d5bf-4605-a14d-eec343c78e09",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"response\": \"Bonjour {{ $json.body.userContext.firstName }} !\\n Bienvenue sur Génie Public. Que souhaitez-vous faire ?\",\n  \"actions\": [\n    { \"label\": \"En savoir plus sur Génie Public\", \"actionId\": \"show_more_info\" },\n    { \"label\": \"Commencer avec les aides\", \"actionId\": \"switch_to_onboarding_chat\" }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        -520,
+        -460
+      ],
+      "id": "e8cab7e1-65c6-4b3d-897c-45b9d1a48cf3",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=  {\n    \"response\": \"Génie Public est une plateforme conçue pour simplifier l’accès aux subventions : \\n qu’il s’agisse d’aides publiques, d’appels à projets ou de dispositifs techniques, elle vous aide à repérer les aides pertinentes, à formuler vos projets de manière convaincante, et à suivre plusieurs démarches en parallèle si nécessaire. \\n\\nQue vous soyez une association, une collectivité ou une entreprise, vous pouvez avancer à votre rythme, sans jargon ni formulaire complexe.\\n\\nPrêt à commencer ? Je vous guide pas à pas.\",\n    \"actions\": [\n      { \"label\": \"Commencer avec les aides\", \"actionId\": \"switch_to_onboarding_chat\" }\n    ]\n  }\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        -480,
+        -180
+      ],
+      "id": "d246154f-6534-4214-8d35-e65290c76d8c",
+      "name": "Transition vers Chat"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extraire Données",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire Données": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Transition vers Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8e2e104c-cbda-4116-8d9a-f0cae9976689",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07ded2a5ddaa2e3ef818e39f2a91a69e11ab5e49fabe12ff8d8cad8daaff0acb"
+  },
+  "id": "xNQ5Crf5VGF5xHCy",
+  "tags": []
+}

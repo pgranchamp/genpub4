@@ -5,7 +5,6 @@
 
 // Exporter les fonctions du client HTTP
 export {
-  API_BASE_URL,
   setAuthToken,
   getStoredToken,
   clearAuthToken,
@@ -27,7 +26,9 @@ export {
   getOrganisations,
   getOrganisation,
   updateOrganisation,
-  updateUserOrganisation
+  updateUserOrganisation,
+  getMyOrganisation,
+  getOrganisationStatus
 } from './organisationService';
 
 // Exporter les fonctions de gestion des projets
@@ -41,7 +42,8 @@ export {
   linkAideToProject,
   uploadProjectFile,
   getProjectFiles,
-  deleteProjectFile
+  deleteProjectFile,
+  updateProjectAnalysisResults
 } from './projectService';
 
 // Exporter les fonctions de gestion des aides
@@ -69,6 +71,9 @@ export {
   analyserProjetEtAides,
   reformulateProject
 } from './openaiService';
+
+// Exporter les fonctions d'onboarding
+export * from './onboardingService';
 
 /**
  * Fonction complète d'analyse de projet et recherche d'aides

@@ -3,7 +3,7 @@
  * Gère les opérations liées à l'authentification des utilisateurs
  */
 
-import { API_BASE_URL, fetchWithAuth, setAuthToken } from './httpClient';
+import { fetchWithAuth, setAuthToken } from './httpClient';
 
 /**
  * Connecte un utilisateur avec son email et mot de passe
@@ -14,7 +14,7 @@ import { API_BASE_URL, fetchWithAuth, setAuthToken } from './httpClient';
  */
 export const login = async (email, password) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await fetch(`/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -49,14 +49,15 @@ export const login = async (email, password) => {
  * Inscrit un nouvel utilisateur
  * @param {string} email - L'email de l'utilisateur
  * @param {string} password - Le mot de passe de l'utilisateur
- * @param {string} full_name - Le nom complet de l'utilisateur
+ * @param {string} firstName - Le prénom de l'utilisateur
+ * @param {string} lastName - Le nom de famille de l'utilisateur
  * @param {Object} organisation - Les données de l'organisation
  * @returns {Promise<Object>} Les données de l'utilisateur inscrit
  * @throws {Error} Si l'inscription échoue
  */
-export const signup = async (email, password, full_name, organisation) => {
+export const signup = async (email, password, firstName, lastName, organisation) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+    const response = await fetch(`/api/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -64,13 +65,15 @@ export const signup = async (email, password, full_name, organisation) => {
       body: JSON.stringify({ 
         email, 
         password, 
-        full_name,
+        first_name: firstName,
+        last_name: lastName,
         organisation
       })
     });
     
     if (!response.ok) {
       const errorData = await response.json();
+      console.error('Détails de l\'erreur de validation:', errorData.details);
       throw new Error(errorData.error || 'Signup failed');
     }
     
@@ -100,7 +103,7 @@ export const signup = async (email, password, full_name, organisation) => {
  */
 export const forgotPassword = async (email) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+    const response = await fetch(`/api/auth/forgot-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -131,7 +134,7 @@ export const forgotPassword = async (email) => {
  */
 export const resetPassword = async (email, reset_code, new_password) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+    const response = await fetch(`/api/auth/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -163,9 +166,7 @@ export const resetPassword = async (email, reset_code, new_password) => {
  */
 export const getMe = async () => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/auth/me`);
-    // La réponse du backend contient { success: true, data: { user, organisations } }
-    // Nous devons la transformer pour qu'elle soit compatible avec le contexte d'authentification
+    const response = await fetchWithAuth(`/api/auth/me`);
     return {
       user: response.data.user,
       organisations: response.data.organisations

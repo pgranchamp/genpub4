@@ -1,8 +1,8 @@
 /**
  * Utilitaire pour la gestion des tokens JWT
  */
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = '7d'; // Durée de validité du token (7 jours)
@@ -37,7 +37,7 @@ const verifyToken = (token) => {
   }
 };
 
-module.exports = {
+export {
   generateToken,
   verifyToken
 };

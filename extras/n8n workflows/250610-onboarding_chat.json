@@ -1,0 +1,469 @@
+{
+  "name": "onboarding-chat",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "onboarding-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b5cf9472-e7c5-42cd-ae88-6722af078993",
+      "name": "Webhook Start",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -140,
+        490
+      ],
+      "webhookId": "start-validation"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "step-check",
+              "leftValue": "={{ $('Webhook Start').item.json.body.userMessage }}",
+              "rightValue": "switch_to_onboarding_chat",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c33673ff-f1d4-488b-8b90-1c9e8a807cdf",
+      "name": "Vérifier Étape",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        300,
+        390
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// L'input de ce nœud contient les données préparées par le nœud \"Code\"\nconst preparedData = $('Code1').item.json; // On va chercher les données du premier noeud Code\n\n// Construire le system prompt avec un exemple pour guider l'IA\nconst systemPrompt = `Tu es un assistant IA bienveillant. Ton rôle est de présenter les informations extraites de son site web à l'utilisateur professionnel qui vient de s'inscrire de manière empathique et de demander validation.\n3. **Si une information est manquante ou marquée \"NSP\", tu DOIS poser une question pour obtenir cette information.**\n\nRéponds TOUJOURS au format JSON avec deux clés : \"response\" et \"next_action\" (toujours \"continue_conversation\").\n\n---\nExemple de conversation :\nINPUT DATA:\n- Secteurs: Santé, Aide à la personne\n- Missions: Soins à domicile\n- Bénéficiaires: Personnes âgées\n- Territoire: Paris\nUSER: Pierre\nUSER MESSAGE: start_chat\nTACHE: Présente ces informations à Pierre.\n\nOUTPUT JSON:\n{\n  \"response\": \"Bonjour Pierre ! ✨ J'ai regardé les informations de votre organisation. Le secteur de la santé et de l'aide à la personne est essentiel, bravo pour votre engagement ! Si j'ai bien compris, vos missions principales tournent autour des soins à domicile pour les personnes âgées sur Paris. Est-ce que cela correspond bien à votre activité ?\",\n  \"next_action\": \"continue_conversation\"\n}\n---\n\nVoici les données réelles à traiter :\n- Secteurs: ${preparedData.keyElementsAsStrings.sectors}\n- Missions: ${preparedData.keyElementsAsStrings.missions}\n- Bénéficiaires: ${preparedData.keyElementsAsStrings.beneficiaries}\n- Territoire: ${preparedData.keyElementsAsStrings.territory}`;\n\n// Construire le corps de la requête pour OpenAI\nconst requestBody = {\n  model: \"gpt-3.5-turbo\",\n  messages: [\n    {\n      role: \"system\",\n      content: systemPrompt\n    },\n    {\n      role: \"user\",\n      content: `Présente ces informations à ${preparedData.userContext.firstName}.`\n    }\n  ],\n  temperature: 0.5,\n  max_tokens: 1050 // Réduit pour plus de rapidité\n};\n\n// Retourner cet objet pour le nœud HTTP Request suivant\nreturn requestBody;\n"
+      },
+      "id": "80be69c0-f2c9-4291-9064-355d1caaa1bf",
+      "name": "Préparer Prompt Initial",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        290
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// On lit l'input direct, qui vient du nœud \"IF\"\nconst preparedData = $json;\nconst userMessage = preparedData.userMessage; // La réponse de l'utilisateur\n\n// Construire le system prompt pour le suivi\nconst systemPrompt = `Tu es Génie Public, un assistant IA. L'utilisateur vient de donner un feedback sur les informations que tu lui as présentées.\n\nInformations actuelles :\n- Secteurs: ${preparedData.keyElementsAsStrings.sectors}\n- Missions: ${preparedData.keyElementsAsStrings.missions}\n- Bénéficiaires: ${preparedData.keyElementsAsStrings.beneficiaries}\n- Territoire: ${preparedData.keyElementsAsStrings.territory}\n\nTon rôle :\n1. Analyser la réponse de l'utilisateur.\n2. Mettre à jour les informations en fonction de son feedback.\n3. Présenter un récapitulatif clair des informations mises à jour.\n\nRéponds TOUJOURS au format JSON.\n\nLe format de ta réponse dépend de l'action que tu choisis :\n\n1.  **Si tu as besoin de plus d'informations** pour compléter ou corriger les éléments, ta réponse JSON doit contenir DEUX clés :\n    *   \\`response\\`: Le texte de ta question ou de ta reformulation pour l'utilisateur.\n    *   \\`next_action\\`: La valeur doit être \\`\"continue_conversation\"\\`.\n\n2.  **Si tu estimes que la synthèse des informations est complète et correcte** ou que l'utilisateur est satisfait, ta réponse JSON doit contenir TROIS clés :\n    *   \\`response\\`: une chaine vide.\n    *   \\`next_action\\`: La valeur doit être \\`\"onboarding-end\"\\`.\n    *   \\`updated_key_elements\\`: Un objet JSON contenant les 4 éléments clés (\\`sectors\\`, \\`missions\\`, \\`beneficiaries\\`, \\`territory\\`) avec leurs valeurs finales sous forme de chaînes de caractères.\n\nExemple de réponse attendue pour le cas 2 :\n{\n  \"next_action\": \"onboarding-end\",\n  \"updated_key_elements\": {\n    \"sectors\": \"Santé, Soins à domicile, ...\",\n    \"missions\": \"Assurer la continuité des soins...\",\n    \"beneficiaries\": \"patients, publics fragiles, ...\",\n    \"territory\": \"Région Sud, Nouvelle Aquitaine\"\n  }\n}`; // <--- FIN DE LA TEMPLATE STRING\n\n// Construire le corps de la requête pour OpenAI\nconst requestBody = {\n  model: \"gpt-3.5-turbo\",\n  messages: [\n    {\n      role: \"system\",\n      content: systemPrompt\n    },\n    {\n      role: \"user\",\n      content: userMessage\n    }\n  ],\n  temperature: 0.5,\n  max_tokens: 1650,\n  response_format: { type: \"json_object\" } // Ajout crucial pour garantir une sortie JSON\n};\n\nreturn requestBody;\n"
+      },
+      "id": "d882df6f-4f33-4833-9e7f-74fea2114e46",
+      "name": "Préparer Prompt Réponse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        490
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Récupérer la réponse brute du LLM\nlet llmResponseString = $json.choices[0].message.content;\n\n// 2. Nettoyer la chaîne pour enlever les balises Markdown\n// Cette expression régulière supprime \"```json\" au début et \"```\" à la fin\nllmResponseString = llmResponseString.replace(/^```json\\n/, '').replace(/\\n```$/, '');\n\n// 3. Parser la chaîne nettoyée\nconst llmResponseObject = JSON.parse(llmResponseString);\n\n// 4. Retourner les données propres pour les nœuds suivants\nreturn {\n  response: llmResponseObject.response,\n  next_action: llmResponseObject.next_action,\n  updated_key_elements: llmResponseObject.updated_key_elements\n};\n"
+      },
+      "id": "fa8959ba-5c93-4a07-b919-9264f529dcd5",
+      "name": "Traiter Réponse LLM",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        390
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "completion-check",
+              "leftValue": "={{ $json.next_action }}",
+              "rightValue": "onboarding-end",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9bcc9fba-3094-4950-a13b-c5a2c2bf1245",
+      "name": "Vérifier Finalisation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        315
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "faa7210a-93a9-4ebe-9ce6-6cdb6372e27f",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -140,
+        290
+      ],
+      "id": "0a22a808-59e6-4c4d-8aba-c752b062ba95",
+      "name": "When chat message received",
+      "webhookId": "263f4b6d-bae1-4a2c-9ead-e340e6eaeae4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const chatInput = $input.item.json.chatInput;\n\n// On essaie de parser l'input comme du JSON\ntry {\n  const jsonData = JSON.parse(chatInput);\n  \n  // Si ça marche, c'est le premier appel. On prépare les données.\n  const payload = jsonData.payload;\n  const keyElements = payload.fullOrganisationData.key_elements;\n  \n  return {\n    isFirstCall: true,\n    sessionId: payload.sessionId,\n    userMessage: payload.userMessage,\n    userContext: payload.userContext,\n    organisationId: payload.fullOrganisationData.id,\n    keyElementsAsStrings: {\n      sectors: keyElements.sectors.join(', '),\n      missions: keyElements.missions.join(', '),\n      beneficiaries: keyElements.beneficiaries.join(', '),\n      territory: keyElements.territory.join(', ')\n    }\n  };\n\n} catch (e) {\n  // Si le parsing échoue, c'est que c'est une simple chaîne de caractères.\n  // C'est un message de l'utilisateur.\n  return {\n    isFirstCall: false,\n    userMessage: chatInput\n  };\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        290
+      ],
+      "id": "639f394a-6e54-424c-a58f-7da61f9b5149",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        390
+      ],
+      "id": "d1594032-a1d6-4a48-be74-a5cb99d80b8c",
+      "name": "Appel LLM OpenAI",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "6aNPGJPFusGFEATV",
+          "name": "Bearer Auth OpenAi"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7dded148-9a9f-48ba-bd90-14ce52937f1e",
+              "name": "response",
+              "value": "Parfait ! Merci pour cette collaboration, j'ai maintenant une vision complète et précise de votre organisation. Ces informations vont me permettre de vous proposer des recherches d'aides publiques parfaitement adaptées à votre contexte et vos besoins spécifiques.  **Génie Public est maintenant prêt à vous accompagner efficacement dans vos recherches ! On peut passer à la suite.",
+              "type": "string"
+            },
+            {
+              "id": "d33de075-022c-4c09-84cf-31a1a8e9864a",
+              "name": "organisation_id_to_update",
+              "value": "={{ $('Code1').item.json.organisationId }}",
+              "type": "string"
+            },
+            {
+              "id": "215da44c-ad78-428c-94eb-c3dae729c173",
+              "name": "key_elements",
+              "value": "={{ $('Traiter Réponse LLM').item.json.updated_key_elements }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1400,
+        240
+      ],
+      "id": "f34b1749-0b3a-4803-9f19-08312dee8bcb",
+      "name": "Finaliser et Sauvegarder"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "organisations",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.organisation_id_to_update}}"
+            }
+          ]
+        },
+        "dataToSend": "=defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "key_elements",
+              "fieldValue": "={{ $json.updated_key_elements }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        140
+      ],
+      "id": "813a5201-e448-4409-9e6b-6e22d1e3bc56",
+      "name": "Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "5w8YE7HspA9yg4xn",
+          "name": "Supabase account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// L'input direct du webhook\nconst body = $json.body;\n\n// 1. Parser la chaîne de caractères \"key_elements\" pour obtenir un objet\nconst keyElementsString = body.fullOrganisationData.key_elements;\nconst keyElementsObject = JSON.parse(keyElementsString);\n\n// 2. Maintenant, on peut travailler avec l'objet parsé\nconst sectors = keyElementsObject.sectors || 'Non identifié';\nconst missions = keyElementsObject.missions || 'Non identifié';\nconst beneficiaries = keyElementsObject.beneficiaries || 'Non identifié';\nconst territory = keyElementsObject.territory || 'Non identifié';\n\n// 3. Retourner un objet propre et plat pour les nœuds suivants\nreturn {\n  isFirstCall: body.userMessage === 'start_chat' || body.userMessage === 'start_onboarding_zero',\n  sessionId: body.sessionId,\n  userMessage: body.userMessage,\n  userContext: body.userContext,\n  organisationId: body.fullOrganisationData.id,\n  keyElementsAsStrings: {\n    sectors: sectors,\n    missions: missions,\n    beneficiaries: beneficiaries,\n    territory: territory\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        490
+      ],
+      "id": "62bbe60c-fd51-405b-b2a9-e40b5701f16e",
+      "name": "Code1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1620,
+        440
+      ],
+      "id": "e0772742-7f2e-47f2-b80f-494f7893fb66",
+      "name": "Merge"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Start": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vérifier Étape": {
+      "main": [
+        [
+          {
+            "node": "Préparer Prompt Initial",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Préparer Prompt Réponse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Traiter Réponse LLM": {
+      "main": [
+        [
+          {
+            "node": "Vérifier Finalisation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Vérifier Finalisation": {
+      "main": [
+        [
+          {
+            "node": "Finaliser et Sauvegarder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Prompt Initial": {
+      "main": [
+        [
+          {
+            "node": "Appel LLM OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Prompt Réponse": {
+      "main": [
+        [
+          {
+            "node": "Appel LLM OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Vérifier Étape",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appel LLM OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Traiter Réponse LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finaliser et Sauvegarder": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        []
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Vérifier Étape",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2223e767-e2b9-43be-be7b-c44490bd2a91",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07ded2a5ddaa2e3ef818e39f2a91a69e11ab5e49fabe12ff8d8cad8daaff0acb"
+  },
+  "id": "GQrFvnUYAzpdOHBq",
+  "tags": []
+}

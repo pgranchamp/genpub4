@@ -1,12 +1,13 @@
 /**
  * Routes pour la gestion des organisations
  */
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const asyncHandler = require('express-async-handler');
-const { supabaseAdminRequest } = require('../utils/supabaseClient');
-const { authenticate } = require('../middleware/auth');
-const { validate, schemas } = require('../middleware/validate');
+import asyncHandler from 'express-async-handler';
+import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import { authenticate } from '../middleware/auth.js';
+import { authenticateService } from '../middleware/authService.js';
+import { validate, schemas } from '../middleware/validate.js';
 
 /**
  * @route   POST /organisations
@@ -102,6 +103,57 @@ router.get('/', authenticate, asyncHandler(async (req, res) => {
   res.json({
     success: true,
     data: organisationsWithRole
+  });
+}));
+
+/**
+ * @route   GET /organisations/me
+ * @desc    Récupérer l'organisation principale de l'utilisateur connecté
+ * @access  Privé
+ */
+router.get('/me', authenticate, asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+
+  // 1. Récupérer la première association utilisateur-organisation
+  const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
+    select: 'organisation_id,role',
+    user_id: `eq.${userId}`,
+    limit: 1
+  });
+
+  if (!userOrganisations || userOrganisations.length === 0) {
+    return res.status(404).json({
+      success: false,
+      error: 'Aucune organisation associée à cet utilisateur',
+      code: 'NO_ORGANISATION_FOUND'
+    });
+  }
+
+  const { organisation_id, role } = userOrganisations[0];
+
+  // 2. Récupérer les détails complets de l'organisation
+  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
+    select: '*',
+    id: `eq.${organisation_id}`
+  });
+
+  if (!organisations || organisations.length === 0) {
+    return res.status(404).json({
+      success: false,
+      error: 'Organisation non trouvée',
+      code: 'NOT_FOUND'
+    });
+  }
+
+  // 3. Ajouter le rôle de l'utilisateur à l'objet organisation
+  const organisation = {
+    ...organisations[0],
+    role
+  };
+
+  res.json({
+    success: true,
+    data: organisation
   });
 }));
 
@@ -234,4 +286,45 @@ router.patch('/:id', authenticate, asyncHandler(async (req, res) => {
   });
 }));
 
-module.exports = router;
+// Route de test pour le middleware de service
+router.post('/test-service-auth', authenticateService, (req, res) => {
+  res.json({ success: true, message: 'Token de service authentifié avec succès.' });
+});
+
+/**
+ * @route   GET /organisations/me/status
+ * @desc    Vérifier le statut de l'analyse de l'organisation de l'utilisateur
+ * @access  Privé
+ */
+router.get('/me/status', authenticate, asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+
+  // Récupérer l'organisation principale de l'utilisateur
+  const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
+    select: 'organisation_id',
+    user_id: `eq.${userId}`,
+    is_default: 'eq.true'
+  });
+
+  if (!userOrganisations || userOrganisations.length === 0) {
+    return res.status(404).json({ success: false, error: 'Organisation par défaut non trouvée.' });
+  }
+
+  const organisationId = userOrganisations[0].organisation_id;
+
+  // Vérifier si les key_elements sont remplis
+  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
+    select: 'key_elements',
+    id: `eq.${organisationId}`
+  });
+
+  if (!organisations || organisations.length === 0) {
+    return res.status(404).json({ success: false, error: 'Organisation non trouvée.' });
+  }
+
+  const analysisComplete = !!organisations[0].key_elements;
+
+  res.json({ success: true, analysisComplete });
+}));
+
+export default router;

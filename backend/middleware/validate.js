@@ -1,7 +1,7 @@
 /**
  * Middleware de validation des données avec Joi
  */
-const Joi = require('joi');
+import Joi from 'joi';
 
 /**
  * Crée un middleware de validation pour un schéma Joi donné
@@ -9,7 +9,7 @@ const Joi = require('joi');
  * @param {string} source - Source des données à valider ('body', 'query', 'params')
  * @returns {Function} - Middleware Express
  */
-const validate = (schema, source = 'body') => {
+export const validate = (schema, source = 'body') => {
   return (req, res, next) => {
     const data = req[source];
     const { error, value } = schema.validate(data, { abortEarly: false });
@@ -44,16 +44,49 @@ const signupSchema = Joi.object({
     'string.min': 'Le mot de passe doit contenir au moins 8 caractères',
     'any.required': 'Le mot de passe est requis'
   }),
-  full_name: Joi.string().required().messages({
-    'any.required': 'Le nom complet est requis'
+  first_name: Joi.string().required().messages({
+    'any.required': 'Le prénom est requis'
+  }),
+  last_name: Joi.string().required().messages({
+    'any.required': 'Le nom de famille est requis'
   }),
   organisation: Joi.object({
     name: Joi.string().required().messages({
       'any.required': 'Le nom de l\'organisation est requis'
     }),
-    type: Joi.string().allow('', null),
-    siret: Joi.string().allow('', null),
-    address: Joi.string().allow('', null)
+    type: Joi.string().valid(
+      'association', 
+      'entreprise_privee', 
+      'particulier', 
+      'agriculteur', 
+      'commune', 
+      'intercommunalite_pays', 
+      'departement', 
+      'region', 
+      'collectivite_outre_mer', 
+      'etablissement_public_etat', 
+      'entreprise_publique_locale'
+    ).required().messages({
+      'any.required': 'Le type d\'organisation est requis',
+      'any.only': 'Le type d\'organisation n\'est pas valide'
+    }),
+    siret: Joi.string().length(14).pattern(/^[0-9]+$/).allow('', null).messages({
+      'string.length': 'Le SIRET doit contenir 14 chiffres',
+      'string.pattern.base': 'Le SIRET ne doit contenir que des chiffres'
+    }),
+    website_url: Joi.string().pattern(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'domain').allow('', null).messages({
+      'string.pattern.name': 'Le format du site web est invalide (ex: domaine.fr)'
+    }),
+    adresse_ligne1: Joi.string().required().messages({
+      'any.required': 'L\'adresse (ligne 1) de l\'organisation est requise'
+    }),
+    code_postal: Joi.string().pattern(/^[0-9]{5}$/).required().messages({
+      'any.required': 'Le code postal de l\'organisation est requis',
+      'string.pattern.base': 'Le code postal doit être composé de 5 chiffres'
+    }),
+    ville: Joi.string().required().messages({
+      'any.required': 'La ville de l\'organisation est requise'
+    })
   }).required().messages({
     'any.required': 'Les informations de l\'organisation sont requises'
   })
@@ -148,16 +181,13 @@ const projectFromInviteSchema = Joi.object({
   })
 });
 
-module.exports = {
-  validate,
-  schemas: {
-    signupSchema,
-    loginSchema,
-    organisationSchema,
-    projectSchema,
-    projectAideSchema,
-    forgotPasswordSchema,
-    resetPasswordSchema,
-    projectFromInviteSchema
-  }
+export const schemas = {
+  signupSchema,
+  loginSchema,
+  organisationSchema,
+  projectSchema,
+  projectAideSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  projectFromInviteSchema
 };

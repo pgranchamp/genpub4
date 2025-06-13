@@ -1,0 +1,2402 @@
+{
+  "count": 7,
+  "results": [
+    {
+      "id": 140806,
+      "slug": "074c-certificats-deconomies-denergie",
+      "url": "/aides/074c-certificats-deconomies-denergie/",
+      "name": "Accélérer la rénovation énergétique de vos bâtiments grâce aux Certificats d'Economie d'Energie (CEE)",
+      "name_initial": "Certificat d'économie d'énergie (CEE)",
+      "short_title": null,
+      "financers": [
+        "Leyton"
+      ],
+      "financers_full": [
+        {
+          "id": 2393,
+          "name": "Leyton",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/leyton_logo.png"
+        }
+      ],
+      "instructors": [],
+      "instructors_full": [],
+      "programs": [],
+      "description": "<p>\n <strong>\n  Leyton\n </strong>\n accompagne plus de 51% des communes &amp; plus de 35 conseils départementaux dans l&#039;optimisation de leurs budgets et le management de leurs transitions.\n</p>\n<p>\n Nous sommes délégataire CEE depuis le début du dispositif (&#43; 15 ans), signataire de chartes Coup de Pouce, engagés FAIRE, membre du conseil supérieur de l&#039;énergie (via GPCEE) et participant actif aux groupes de travail de l&#039;ADEME et du PNCEE : nous sommes au cœur de l&#039;écosystème Certificats d&#039;Economies d&#039;Energie (CEE) et nous en maîtrisons parfaitement les rouages. ﻿\n</p>\n<p>\n <strong>\n  Le dispositif des certificats d&#039;économies d&#039;énergie (CEE)\n </strong>\n est l&#039;outil principal de la politique de la maîtrise de la demande énergétique en France. Il s&#039;agit d&#039;un dispositif mis en place pour inciter les collectivités, les entreprises et les particuliers à réaliser des économies d&#039;énergie.\n</p>\n<p>\n Nos experts en efficacité énergétique accompagnent les collectivités à chaque étape, de l&#039;audit initial des processus jusqu&#039;à la mise en œuvre de plans d&#039;action visant à renforcer leur exemplarité et à optimiser les performances énergétiques de leurs bâtiments.\n <br />\n</p>\n<p>\n 1 - Identification des gisements\n</p>\n<p>\n 2 - Incitation et réalisation des travaux\n</p>\n<p>\n 3 -  Montage des dossiers\n</p>\n<p>\n 4 -  Dépôt au PNCEE et valorisation\n</p>",
+      "eligibility": "<p>\n Afin de bénéficier des dispositifs des CEE et des solutions complémentaires de Leyton, il est impératif d&#039;effectuer des travaux visant à réaliser des économies d&#039;énergie pour une commune de plus de 10 000 habitants ou des travaux de plus d&#039; 1M€. </p>",
+      "perimeter": "France",
+      "perimeter_scale": "Pays",
+      "mobilization_steps": [
+        "Réflexion / conception",
+        "Mise en œuvre / réalisation",
+        "Usage / valorisation"
+      ],
+      "origin_url": "https://leyton.com/fr/communes-departements-des-experts-au-service-de-votre-transition-energetique-sociale/?utm_source=annuaire&utm_medium=aides-territoires&utm_campaign=frmktannuairee27&utm_term=cee&utm_content=plus_dinformations",
+      "categories": [
+        "Culture et identité collective / patrimoine / sports / Musée",
+        "Culture et identité collective / patrimoine / sports / Sports et loisirs",
+        "Urbanisme / logement / aménagement / Espaces verts",
+        "Urbanisme / logement / aménagement / Espace public",
+        "Urbanisme / logement / aménagement / Friche",
+        "Urbanisme / logement / aménagement / Foncier",
+        "Urbanisme / logement / aménagement / Voirie et réseaux",
+        "Énergies / Déchets / Transition énergétique",
+        "Énergies / Déchets / Economie d'énergie et rénovation énergétique",
+        "Énergies / Déchets / Réseaux de chaleur",
+        "Énergies / Déchets / Recyclage et valorisation des déchets",
+        "Développement économique / production et consommation / Commerces et services",
+        "Urbanisme / logement / aménagement / Equipement public",
+        "Urbanisme / logement / aménagement / Bâtiments et construction",
+        "Urbanisme / logement / aménagement / Réhabilitation",
+        "Urbanisme / logement / aménagement / Logement et habitat",
+        "Urbanisme / logement / aménagement / Architecture",
+        "Urbanisme / logement / aménagement / Paysage",
+        "Urbanisme / logement / aménagement / Accessibilité",
+        "Mobilité / transports / Mobilité partagée",
+        "Mobilité / transports / Mobilité pour tous",
+        "Mobilité / transports / Modes actifs : vélo, marche et aménagements associés",
+        "Énergies / Déchets / Réduction de l'empreinte carbone",
+        "Culture et identité collective / patrimoine / sports / Bibliothèques et livres",
+        "Mobilité / transports / Mobilité fluviale",
+        "Urbanisme / logement / aménagement / Cimetières et funéraire",
+        "Mobilité / transports / Mobilité et véhicules autonomes"
+      ],
+      "is_call_for_project": false,
+      "application_url": "https://leyton.com/fr/contactez-nous-energie/?utm_source=annuaire&utm_medium=aides-territoires&utm_campaign=frmktannuairee27&utm_term=cee&utm_content=candidatez-a-laide",
+      "targeted_audiences": [
+        "Commune",
+        "Intercommunalité / Pays",
+        "Département",
+        "Région",
+        "Collectivité d’outre-mer à statut particulier",
+        "Etablissement public dont services de l'Etat",
+        "Entreprise publique locale (Sem, Spl, SemOp)",
+        "Association",
+        "Entreprise privée",
+        "Particulier",
+        "Agriculteur"
+      ],
+      "aid_types": [
+        "Certificat d'économie d'énergie (CEE)"
+      ],
+      "aid_types_full": [
+        {
+          "id": 4,
+          "name": "Certificat d'économie d'énergie (CEE)",
+          "group": {
+            "id": 1,
+            "name": "Aide financière"
+          }
+        }
+      ],
+      "is_charged": false,
+      "destinations": [
+        "Dépenses d’investissement"
+      ],
+      "start_date": null,
+      "predeposit_date": null,
+      "submission_deadline": null,
+      "subvention_rate_lower_bound": null,
+      "subvention_rate_upper_bound": null,
+      "subvention_comment": null,
+      "loan_amount": null,
+      "recoverable_advance_amount": null,
+      "contact": "<p>\n Laurent Bourdier\n</p>\n<p>\n Expert en stratégie durable\n</p>\n<p>\n 06 68 40 21 87\n</p>",
+      "recurrence": "Permanente",
+      "project_examples": "<p>\n Les Certificats d&#039;Économies d&#039;Énergie (CEE) concernent plusieurs secteurs, notamment :\n</p>\n<ul>\n <li>\n  <strong>\n   Le résidentiel\n  </strong>\n  (logements individuels et collectifs, ainsi que les copropriétés.)\n </li>\n <li>\n  <strong>\n   Le tertiaire\n  </strong>\n  (bâtiments publics et privés à usage administratif, commercial, éducatif, culturel, sportif, etc.)\n </li>\n <li>\n  <strong>\n   L&#039;industrie </strong>(entreprises et industries de toutes tailles)\n </li>\n</ul>\n<p>\n <strong>\n  Exemples de projets réalisables :\n </strong>\n</p>\n<p>\n <strong>\n  Exemple 1 - Rénovation thermique des bâtiments de l&#039;université de Bordeaux\n </strong>\n</p>\n<ul>\n <li>\n  <span>\n   Isolation de combles ou de toitures sur 4 bâtiments :  12 877€ de primes versées\n  </span>\n </li>\n <li>\n  <span>\n   Isolation de toitures terrasses sur 4 bâtiments : 23 544 € de primes versées\n  </span>\n </li>\n <li>\n  <span>\n   Mise en place de robinets thermostatiques : 2 872€ de primes versées\n  </span>\n </li>\n <li>\n  <span>\n   Pompe à chaleur de type air / eau : 46 680€ de primes versées\n  </span>\n </li>\n</ul>\n<p>\n <strong>\n  Exemple 2 - Récupération de chaleur sur une patinoire\n </strong>\n</p>\n<p>\n <strong>\n  Fiches valorisées\n </strong>\n</p>\n<ul>\n <li>\n  Régulation sur un groupe de production de froid\n </li>\n <li>\n  Récupération de chaleur sur un groupe de production de froid\n </li>\n <li>\n  Mise en place d&#039;un système de variation électronique de vitesse (VEV) sur un moteur asynchrone\n </li>\n</ul>\n<p>\n <strong>\n  Le montant de prime versé a été de 245 000€ pour un investissement réalisé de 1,2 M€​\n </strong>\n</p>\n<p>\n <strong>\n  Taux de couverture : 20%\n </strong>\n</p>",
+      "import_data_url": null,
+      "import_data_mention": null,
+      "import_share_licence": null,
+      "date_created": "2023-05-11T17:21:00+00:00",
+      "date_updated": "2024-12-06T15:34:16+00:00",
+      "project_references": [
+        "Isolation du bâtiment",
+        "Rénovation du gymnase"
+      ],
+      "european_aid": null,
+      "is_live": true
+    },
+    {
+      "id": 100733,
+      "slug": "4255-proposer-a-des-porteurs-de-projets-des-locaux",
+      "url": "/aides/4255-proposer-a-des-porteurs-de-projets-des-locaux/",
+      "name": "Proposer à des porteurs de projets des locaux vacants dans les gares",
+      "name_initial": "Place de la Gare",
+      "short_title": null,
+      "financers": [
+        "SNCF Gares et Connexions"
+      ],
+      "financers_full": [
+        {
+          "id": 1902,
+          "name": "SNCF Gares et Connexions",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/sncf-gares-et-connexions_logo.jpeg"
+        }
+      ],
+      "instructors": [],
+      "instructors_full": [],
+      "programs": [],
+      "description": "<p>\n Participez à la dynamique économique de nos territoires en proposant des projets innovants et utiles au sein des petites et moyennes gares françaises.\n</p>\n<p>\n Sur l'ensemble du réseau, près d'un millier de gares disposent aujourd'hui de locaux vacants dans des contextes extrêmement variés : communes rurales, villes moyennes, zones périurbaines.\n</p>\n<p>\n Place de la Gare, porté avec les Autorités Organisatrices et les collectivités territoriales, en tant qu'outil de l'équilibre financier des gares et de désenclavement des territoires, a pour ambition de dynamiser ce réseau de gares et d'en faire un point d'ancrage des commerces et des services publics locaux, au plus proche de tous.\n</p>\n<p>\n Vous avez un projet, nous avons les m2 et des équipes pour vous accompagner !\n <br/>\n</p>\n<p>\n Manifestez-vous sur\n <a href=\"https://placedelagare.sncf/\" target=\"_self\">\n  https://placedelagare.sncf/\n </a>\n <a href=\"https://www.1001gares.fr/\" rel=\"noopener\" target=\"_blank\">\n  <span class=\"fr-sr-only\">\n   Ouvre une nouvelle fenêtre\n  </span>\n </a>\n</p>",
+      "eligibility": "<p>\n Déposez un projet sur la plateforme\n <a href=\"https://placedelagare.sncf/\" target=\"_self\">\n  https://placedelagare.sncf/\n </a>\n</p>\n<p>\n Votre candidature sera analysée par un jury SNCF.\n</p>\n<p>\n <span class=\"fr-sr-only\">\n  <a href=\"https://placedelagare.sncf/\" target=\"_self\">\n   Ouvre une nou\n  </a>\n  <span style=\"font-size: 1rem; background-color: var(--background-default-grey); color: var(--text-default-grey);\">\n   qui sera soumis à la validation du jury\n  </span>\n </span>\n</p>",
+      "perimeter": "France",
+      "perimeter_scale": "Pays",
+      "mobilization_steps": [
+        "Mise en œuvre / réalisation",
+        "Usage / valorisation"
+      ],
+      "origin_url": "https://placedelagare.sncf/",
+      "categories": [
+        "Culture et identité collective / patrimoine / sports / Arts plastiques et photographie",
+        "Culture et identité collective / patrimoine / sports / Sports et loisirs",
+        "Développement économique / production et consommation / Tourisme",
+        "Urbanisme / logement / aménagement / Friche",
+        "Développement économique / production et consommation / Commerces et services",
+        "Développement économique / production et consommation / Tiers-lieux",
+        "Développement économique / production et consommation / Economie circulaire",
+        "Développement économique / production et consommation / Economie locale et circuits courts",
+        "Développement économique / production et consommation / Consommation et production",
+        "Développement économique / production et consommation / Economie sociale et solidaire",
+        "Développement économique / production et consommation / Artisanat",
+        "Mobilité / transports / Mobilité partagée",
+        "Mobilité / transports / Mobilité pour tous",
+        "Mobilité / transports / Modes actifs : vélo, marche et aménagements associés"
+      ],
+      "is_call_for_project": true,
+      "application_url": "https://placedelagare.sncf/",
+      "targeted_audiences": [
+        "Commune",
+        "Intercommunalité / Pays",
+        "Département",
+        "Région",
+        "Collectivité d’outre-mer à statut particulier",
+        "Etablissement public dont services de l'Etat",
+        "Entreprise publique locale (Sem, Spl, SemOp)",
+        "Association",
+        "Entreprise privée",
+        "Particulier",
+        "Agriculteur",
+        "Recherche"
+      ],
+      "aid_types": [
+        "Autre aide financière"
+      ],
+      "aid_types_full": [
+        {
+          "id": 5,
+          "name": "Autre aide financière",
+          "group": {
+            "id": 1,
+            "name": "Aide financière"
+          }
+        }
+      ],
+      "is_charged": false,
+      "destinations": [
+        "Dépenses d’investissement"
+      ],
+      "start_date": null,
+      "predeposit_date": null,
+      "submission_deadline": null,
+      "subvention_rate_lower_bound": null,
+      "subvention_rate_upper_bound": null,
+      "subvention_comment": null,
+      "loan_amount": null,
+      "recoverable_advance_amount": null,
+      "contact": "<p>\n <a href=\"https://placedelagare.sncf/\" target=\"_self\">\n  https://placedelagare.sncf/\n </a>\n <br/>\n</p>",
+      "recurrence": "Permanente",
+      "project_examples": "<ul>\n <li>\n  Commerces\n </li>\n <li>\n  Co-working\n </li>\n <li>\n  Maison médicale\n </li>\n <li>\n  Logement saisonnier\n </li>\n <li>\n  Hébergement d'urgence\n </li>\n <li>\n  Magasins de producteurs\n </li>\n <li>\n  Circuit court\n </li>\n <li>\n  Office de tourisme\n </li>\n <li>\n  Crèche\n </li>\n <li>\n  Bibliothèque\n </li>\n <li>\n  Médiathèque\n </li>\n <li>\n  Musée\n </li>\n <li>\n  Vélostation\n </li>\n <li>\n  Et tout autre projet\n </li>\n</ul>",
+      "import_data_url": null,
+      "import_data_mention": null,
+      "import_share_licence": null,
+      "date_created": "2021-08-17T16:07:22+00:00",
+      "date_updated": "2024-05-03T08:16:29+00:00",
+      "project_references": [
+        "Mise en place d’un café / bistrot"
+      ],
+      "european_aid": null,
+      "is_live": true
+    },
+    {
+      "id": 89471,
+      "slug": "1f1b-service-gratuit-urbanvitaliz-debloquer-les-pr",
+      "url": "/aides/1f1b-service-gratuit-urbanvitaliz-debloquer-les-pr/",
+      "name": "Débloquer les projets de revitalisation des friches - UrbanVitaliz",
+      "name_initial": null,
+      "short_title": null,
+      "financers": [
+        "Cerema",
+        "Agence nationale de la cohésion des territoires (ANCT)",
+        "Ministères de l'Aménagement du territoire et de la Transition écologique",
+        "Établissement Public Foncier des Hauts-de-France (EPF)"
+      ],
+      "financers_full": [
+        {
+          "id": 58,
+          "name": "Cerema",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/cerema_logo.jpg"
+        },
+        {
+          "id": 514,
+          "name": "Agence nationale de la cohésion des territoires (ANCT)",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/agence-nationale-de-la-cohesion-des-territoires-an_logo.png"
+        },
+        {
+          "id": 26,
+          "name": "Ministères de l'Aménagement du territoire et de la Transition écologique",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/capture-d-ecran-2025-03-12-a-12-28-30-1741779056.png"
+        },
+        {
+          "id": 668,
+          "name": "Établissement Public Foncier des Hauts-de-France (EPF)",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/etablissement-public-foncier-nord-pas-de-calais_logo.jpg"
+        }
+      ],
+      "instructors": [],
+      "instructors_full": [],
+      "programs": [
+        "Fonds vert Ingénierie"
+      ],
+      "description": "<p>\r\n <a href=\"https://urbanvitaliz.fr/\" target=\"_self\">\r\n  UrbanVitaliz\r\n </a>\r\n est un service humain et numérique gratuit qui permet de\r\n <strong>\r\n  lever les blocages rencontrés par les collectivités en déficit d'ingénierie qui souhaitent débloquer le foncier à l'abandon\r\n </strong>\r\n sur leur territoire (anciennes zones commerciales, industrielles, ferroviaires, résidences à l'abandon, etc.).\r\n</p>\r\n<p>\r\n Le foncier artificialisé qui a perdu son usage représente une belle opportunité de renouvellement urbain, pour limiter l'artificialisation de sols naturels ou agricoles. Mais il est aussi très complexe à réhabiliter, et de nombreuses collectivités en déficit d'ingénierie renoncent face aux difficultés et inconnues rencontrées.\r\n <br>\r\n</p>\r\n<p>\r\n En lien avec les acteurs ressources des territoires,\r\n <a href=\"https://urbanvitaliz.fr/\" target=\"_self\">\r\n  UrbanVitaliz\r\n </a>\r\n agit d'ores et déjà avec succès auprès des communes et intercommunalités pour\r\n <strong>\r\n  les aiguiller gratuitement dans leur démarche\r\n </strong>\r\n :\r\n <br>\r\n <span>👩‍💼</span>\r\n En les orientant vers un\r\n <strong>\r\n  acteur public ou privé\r\n </strong>\r\n qui peut intervenir aux côtés de la collectivité en fonction de son cas de figure (EPF, Ademe, services de l'Etat, prestation d'acteur privé, etc.) ;\r\n <br>\r\n <span>💸</span>\r\n En faisant le tri parmi les\r\n <strong>\r\n  financements existants\r\n </strong>\r\n pour un type de projet donné ;\r\n <br>\r\n <span>📌</span>\r\n En proposant les\r\n <strong>\r\n  prochaines étapes à suivre\r\n </strong>\r\n jusqu'à la phase travaux, etc.\r\n</p>\r\n<p>\r\n La construction du parcours numérique et l'alimentation de l'outil avec les bonnes ressources sont réalisées au fil de l'eau à partir des besoins des collectivités qui sollicitent le service, en partenariat avec l'ensemble des acteurs du territoire (Ademe, Établissements Publics Fonciers, Agences d'urbanisme, SAFER, etc.).\r\n <br>\r\n L'équipe est composée de 2 urbanistes conseillères qui prennent contact directement avec les communes pour apporter des solutions pertinentes, et d'une personne chargée de déploiement disponible pour vous aider sur le service.\r\n <br>\r\n <br>\r\n 72 % des dossiers sont déposés par des communes de moins de 5000 habitants\r\n <br>\r\n 40% des dossiers par des communes de moins de 2000 habitants\r\n</p>\r\n<p>\r\n Revitalisation - Renouvellement urbain - Renaturation - Sobriété foncière - Lien entre acteurs du territoire - Appui à l'ingénierie\r\n</p>\r\n<p>\r\n Il s'agit d'une initiative du Cerema et de beta.gouv.fr en partenariat avec le MTE (DGALN), l'ANCT et l'EPF Hauts-de-France, qui s'inscrit dans le cadre du Zéro Artificialisation Nette.\r\n <br>\r\n</p>",
+      "eligibility": "<ul>\r\n <li>\r\n  Avoir repéré une friche à revitaliser/renaturer\r\n </li>\r\n <li>\r\n  Être une collectivité ou en lien avec la collectivité</li>\r\n</ul>",
+      "perimeter": "France",
+      "perimeter_scale": "Pays",
+      "mobilization_steps": [
+        "Réflexion / conception",
+        "Mise en œuvre / réalisation"
+      ],
+      "origin_url": "http://www.urbanvitaliz.fr",
+      "categories": [
+        "Culture et identité collective / patrimoine / sports / Patrimoine et monuments historiques",
+        "Nature / environnement / Sols",
+        "Urbanisme / logement / aménagement / Espaces verts",
+        "Urbanisme / logement / aménagement / Espace public",
+        "Urbanisme / logement / aménagement / Friche",
+        "Urbanisme / logement / aménagement / Foncier",
+        "Énergies / Déchets / Economie d'énergie et rénovation énergétique",
+        "Développement économique / production et consommation / Tiers-lieux",
+        "Développement économique / production et consommation / Revitalisation",
+        "Nature / environnement / Biodiversité",
+        "Urbanisme / logement / aménagement / Equipement public",
+        "Urbanisme / logement / aménagement / Réhabilitation",
+        "Urbanisme / logement / aménagement / Logement et habitat",
+        "Fonctions support / Appui méthodologique"
+      ],
+      "is_call_for_project": false,
+      "application_url": "https://urbanvitaliz.fr/onboarding/",
+      "targeted_audiences": [
+        "Commune",
+        "Intercommunalité / Pays",
+        "Collectivité d’outre-mer à statut particulier",
+        "Entreprise publique locale (Sem, Spl, SemOp)",
+        "Association",
+        "Particulier"
+      ],
+      "aid_types": [
+        "Ingénierie technique",
+        "Ingénierie financière",
+        "Ingénierie Juridique / administrative"
+      ],
+      "aid_types_full": [
+        {
+          "id": 6,
+          "name": "Ingénierie technique",
+          "group": {
+            "id": 2,
+            "name": "Aide en ingénierie"
+          }
+        },
+        {
+          "id": 7,
+          "name": "Ingénierie financière",
+          "group": {
+            "id": 2,
+            "name": "Aide en ingénierie"
+          }
+        },
+        {
+          "id": 8,
+          "name": "Ingénierie Juridique / administrative",
+          "group": {
+            "id": 2,
+            "name": "Aide en ingénierie"
+          }
+        }
+      ],
+      "is_charged": false,
+      "destinations": [
+        "Dépenses de fonctionnement",
+        "Dépenses d’investissement"
+      ],
+      "start_date": null,
+      "predeposit_date": null,
+      "submission_deadline": null,
+      "subvention_rate_lower_bound": null,
+      "subvention_rate_upper_bound": null,
+      "subvention_comment": null,
+      "loan_amount": null,
+      "recoverable_advance_amount": null,
+      "contact": "<p>\r\n friches@beta.gouv.fr\r\n <br>\r\n</p><p>https://urbanvitaliz.fr/onboarding/<br></p>",
+      "recurrence": "Permanente",
+      "project_examples": "<p>\r\n L'appui aux collectivités a démarré en décembre 2020 et déjà 440 collectivités furent mises sur les bons rails pour le démarrage de leur projet. À titre d'exemple, UrbanVitaliz a permis aux collectivités de faire maturer leurs projets pour pouvoir candidater au Fonds vert / fonds friches, de progresser dans leurs démarches en prenant un contact efficace avec les acteurs locaux ou en candidatant aux financements pertinents.</p>",
+      "import_data_url": null,
+      "import_data_mention": null,
+      "import_share_licence": null,
+      "date_created": "2021-03-24T10:19:00+00:00",
+      "date_updated": "2024-06-24T08:13:00+00:00",
+      "project_references": [],
+      "european_aid": null,
+      "is_live": true
+    },
+    {
+      "id": 83479,
+      "slug": "7453-copie-10h00-federer-les-accompagnements-en-en",
+      "url": "/aides/7453-copie-10h00-federer-les-accompagnements-en-en/",
+      "name": "Fédérer les accompagnements en amont de projets de construction, architecture, urbanisme, énergie, paysage et environnement, culture",
+      "name_initial": null,
+      "short_title": null,
+      "financers": [
+        "Union régionale des CAUE des Hauts de France",
+        "Union régionale des CAUE Normands",
+        "Union régionale des CAUE d'Auvergne-Rhône-Alpes",
+        "Union régionale des CAUE Bourgogne-Franche-Comté",
+        "Union régionale des CAUE d'Île-de-France",
+        "Union régionale des CAUE d'Occitanie",
+        "Union régionale des CAUE des Pays de la Loire",
+        "Union régionale des CAUE de Nouvelle-Aquitaine"
+      ],
+      "financers_full": [
+        {
+          "id": 1591,
+          "name": "Union régionale des CAUE des Hauts de France",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-des-hauts-de-france_logo.jpeg"
+        },
+        {
+          "id": 1674,
+          "name": "Union régionale des CAUE Normands",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-normands_logo.png"
+        },
+        {
+          "id": 1586,
+          "name": "Union régionale des CAUE d'Auvergne-Rhône-Alpes",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-dauvergne-rhone-alpes_logo.jpeg"
+        },
+        {
+          "id": 1589,
+          "name": "Union régionale des CAUE Bourgogne-Franche-Comté",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-bourgogne-franche-comte_logo.jpeg"
+        },
+        {
+          "id": 1590,
+          "name": "Union régionale des CAUE d'Île-de-France",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-dile-de-france_logo.png"
+        },
+        {
+          "id": 1588,
+          "name": "Union régionale des CAUE d'Occitanie",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-doccitanie_logo.jpeg"
+        },
+        {
+          "id": 1587,
+          "name": "Union régionale des CAUE des Pays de la Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-des-pays-de-la-loire_logo.jpeg"
+        },
+        {
+          "id": 1585,
+          "name": "Union régionale des CAUE de Nouvelle-Aquitaine",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/union-regionale-des-caue-de-nouvelle-aquitaine_logo.png"
+        }
+      ],
+      "instructors": [],
+      "instructors_full": [],
+      "programs": [
+        "Petites villes de demain",
+        "Action cœur de ville",
+        "Territoires d'industrie",
+        "Avenir Montagnes",
+        "Cités éducatives",
+        "Tourisme Ingénierie Développement",
+        "Destination France",
+        "France 2030",
+        "Renaturation des villes",
+        "Fonds vert Ingénierie",
+        "Fonds Biodiversité"
+      ],
+      "description": "<p>\r\n <strong>\r\n  L'Union régionale des CAUE (URCAUE) regroupe les CAUE volontaires de la région concernée.\r\n  <br>\r\n  Elle a pour mission de :\r\n </strong>\r\n <br>\r\n</p>\r\n<ul>\r\n <li>\r\n  représenter et promouvoir les CAUE de sa région ;\r\n </li>\r\n <li>\r\n  identifier et mettre la connaissance et l'expérience des CAUE à disposition des acteurs publics ou privés d'échelle régional ;\r\n </li>\r\n <li>\r\n  coordonner des actions des CAUE pour lesquelles une organisation à l'échelle régionale est pertinente ;\r\n  <br>\r\n </li>\r\n <li>\r\n  contribuer à faciliter le débat entre les acteurs de l'architecture, l'urbanisme et l'environnement qui interviennent à l'échelon régional.\r\n </li>\r\n</ul>\r\n<p>\r\n <br>\r\n En ce sens, elle peut donc être un interlocuteur de la collectivité régionale, des services de l'Etat et de tout autre acteur mobilisés à ce niveau. Elle ne se substitue en rien à l'action des CAUE.\r\n <br>\r\n Elle repose à minima sur une organisation entre les CAUE qui la compose et certaines URCAUE dispose de un ou plusieurs salariés.\r\n <br>\r\n <br>\r\n</p>\r\n<p>\r\n <strong>\r\n  Les CAUE vous apportent une aide et un conseil gratuit, neutre et personnalisé\r\n </strong>\r\n à partir de vos questions, de vos idées et de vos besoins. Leurs équipes sont pluridisciplinaires et œuvrent au quotidien, sur le terrain.\r\n <br>\r\n</p>\r\n<p>\r\n <strong>\r\n  Les CAUE contribuent à améliorer la qualité de vie chacun\r\n </strong>\r\n . Ils ont pour objet la promotion de la qualité de l'architecture, de l'urbanisme et de l'environnement. Organismes départementaux issus de la loi sur l'architecture du 3 janvier 1977, ils assument des missions d'intérêt public.\r\n <br>\r\n</p>\r\n<p>\r\n <strong>\r\n  Les CAUE sont à votre service\r\n </strong>\r\n .\r\n <br>\r\n</p>\r\n<ul>\r\n <li>\r\n  Vous êtes un élu ou un agent de collectivité territoriale et vous souhaitez un appui pour définir vos projets et vos politiques publiques ?\r\n </li>\r\n <li>\r\n  Vous êtes un particulier et vous avez une envie ou un projet de construction, d'extension, de rénovation, d'énergie renouvelable... ?\r\n </li>\r\n <li>\r\n  Vous êtes une administration ou un service de l'État, et vous souhaitez être accompagné pour la mise en œuvre de politiques publiques territoriales... ?\r\n </li>\r\n <li>\r\n  Vous êtes un professionnel de la construction et vous souhaitez bénéficier du retour d'expériences d'autres acteurs... ?\r\n </li>\r\n <li>\r\n  Vous êtes un enseignant ou un professionnel de la culture et vous voulez organiser des activités pédagogiques ou développer des offres culturelles... ?\r\n </li>\r\n <li>\r\n  Vous souhaitez renforcer vos démarches en faveur de la transition écologique ? Expérimenter des pistes innovantes ?\r\n </li>\r\n</ul>\r\n<p>\r\n <strong>\r\n  La palette de leurs interventions est multiple :\r\n </strong>\r\n <br>\r\n</p>\r\n<ul>\r\n <li>\r\n  Accompagnement dans des projets de construction, d'architecture, d'aménagement, d'urbanisme, de paysage, d'environnement, d'énergie : aide à la décision, conseil, diagnostic, note d'enjeux, préparation à la programmation, organisation de la concertation, animation du débat public, participation à des jury, évaluation de politiques publiques, médiation...\r\n </li>\r\n <li>\r\n  Animations interprofessionnelles, mise en réseaux des acteurs du territoire\r\n </li>\r\n <li>\r\n  Information, fourniture de données\r\n </li>\r\n</ul>\r\n<p>\r\n <em>\r\n  NB : les CAUE ne font pas de maîtrise d'œuvre.\r\n  <br>\r\n </em>\r\n</p>\r\n<p>\r\n <br>\r\n</p>",
+      "eligibility": null,
+      "perimeter": "France",
+      "perimeter_scale": "Pays",
+      "mobilization_steps": [
+        "Réflexion / conception",
+        "Mise en œuvre / réalisation",
+        "Usage / valorisation"
+      ],
+      "origin_url": "http://www.fncaue.fr",
+      "categories": [
+        "Eau et milieux aquatiques / Eau pluviale",
+        "Eau et milieux aquatiques / Assainissement des eaux",
+        "Eau et milieux aquatiques / Eau souterraine",
+        "Eau et milieux aquatiques / Cours d'eau / canaux / plans d'eau",
+        "Culture et identité collective / patrimoine / sports / Patrimoine et monuments historiques",
+        "Culture et identité collective / patrimoine / sports / Culture et identité collective",
+        "Culture et identité collective / patrimoine / sports / Arts plastiques et photographie",
+        "Culture et identité collective / patrimoine / sports / Musée",
+        "Culture et identité collective / patrimoine / sports / Sports et loisirs",
+        "Développement économique / production et consommation / Tourisme",
+        "Nature / environnement / Forêts",
+        "Nature / environnement / Montagne",
+        "Nature / environnement / Sols",
+        "Urbanisme / logement / aménagement / Espaces verts",
+        "Urbanisme / logement / aménagement / Espace public",
+        "Urbanisme / logement / aménagement / Friche",
+        "Urbanisme / logement / aménagement / Foncier",
+        "Urbanisme / logement / aménagement / Voirie et réseaux",
+        "Énergies / Déchets / Transition énergétique",
+        "Énergies / Déchets / Economie d'énergie et rénovation énergétique",
+        "Énergies / Déchets / Réseaux de chaleur",
+        "Énergies / Déchets / Recyclage et valorisation des déchets",
+        "Solidarités / lien social / Personnes âgées",
+        "Solidarités / lien social / Jeunesse",
+        "Solidarités / lien social / Famille et enfance",
+        "Solidarités / lien social / Cohésion sociale et inclusion",
+        "Solidarités / lien social / Citoyenneté",
+        "Solidarités / lien social / Santé",
+        "Solidarités / lien social / Education et renforcement des compétences",
+        "Développement économique / production et consommation / Commerces et services",
+        "Développement économique / production et consommation / Tiers-lieux",
+        "Développement économique / production et consommation / Economie circulaire",
+        "Développement économique / production et consommation / Economie locale et circuits courts",
+        "Développement économique / production et consommation / Agriculture et agroalimentaire",
+        "Développement économique / production et consommation / Revitalisation",
+        "Développement économique / production et consommation / Innovation, créativité et recherche",
+        "Nature / environnement / Risques naturels",
+        "Nature / environnement / Qualité de l'air",
+        "Nature / environnement / Biodiversité",
+        "Urbanisme / logement / aménagement / Equipement public",
+        "Urbanisme / logement / aménagement / Bâtiments et construction",
+        "Urbanisme / logement / aménagement / Réhabilitation",
+        "Urbanisme / logement / aménagement / Logement et habitat",
+        "Urbanisme / logement / aménagement / Architecture",
+        "Urbanisme / logement / aménagement / Paysage",
+        "Urbanisme / logement / aménagement / Accessibilité",
+        "Développement économique / production et consommation / International",
+        "Développement économique / production et consommation / Attractivité économique",
+        "Fonctions support / Appui méthodologique",
+        "Fonctions support / Animation et mise en réseau",
+        "Fonctions support / Valorisation d'actions",
+        "Fonctions support / Prévention des risques",
+        "Développement économique / production et consommation / Artisanat",
+        "Mobilité / transports / Mobilité partagée",
+        "Mobilité / transports / Logistique urbaine",
+        "Mobilité / transports / Mobilité pour tous",
+        "Mobilité / transports / Connaissance de la mobilité",
+        "Mobilité / transports / Modes actifs : vélo, marche et aménagements associés",
+        "Énergies / Déchets / Réduction de l'empreinte carbone",
+        "Nature / environnement / Milieux humides",
+        "Urbanisme / logement / aménagement / Cimetières et funéraire",
+        "Nature / environnement / Solutions d'adaptation fondées sur la nature (SafN)"
+      ],
+      "is_call_for_project": false,
+      "application_url": null,
+      "targeted_audiences": [
+        "Région",
+        "Collectivité d’outre-mer à statut particulier",
+        "Etablissement public dont services de l'Etat",
+        "Entreprise publique locale (Sem, Spl, SemOp)",
+        "Association",
+        "Entreprise privée",
+        "Particulier",
+        "Agriculteur",
+        "Recherche"
+      ],
+      "aid_types": [
+        "Ingénierie technique"
+      ],
+      "aid_types_full": [
+        {
+          "id": 6,
+          "name": "Ingénierie technique",
+          "group": {
+            "id": 2,
+            "name": "Aide en ingénierie"
+          }
+        }
+      ],
+      "is_charged": false,
+      "destinations": [
+        "Dépenses de fonctionnement",
+        "Dépenses d’investissement"
+      ],
+      "start_date": null,
+      "predeposit_date": null,
+      "submission_deadline": null,
+      "subvention_rate_lower_bound": null,
+      "subvention_rate_upper_bound": null,
+      "subvention_comment": null,
+      "loan_amount": null,
+      "recoverable_advance_amount": null,
+      "contact": "<p>\r\n Les contacts des unions régionales :\r\n <br>\r\n</p>\r\n<p>\r\n Union régionale des CAUE normands\r\n <br>\r\n 51 rue Joséphine 27000 ÉVREUX\r\n <br>\r\n Tél : 02 32 33 15 78 - contact@cauenormands.fr -\r\n</p>\r\n<p>\r\n Union régionale des CAUE des Hauts de France\r\n <br>\r\n 35 mail Albert 1er 80000 AMIENS\r\n <br>\r\n Tél : - contact@caue02.com -\r\n</p>\r\n<p>\r\n URCAUE AUVERGNE-RHÔNE-ALPES\r\n <br>\r\n 6 bis, quai Saint-Vincent 69283 LYON Cedex 01\r\n <br>\r\n Tél : 07 87 68 94 27 - urcaue.aura@gmail.com - http://www.urcaue-aura.fr/\r\n</p>\r\n<p>\r\n URCAUE BOURGOGNE-FRANCHE-COMTÉ\r\n <br>\r\n 1 rue de Soissons 21000 DIJON\r\n <br>\r\n Tél : 03 80 30 02 38 -\r\n <br>\r\n</p>\r\n<p>\r\n LES CAUE D'ILE-DE-FRANCE\r\n <br>\r\n c/o CAUE de Seine-Saint-Denis 153 avenue Jean Lolive 93500 PANTIN\r\n <br>\r\n Tél : 01 48 32 40 81 - contact@caue-idf.fr - http://www.caue-idf.fr/\r\n</p>\r\n<p>\r\n URCAUE NOUVELLE-AQUITAINE\r\n <br>\r\n 293 rue d'Ornano 33000 BORDEAUX\r\n <br>\r\n Tél : 05 56 12 27 68 - contact@urcaue-na.fr - http://www.urcaue-na.fr\r\n</p>\r\n<p>\r\n Union régionale Les CAUE d'Occitanie\r\n <br>\r\n 5 avenue Frizac 31400 TOULOUSE\r\n <br>\r\n Tél : 05 34 41 39 59 - contact@les-caue-occitanie.fr - http://www.les-caue-occitanie.fr\r\n</p>\r\n<p>\r\n URCAUE DES PAYS-DE-LA-LOIRE\r\n <br>\r\n 312, avenue René Gasnier 49100 ANGERS\r\n <br>\r\n Tél : 02 41 22 99 91 - contact@urcaue-paysdelaloire.com - http://www.urcaue-paysdelaloire.com\r\n <br>\r\n</p>\r\n<p>\r\n <a href=\"https://www.fncaue.com/repertoire-caue-urcaue/\" rel=\"noopener\" target=\"_blank\">\r\n  Retrouvez l'annuaire des CAUE ici\r\n  <span class=\"fr-sr-only\">\r\n   Ouvre une nouvelle fenêtre\r\n  </span>\r\n  <span class=\"fr-sr-only\">\r\n   Ouvre une nouvelle fenêtre\r\n  </span>\r\n </a>\r\n</p>",
+      "recurrence": "Permanente",
+      "project_examples": "<p>\r\n L'ARCHITECTURE – LA CONSTRUCTION\r\n <br>\r\n Bâtiments / (Eco) Construction / Rénovation / Réhabilitation / Habitat / Logement / Savoir-faire locaux / Patrimoine /Accessibilité / Énergie / Accueil de la petite enfance / Ecoles / Collège / Lycée / Équipement public / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Autorisation d'urbanisme / Droit de la construction / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Equipement public\r\n <br>\r\n <br>\r\n L'URBANISME – L'AMÉNAGEMENT\r\n <br>\r\n Stratégie et planification territoriale /Urbanisme réglementaire / Urbanisme de projet / Urbanisme opérationnel / Climat / Foncier/ Aménagement d'espace public / Aménagement paysager / Revitalisation des centres-villes / Traversée de bourg / Zone d'activité / Commerce / Politique de la ville / Quartier / Urbain / Rural / Petites Villes de Demain (PVD) / Action Coeur de Ville\r\n <br>\r\n <br>\r\n L'ENVIRONNEMENT – LE PAYSAGE\r\n <br>\r\n Paysage / Espace naturel /Espace vert / Fleurissement / Embellissement / Biodiversité / Eau /Trame verte, trame bleue / Risques naturels / Ecologie / Jardins / Aires de jeux\r\n <br>\r\n <br>\r\n TRANSVERSALEMENT\r\n <br>\r\n</p>\r\n<p>\r\n Accessibilité / Mobilité / Voies de communication / Publicité / Tourisme / Transition énergétique / Aménagement du territoire / Vivre ensemble / Action Educative et Culturelle /\r\n</p>",
+      "import_data_url": null,
+      "import_data_mention": null,
+      "import_share_licence": null,
+      "date_created": "2021-02-26T11:00:00+00:00",
+      "date_updated": "2024-05-03T08:42:00+00:00",
+      "project_references": [
+        "Construction d'une piscine",
+        "Construction d’une école",
+        "Cour d’école : végétaliser, désimperméabiliser, jeux, voiles ombrages",
+        "Rénovation énergétique école"
+      ],
+      "european_aid": null,
+      "is_live": true
+    },
+    {
+      "id": 82915,
+      "slug": "d6d7-copie-16h24-etre-accompagne-en-amont-de-proje",
+      "url": "/aides/d6d7-copie-16h24-etre-accompagne-en-amont-de-proje/",
+      "name": "Être accompagné en amont de projets de construction, architecture, urbanisme, aménagement, énergie, paysage et environnement et culture",
+      "name_initial": null,
+      "short_title": null,
+      "financers": [
+        "CAUE de l’Indre-et-Loire",
+        "CAUE de la Somme",
+        "CAUE d'Alsace",
+        "CAUE du Morbihan",
+        "CAUE du Loiret",
+        "CAUE du Loir-et-Cher",
+        "CAUE de la Creuse",
+        "CAUE de Corse",
+        "CAUE des Hauts-de-Seine",
+        "CAUE de l'Orne",
+        "CAUE de l'Yonne",
+        "CAUE du Var",
+        "CAUE de l'Île-de-la-Réunion",
+        "CAUE de la Guyane",
+        "CAUE de la Martinique",
+        "CAUE de Guadeloupe",
+        "CAUE du Val d'Oise",
+        "CAUE du Val-de-Marne",
+        "CAUE de la Charente-Maritime",
+        "CAUE du Tarn-et-Garonne",
+        "CAUE de la Haute-Savoie",
+        "Fédération Nationale des Conseils d'Architecture, d'Urbanisme et de l'Environnement",
+        "CAUE de l'Essonne",
+        "CAUE des Vosges",
+        "CAUE de la Haute-Vienne",
+        "CAUE de la Vendée",
+        "CAUE des Deux-Sèvres",
+        "CAUE du Pas-de-Calais",
+        "CAUE de la Seine-Maritime",
+        "CAUE de la Côte-d'Or",
+        "CAUE de la Savoie",
+        "CAUE de la Sarthe",
+        "CAUE de la Haute-Saône",
+        "CAUE de Rhône-Métropole",
+        "CAUE des Pyrénées-Orientales",
+        "CAUE des Hautes-Pyrénées",
+        "CAUE des Pyrénées-Atlantiques",
+        "CAUE de la Seine-et-Marne",
+        "CAUE des Landes",
+        "CAUE de la Moselle",
+        "CAUE de Meurthe-et-Moselle",
+        "CAUE de la Mayenne",
+        "CAUE de la Manche",
+        "CAUE du Maine-et-Loire",
+        "CAUE Lot-et-Garonne",
+        "CAUE du Lot",
+        "CAUE de la Haute-Loire",
+        "CAUE de l'Ariège",
+        "CAUE de Mayotte",
+        "CAUE de l'Isère",
+        "CAUE de l'Hérault",
+        "CAUE de la Gironde",
+        "CAUE de la Haute-Garonne",
+        "CAUE du Gard",
+        "CAUE de l'Eure",
+        "CAUE de l'Oise",
+        "CAUE de la Drôme",
+        "CAUE de l'Ardèche",
+        "CAUE de Corrèze",
+        "CAUE du Cher",
+        "CAUE de la Charente",
+        "CAUE du Cantal",
+        "CAUE du Calvados",
+        "CAUE des Bouches-du-Rhône",
+        "CAUE de l'Aveyron",
+        "CAUE du Puy-de-Dôme",
+        "Conseils d'architecture, d'urbanisme et d'environnement (CAUE)",
+        "CAUE de l'Aude",
+        "CAUE des Hautes-Alpes",
+        "CAUE de l'Allier",
+        "CAUE de l'Aisne",
+        "CAUE de l'Ain",
+        "CAUE du Gers",
+        "CAUE de la Meuse",
+        "CAUE du Tarn",
+        "CAUE de la Dordogne"
+      ],
+      "financers_full": [
+        {
+          "id": 805,
+          "name": "CAUE de l’Indre-et-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-37-img-couverture-1726566981.jpg"
+        },
+        {
+          "id": 2437,
+          "name": "CAUE de la Somme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue80-2019-1712065848.png"
+        },
+        {
+          "id": 2436,
+          "name": "CAUE d'Alsace",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-1712065535.png"
+        },
+        {
+          "id": 2435,
+          "name": "CAUE du Morbihan",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-56-1726576701.png"
+        },
+        {
+          "id": 2434,
+          "name": "CAUE du Loiret",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-45-1726574960.png"
+        },
+        {
+          "id": 2433,
+          "name": "CAUE du Loir-et-Cher",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue41-2x-1712065103.png"
+        },
+        {
+          "id": 2432,
+          "name": "CAUE de la Creuse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-23-512px-1712065002.webp"
+        },
+        {
+          "id": 2431,
+          "name": "CAUE de Corse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logos-caue-corse-original-1712064665.png"
+        },
+        {
+          "id": 793,
+          "name": "CAUE des Hauts-de-Seine",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-92-1726578842.jpg"
+        },
+        {
+          "id": 768,
+          "name": "CAUE de l'Orne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-61-1726576303.png"
+        },
+        {
+          "id": 791,
+          "name": "CAUE de l'Yonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-lyonne_logo.jpeg"
+        },
+        {
+          "id": 801,
+          "name": "CAUE du Var",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-83-1726578669.png"
+        },
+        {
+          "id": 799,
+          "name": "CAUE de l'Île-de-la-Réunion",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-lile-de-la-reunion_logo.png"
+        },
+        {
+          "id": 798,
+          "name": "CAUE de la Guyane",
+          "logo": null
+        },
+        {
+          "id": 797,
+          "name": "CAUE de la Martinique",
+          "logo": null
+        },
+        {
+          "id": 796,
+          "name": "CAUE de Guadeloupe",
+          "logo": null
+        },
+        {
+          "id": 795,
+          "name": "CAUE du Val d'Oise",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-val-doise_logo.png"
+        },
+        {
+          "id": 794,
+          "name": "CAUE du Val-de-Marne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-val-de-marne_logo.jpeg"
+        },
+        {
+          "id": 810,
+          "name": "CAUE de la Charente-Maritime",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-17-1726565258.jpg"
+        },
+        {
+          "id": 808,
+          "name": "CAUE du Tarn-et-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-tarn-et-garonne_logo.jpeg"
+        },
+        {
+          "id": 781,
+          "name": "CAUE de la Haute-Savoie",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-74-1726578412.jpg"
+        },
+        {
+          "id": 2439,
+          "name": "Fédération Nationale des Conseils d'Architecture, d'Urbanisme et de l'Environnement",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-fncaue-1712066635.jpg"
+        },
+        {
+          "id": 792,
+          "name": "CAUE de l'Essonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-91-1726578870.jpg"
+        },
+        {
+          "id": 790,
+          "name": "CAUE des Vosges",
+          "logo": null
+        },
+        {
+          "id": 789,
+          "name": "CAUE de la Haute-Vienne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-87-1726579460.png"
+        },
+        {
+          "id": 787,
+          "name": "CAUE de la Vendée",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-85-1726578570.png"
+        },
+        {
+          "id": 786,
+          "name": "CAUE des Deux-Sèvres",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-deux-sevres_logo.jpeg"
+        },
+        {
+          "id": 769,
+          "name": "CAUE du Pas-de-Calais",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-pas-de-calais_logo.jpeg"
+        },
+        {
+          "id": 783,
+          "name": "CAUE de la Seine-Maritime",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-76-1726578297.jpg"
+        },
+        {
+          "id": 745,
+          "name": "CAUE de la Côte-d'Or",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-21-1726566604.jpg"
+        },
+        {
+          "id": 780,
+          "name": "CAUE de la Savoie",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-73-1726577722.png"
+        },
+        {
+          "id": 779,
+          "name": "CAUE de la Sarthe",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-72-1726577816.jpg"
+        },
+        {
+          "id": 777,
+          "name": "CAUE de la Haute-Saône",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-70-1726577892.jpg"
+        },
+        {
+          "id": 776,
+          "name": "CAUE de Rhône-Métropole",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-rhone-metropole_logo.gif"
+        },
+        {
+          "id": 773,
+          "name": "CAUE des Pyrénées-Orientales",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-66-1726577210.jpg"
+        },
+        {
+          "id": 772,
+          "name": "CAUE des Hautes-Pyrénées",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-65-1726577290.png"
+        },
+        {
+          "id": 771,
+          "name": "CAUE des Pyrénées-Atlantiques",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-64-1726577599.webp"
+        },
+        {
+          "id": 784,
+          "name": "CAUE de la Seine-et-Marne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-77-1726578265.jpg"
+        },
+        {
+          "id": 757,
+          "name": "CAUE des Landes",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-landes_logo.png"
+        },
+        {
+          "id": 766,
+          "name": "CAUE de la Moselle",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-57-1726576650.jpg"
+        },
+        {
+          "id": 765,
+          "name": "CAUE de Meurthe-et-Moselle",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-meurthe-et-moselle_logo.png"
+        },
+        {
+          "id": 764,
+          "name": "CAUE de la Mayenne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-53-1726576090.jpg"
+        },
+        {
+          "id": 763,
+          "name": "CAUE de la Manche",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-50-1726576144.jpg"
+        },
+        {
+          "id": 762,
+          "name": "CAUE du Maine-et-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-49-1726576184.jpg"
+        },
+        {
+          "id": 761,
+          "name": "CAUE Lot-et-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-lot-et-garonne_logo.jpeg"
+        },
+        {
+          "id": 760,
+          "name": "CAUE du Lot",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-46-1726574546.jpg"
+        },
+        {
+          "id": 759,
+          "name": "CAUE de la Haute-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-43-1726575023.jpg"
+        },
+        {
+          "id": 734,
+          "name": "CAUE de l'Ariège",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-09-1726501414.png"
+        },
+        {
+          "id": 2438,
+          "name": "CAUE de Mayotte",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/images-1-1712066056.png"
+        },
+        {
+          "id": 755,
+          "name": "CAUE de l'Isère",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue38-1726566676.jpg"
+        },
+        {
+          "id": 754,
+          "name": "CAUE de l'Hérault",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-34-1726567021.jpg"
+        },
+        {
+          "id": 753,
+          "name": "CAUE de la Gironde",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-33-1726567062.png"
+        },
+        {
+          "id": 751,
+          "name": "CAUE de la Haute-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-31-1726567192.png"
+        },
+        {
+          "id": 750,
+          "name": "CAUE du Gard",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-gard_logo.jpeg"
+        },
+        {
+          "id": 748,
+          "name": "CAUE de l'Eure",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue27-414x583-retina-png-1726566260.webp"
+        },
+        {
+          "id": 767,
+          "name": "CAUE de l'Oise",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-60-1-1726576581.png"
+        },
+        {
+          "id": 747,
+          "name": "CAUE de la Drôme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/26-1726566336.gif"
+        },
+        {
+          "id": 733,
+          "name": "CAUE de l'Ardèche",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-07-1726501480.jpg"
+        },
+        {
+          "id": 742,
+          "name": "CAUE de Corrèze",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-19-1726501612.jpg"
+        },
+        {
+          "id": 741,
+          "name": "CAUE du Cher",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-cher_logo.jpeg"
+        },
+        {
+          "id": 740,
+          "name": "CAUE de la Charente",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-16-1726565592.png"
+        },
+        {
+          "id": 739,
+          "name": "CAUE du Cantal",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-cantal_logo.png"
+        },
+        {
+          "id": 738,
+          "name": "CAUE du Calvados",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-calvados_logo.png"
+        },
+        {
+          "id": 737,
+          "name": "CAUE des Bouches-du-Rhône",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-bouches-du-rhone_logo.gif"
+        },
+        {
+          "id": 736,
+          "name": "CAUE de l'Aveyron",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-12-1726501277.png"
+        },
+        {
+          "id": 770,
+          "name": "CAUE du Puy-de-Dôme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-63-1726577658.jpg"
+        },
+        {
+          "id": 1805,
+          "name": "Conseils d'architecture, d'urbanisme et d'environnement (CAUE)",
+          "logo": null
+        },
+        {
+          "id": 735,
+          "name": "CAUE de l'Aude",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-laude_logo.png"
+        },
+        {
+          "id": 732,
+          "name": "CAUE des Hautes-Alpes",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-05-1726501177.png"
+        },
+        {
+          "id": 731,
+          "name": "CAUE de l'Allier",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-3-1726501029.webp"
+        },
+        {
+          "id": 730,
+          "name": "CAUE de l'Aisne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue02-1726500914.png"
+        },
+        {
+          "id": 729,
+          "name": "CAUE de l'Ain",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/vignette-logo-102020-1726500658.jpg"
+        },
+        {
+          "id": 728,
+          "name": "CAUE du Gers",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-32-1726567109.png"
+        },
+        {
+          "id": 508,
+          "name": "CAUE de la Meuse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-55-1726576868.png"
+        },
+        {
+          "id": 447,
+          "name": "CAUE du Tarn",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-tarn_logo.png"
+        },
+        {
+          "id": 746,
+          "name": "CAUE de la Dordogne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-24-1726566413.png"
+        }
+      ],
+      "instructors": [],
+      "instructors_full": [],
+      "programs": [
+        "Petites villes de demain",
+        "France Relance",
+        "Action cœur de ville",
+        "Territoires d'industrie",
+        "4ème Programme d’investissements d’avenir - PIA 4",
+        "Avenir Montagnes",
+        "Cités éducatives",
+        "Destination France",
+        "Renaturation des villes",
+        "Fonds vert Ingénierie"
+      ],
+      "description": "<p>\n <strong>\n  Les CAUE vous apportent une aide et un conseil gratuit, neutre et personnalisé\n </strong>\n à partir de vos questions, de vos idées et de vos besoins. Leurs équipes sont pluridisciplinaires et œuvrent au quotidien, sur le terrain, dans presque la totalité du territoire national (92 CAUE).\n <br />\n</p>\n<p>\n <strong>\n  Les CAUE contribuent à améliorer qualité de vie de chacun\n </strong>\n . Ils ont pour objet la promotion de la qualité de l&#039;architecture, de l&#039;urbanisme et de l&#039;environnement. Organismes départementaux issus de la loi sur l&#039;architecture du 3 janvier 1977, ils assument des missions d&#039;intérêt public.\n Ils oeuvrent en lien avec les politiques départementales, locales et déclinent les politiques publiques nationales.\n <br />\n</p>\n<p>\n <strong>\n  Les CAUE sont à votre service.\n </strong>\n <br />\n</p>\n<ul>\n <li>\n  Vous êtes un élu, un maire ou un agent de collectivité territoriale et vous souhaitez un appui pour définir vos projets et vos politiques publiques ?\n </li>\n <li>\n  Vous êtes un particulier et vous avez une envie ou un projet de construction, d&#039;extension, de rénovation, d&#039;énergie renouvelable... ?\n </li>\n <li>\n  Vous êtes une administration ou un service de l&#039;État, et vous souhaitez être accompagné pour la mise en œuvre de politiques publiques territoriales... ?\n </li>\n <li>\n  Vous êtes un professionnel de la construction et vous souhaitez bénéficier du retour d&#039;expériences d&#039;autres acteurs... ?\n </li>\n <li>\n  Vous êtes un enseignant ou un professionnel de la culture et vous voulez organiser des activités pédagogiques ou développer des offres culturelles... ?\n </li>\n <li>\n  Vous souhaitez renforcer vos démarches en faveur de la transition écologique ? Expérimenter des pistes innovantes ?\n </li>\n</ul>\n<p>\n <strong>\n  La palette de leurs interventions est multiple :\n </strong>\n <br />\n</p>\n<ul>\n <li>\n  Accompagnement les porteurs de projets publics et privés en amont de leurs projets de construction, d&#039;architecture, d&#039;aménagement, d&#039;urbanisme, de paysage, d&#039;environnement, d&#039;énergie : aide à la décision, conseil, diagnostic, note d&#039;enjeux, préparation à la programmation, organisation de la concertation, animation du débat public, participation à des jury, évaluation de politiques publiques, médiation...\n </li>\n <li>\n  Animations interprofessionnelles, mise en réseaux des acteurs du territoire\n </li>\n <li>\n  Actions de sensibilisation et de formation pour les collectivités territoriales, les élus, les professionnels, les services de l&#039;Etat, les scolaires, le grand public\n  <br />\n </li>\n <li>\n  Information, fourniture de données\n </li>\n</ul>\n<p>\n <em>\n  NB : les CAUE ne font pas de maîtrise d&#039;œuvre.\n  <br />\n </em>\n</p>\n<p>\n <strong>\n  Nature de l&#039;aide :\n </strong>\n</p>\n<p>\n Ingenierie territoriale / Aide à la décision / conseil / diagnostic / note d&#039;enjeux / préparation à la programmation / guide / organisation de la concertation / animation du débat public / participation à des jury / médiation / publications / expérimentations, des programmes actions-recherche...\n <br />\n</p>\n<p>\n Par leur posture neutre, leurs compétences, leur connaissance des territoires, dans un environnement de plus en plus complexe, les CAUE renforcent  la capacité de chacun à agir, à atteindre les changements durables voulus. Promoteurs d&#039;une culture de l&#039;Architecture, de l&#039;Urbanisme, de l&#039;Environnement et du conseil, ils sont la mémoire des territoires facilitateurs de liens entre acteurs locaux, départementaux, régionaux, nationaux et de ressources d&#039;une grande richesse.\n <br />\n <br />\n</p>",
+      "eligibility": null,
+      "perimeter": "France",
+      "perimeter_scale": "Pays",
+      "mobilization_steps": [
+        "Réflexion / conception",
+        "Mise en œuvre / réalisation",
+        "Usage / valorisation"
+      ],
+      "origin_url": "https://www.fncaue.com/?page=home",
+      "categories": [
+        "Eau et milieux aquatiques / Eau pluviale",
+        "Eau et milieux aquatiques / Assainissement des eaux",
+        "Eau et milieux aquatiques / Eau souterraine",
+        "Eau et milieux aquatiques / Cours d'eau / canaux / plans d'eau",
+        "Culture et identité collective / patrimoine / sports / Patrimoine et monuments historiques",
+        "Culture et identité collective / patrimoine / sports / Culture et identité collective",
+        "Culture et identité collective / patrimoine / sports / Arts plastiques et photographie",
+        "Culture et identité collective / patrimoine / sports / Musée",
+        "Culture et identité collective / patrimoine / sports / Sports et loisirs",
+        "Développement économique / production et consommation / Tourisme",
+        "Nature / environnement / Forêts",
+        "Nature / environnement / Montagne",
+        "Nature / environnement / Sols",
+        "Urbanisme / logement / aménagement / Espaces verts",
+        "Urbanisme / logement / aménagement / Espace public",
+        "Urbanisme / logement / aménagement / Friche",
+        "Urbanisme / logement / aménagement / Foncier",
+        "Urbanisme / logement / aménagement / Voirie et réseaux",
+        "Énergies / Déchets / Transition énergétique",
+        "Énergies / Déchets / Economie d'énergie et rénovation énergétique",
+        "Énergies / Déchets / Réseaux de chaleur",
+        "Énergies / Déchets / Recyclage et valorisation des déchets",
+        "Solidarités / lien social / Personnes âgées",
+        "Solidarités / lien social / Jeunesse",
+        "Solidarités / lien social / Famille et enfance",
+        "Solidarités / lien social / Cohésion sociale et inclusion",
+        "Solidarités / lien social / Citoyenneté",
+        "Solidarités / lien social / Education et renforcement des compétences",
+        "Développement économique / production et consommation / Commerces et services",
+        "Développement économique / production et consommation / Tiers-lieux",
+        "Développement économique / production et consommation / Economie locale et circuits courts",
+        "Développement économique / production et consommation / Agriculture et agroalimentaire",
+        "Développement économique / production et consommation / Revitalisation",
+        "Développement économique / production et consommation / Innovation, créativité et recherche",
+        "Nature / environnement / Risques naturels",
+        "Nature / environnement / Qualité de l'air",
+        "Nature / environnement / Biodiversité",
+        "Urbanisme / logement / aménagement / Equipement public",
+        "Urbanisme / logement / aménagement / Bâtiments et construction",
+        "Urbanisme / logement / aménagement / Réhabilitation",
+        "Urbanisme / logement / aménagement / Logement et habitat",
+        "Urbanisme / logement / aménagement / Architecture",
+        "Urbanisme / logement / aménagement / Paysage",
+        "Urbanisme / logement / aménagement / Accessibilité",
+        "Développement économique / production et consommation / International",
+        "Développement économique / production et consommation / Attractivité économique",
+        "Fonctions support / Appui méthodologique",
+        "Fonctions support / Animation et mise en réseau",
+        "Fonctions support / Valorisation d'actions",
+        "Développement économique / production et consommation / Artisanat",
+        "Mobilité / transports / Mobilité partagée",
+        "Mobilité / transports / Logistique urbaine",
+        "Mobilité / transports / Mobilité pour tous",
+        "Mobilité / transports / Connaissance de la mobilité",
+        "Mobilité / transports / Modes actifs : vélo, marche et aménagements associés",
+        "Eau et milieux aquatiques / Mers et océans",
+        "Nature / environnement / Milieux humides",
+        "Urbanisme / logement / aménagement / Cimetières et funéraire",
+        "Nature / environnement / Solutions d'adaptation fondées sur la nature (SafN)"
+      ],
+      "is_call_for_project": false,
+      "application_url": null,
+      "targeted_audiences": [
+        "Commune",
+        "Intercommunalité / Pays",
+        "Département",
+        "Région",
+        "Collectivité d’outre-mer à statut particulier",
+        "Etablissement public dont services de l'Etat",
+        "Entreprise publique locale (Sem, Spl, SemOp)",
+        "Association",
+        "Entreprise privée",
+        "Particulier",
+        "Agriculteur",
+        "Recherche"
+      ],
+      "aid_types": [
+        "Ingénierie technique"
+      ],
+      "aid_types_full": [
+        {
+          "id": 6,
+          "name": "Ingénierie technique",
+          "group": {
+            "id": 2,
+            "name": "Aide en ingénierie"
+          }
+        }
+      ],
+      "is_charged": false,
+      "destinations": [
+        "Dépenses de fonctionnement",
+        "Dépenses d’investissement"
+      ],
+      "start_date": null,
+      "predeposit_date": null,
+      "submission_deadline": null,
+      "subvention_rate_lower_bound": null,
+      "subvention_rate_upper_bound": null,
+      "subvention_comment": null,
+      "loan_amount": null,
+      "recoverable_advance_amount": null,
+      "contact": "<p>\n <strong>\n  Contactez le CAUE de votre département pour plus d&#039;informations.\n </strong>\n <br />\n</p>\n<p>\n CAUE DE L&#039;AIN\n - 34 rue Delestraint  - 01000    BOURG-EN-BRESSE\n - contact&#64;caue-ain.com - 04 74 21 11 31\n <br />\n</p>\n<p>\n CAUE DE L&#039;AISNE - 34 rue Sérurier - 02000 LAON - info&#64;caue02.com - 03 23 79 00 03\n</p>\n<p>\n CAUE de l&#039;ALLIER - Hôtel de Sampigny - 14 rue de Decize - 03000 MOULINS - 04 70 20 11 00\n <br />\n <br />\n CAUE DES HAUTES-ALPES\n - 1 avenue Alexandre Didier\n - BP 55  - 05200    EMBRUN\n - caue05&#64;orange.fr\n - 04 92 43 60 31\n <br />\n <br />\n CAUE DE L&#039;ARDÈCHE\n - 2 bis avenue de l&#039;Europe Unie\n - BP 102\n - 07002    PRIVAS Cedex\n - caue-07&#64;wanadoo.fr\n - 04 75 64 36 04\n <br />\n <br />\n CAUE DE L&#039;ARIEGE\n - 26 bis avenue du stade  - 09001    FOIX\n - caue.ariege&#64;orange.fr\n - 05 34 09 78 30\n <br />\n <br />\n CAUE DE L&#039; AUDE\n - Maison de l&#039;Architecture et de l&#039;Environnement\n - 28 avenue Claude Bernard\n - 11000    CARCASSONNE\n - caue.aude&#64;gmail.com\n - 04 68 11 56 20\n <br />\n <br />\n CAUE DE L&#039; AVEYRON\n - 5 place Sainte-Catherine\n - Immeuble Sainte Catherine\n - 12000    RODEZ\n - caue&#64;caueaveyron.fr\n - 05 65 68 66 45\n <br />\n <br />\n CAUE DES BOUCHES-DU-RHÔNE\n - 18 rue Neuve Sainte-Catherine\n - 13007    MARSEILLE\n - caue13&#64;caue13.fr\n - 04 96 11 01 20\n <br />\n <br />\n CAUE DU CALVADOS\n - 28 rue Jean Eudes\n - 14000    CAEN\n - contact&#64;caue14.fr\n - 02 31 15 59 60\n <br />\n <br />\n CAUE DU CANTAL\n - 19 avenue de la République\n - 15000    AURILLAC\n - caue.cantal&#64;wanadoo.fr\n - 04 71 48 50 22\n <br />\n <br />\n CAUE DE LA CHARENTE\n - 31 boulevard Besson Bey\n - 16000    ANGOULEME\n - contact&#64;caue16.fr\n - 05 45 92 95 93\n <br />\n <br />\n CAUE DE LA CHARENTE-MARITIME\n - 85 boulevard de la République\n - Les Minimes\n - 17076    LA ROCHELLE Cedex 09\n - contact&#64;caue17.fr\n - 05 46 31 71 90\n <br />\n <br />\n CAUE DU CHER\n - 27 boulevard de Strasbourg\n - 18000    BOURGES\n - contact&#64;caue18.fr\n - 02 48 50 75 18\n <br />\n <br />\n CAUE DE CORRÈZE\n - 45 Quai Aristide Briand\n - 19000    TULLE\n - caue.19&#64;wanadoo.fr\n - 05 55 26 06 48\n <br />\n <br />\n CAUE CORSE\n - Immeuble l&#039;Expo\n - Avenue de la Libération\n - 20600    BASTIA\n - cauedecorse&#64;orange.fr\n - 04 95 21 19 48\n <br />\n</p>\n<p>\n CAUE DE LA CÔTE-D&#039;OR\n - 1 rue de Soissons\n - 21000    DIJON\n - info&#64;caue21.fr\n - 03 80 30 02 38\n <br />\n</p>\n<p>\n CAUE DE LA CREUSE\n - 1 avenue Jean-Baptiste Defumade\n - 23320    SAINT-VAURY\n - caue23&#64;caue23.fr\n - 05 44 30 27 56\n <br />\n <br />\n CAUE DE LA DORDOGNE\n - 2 place Hôche\n - 24000    PÉRIGUEUX\n - courriel&#64;cauedordogne.com - 05 53 08 37 13\n <br />\n</p>\n<p>\n CAUE DE LA DRÔME\n - 44 rue Faventines\n - BP 1022\n - 26010    VALENCE Cedex\n - co-caue&#64;dromenet.org\n - 04 75 79 04 19\n <br />\n <br />\n CAUE DE L&#039; EURE\n - 22 rue Joséphine\n - 27000    EVREUX\n - contact&#64;caue27.fr\n - 02 32 33 15 78\n <br />\n <br />\n CAUE DU GARD\n - 29 rue Charlemagne\n - 30000    NIMES\n - accueil&#64;caue30.fr\n - 04 66 36 10 60\n <br />\n <br />\n CAUE DE LA HAUTE-GARONNE\n - 1 rue Matabiau\n - 31000    TOULOUSE\n - caue&#64;caue31.org\n - 05 62 73 73 62\n <br />\n <br />\n CAUE DU GERS\n - 93 route de Pessan\n - 32000    AUCH\n - cauegers&#64;caue32.fr\n - 05 62 05 75 34\n <br />\n <br />\n CAUE DE LA GIRONDE\n - 283 rue d&#039;Ornano\n - 33000    BORDEAUX\n - contact&#64;cauegironde.com\n - 05 56 97 81 89\n <br />\n</p>\n<p>\n CAUE DE L&#039;HÉRAULT\n - 19 rue Saint Louis\n - 34000    MONTPELLIER\n - contact&#64;caue34.fr\n - 04 99 13 37 00\n <br />\n <br />\n CAUE D&#039;INDRE-ET-LOIRE\n - 34, place de la Préfecture\n - 37000    TOURS\n - administration&#64;caue37.fr\n - 02 47 31 13 40\n <br />\n <br />\n CAUE DE L&#039;ISÈRE\n - 22 rue Hébert\n - 38000    GRENOBLE\n - contact&#64;caue-isere.org\n - 04 76 00 02 21\n <br />\n <br />\n CAUE DES LANDES\n - 155 rue Martin Luther King\n - 40000    MONT-DE-MARSAN\n - contact&#64;caue40.com\n - 05 58 06 11 77\n <br />\n <br />\n CAUE DU LOIR-ET-CHER\n - 34 avenue Maunoury\n - 41000    BLOIS\n - contact&#64;caue41.fr\n - 02 54 51 56 50\n <br />\n <br />\n CAUE DE LA HAUTE-LOIRE\n - 16 rue Jean Solvain\n - 43000    LE PUY-EN-VELAY\n - contact&#64;caue43.fr\n - 04 71 07 41 76\n <br />\n</p>\n<p>\n CAUE DU LOIRET - 36 Quai du Châtelet, 45000 Orléans - 02 38 54 13 98\n</p>\n<p>\n CAUE DU LOT\n - Cité Bessières\n - Rue Pierre Mendès France\n - 46000    CAHORS\n - caue.46&#64;wanadoo.fr\n - 05 65 30 14 35\n <br />\n <br />\n CAUE LOT-ET-GARONNE\n - 9 rue Etienne Dolet\n - 47000    AGEN\n - secretariat.vr&#64;caue47.com\n - 05 53 48 46 70\n <br />\n <br />\n CAUE DE MAINE-ET-LOIRE\n - Maison de l&#039;architecture des territoires et du paysage\n - 312 avenue René Gasnier\n - 49100    ANGERS\n - contact&#64;caue49.com\n - 02 41 22 99 99\n <br />\n <br />\n CAUE DE LA MANCHE\n - 2 Place de Gaulle\n - 50000    SAINT-LO\n - courrier&#64;caue50.fr\n - 02 33 77 20 77\n <br />\n <br />\n CAUE DE LA MAYENNE\n - 2 rue de l&#039;Ermitage\n - 53000    LAVAL\n - accueil&#64;caue53.com\n - 02 43 56 41 79\n <br />\n <br />\n CAUE DE MEURTHE-ET-MOSELLE\n - 48 esplanade Jacques Baudot\n - Rue du Sergent Blandan\n - co 90019\n - 54035    NANCY Cedex\n - caue&#64;caue54.departement54.fr\n - 03 83 94 51 78\n <br />\n <br />\n CAUE DE LA MEUSE\n - 28 rue des Romains\n - 55000    BAR-LE-DUC\n - contact&#64;caue55.fr\n - 03 29 45 77 68\n <br />\n</p>\n<p>\n CAUE DU MORBIHAN - 2 All. Nicolas Leblanc, 56000 Vannes - 02 97 62 40 90\n <br />\n</p>\n<p>\n CAUE DE LA MOSELLE\n - 17 Quai Wiltzer\n - 57000    METZ\n - contact&#64;caue57.com\n - 03 87 74 46 06\n <br />\n <br />\n CAUE DE L&#039;OISE\n - 4 rue de l&#039;Abbé du Bos\n - 60000    BEAUVAIS\n - caue60&#64;wanadoo.fr\n - 03 44 82 14 14\n <br />\n <br />\n CAUE DE L&#039;ORNE\n - 54 rue Saint-Blaise\n - 61000    ALENÇON\n - contact&#64;caue61.fr\n - 02 33 26 14 14\n <br />\n <br />\n CAUE DU PAS-DE-CALAIS\n - 43 rue d&#039;Amiens\n - 62018    ARRAS Cedex 9\n - caue62&#64;caue62.org\n - 03 21 21 65 65\n <br />\n <br />\n CAUE DU PUY-DE-DÔME\n - Maison de l&#039;Habitat\n - 129 avenue de la République\n - 63100    CLERMONT-FERRAND\n - contact&#64;caue63.com\n - 04 73 42 21 20\n <br />\n <br />\n CAUE DES PYRÉNÉES-ATLANTIQUES\n - 4 place Reine Marguerite\n - 64000    PAU\n - contact&#64;caue64.fr\n - 05 59 84 53 66\n <br />\n <br />\n CAUE DES HAUTES-PYRÉNÉES\n - 14 boulevard Claude Debussy\n - 65000    TARBES  - caue-65&#64;orange.fr\n - 05 62 56 71 45\n <br />\n <br />\n CAUE DES PYRÉNÉES-ORIENTALES\n - 11 rue du Bastion Saint-François\n - 66000    PERPIGNAN\n - contact&#64;caue66.fr\n - 04 68 34 12 37\n <br />\n <br />\n CAUE D&#039;ALSACE\n - 5 rue Hannong\n - 67000    STRASBOURG\n - caue&#64;caue-alsace.com\n - 03 88 15 02 30\n <br />\n <br />\n CAUE DE RHÔNE-METROPOLE\n DE LYON- 6 bis quai Saint-Vincent\n - 69283    LYON Cedex 01\n - caue69&#64;caue69.fr\n - 04 72 07 44 55\n <br />\n <br />\n CAUE DE LA HAUTE-SAÔNE\n - 5 A route de Saint Loup\n - 70005    VESOUL Cedex\n - contact&#64;caue70.fr\n - 03 84 96 97 77\n <br />\n <br />\n CAUE DE LA SARTHE\n - 1 rue de la Mariette\n - 72000    LE MANS\n - caue.sarthe&#64;wanadoo.fr\n - 02 43 72 35 31\n <br />\n <br />\n CAUE DE LA SAVOIE\n - Bâtiment Evolution\n - 25 Rue Jean Pellerin\n - CS 42632\n - 73026    CHAMBERY Cedex\n - caue&#64;cauesavoie.org\n - 04 79 60 75 50\n <br />\n <br />\n CAUE DE LA HAUTE-SAVOIE\n - L&#039;Ilot-S\n - 7 esplanade Paul Grimault\n - BP 339\n - 74008    ANNECY Cedex\n - caue74&#64;caue74.fr\n - 04 50 88 21 10\n <br />\n <br />\n CAUE DE LA SEINE-MARITIME\n - 27 rue François Mitterrand\n - BP 90241\n - 76142    PETIT-QUEVILLY Cedex\n - caue&#64;caue76.org\n - 02 35 72 94 50\n <br />\n <br />\n CAUE DE LA SEINE-ET-MARNE\n - 27 rue du Marché\n - 77120    COULOMMIERS\n - accueil&#64;caue77.fr\n - 01 64 03 30 62\n <br />\n <br />\n CAUE DES DEUX-SÈVRES\n - Maison du Département\n - Mail Lucie Aubrac\n - CS 58882\n - 79000    NIORT\n - caue&#64;caue79.fr\n - 05 49 28 06 28\n <br />\n <br />\n CAUE DE LA SOMME\n - 35 mail Albert 1er\n - 80000    AMIENS\n - caue80&#64;caue80.asso.fr\n - 03 22 91 11 65\n <br />\n <br />\n CAUE DE TARN\n - 188 rue de Jarlard\n - 81000    ALBI\n - caue&#64;caue81.fr\n - 05 63 60 16 70\n <br />\n <br />\n CAUE DE TARN-ET-GARONNE\n - Hôtel du Département\n - 100 boulevard Hubert Gouze\n - 82000    MONTAUBAN\n - caue82&#64;ledepartement82.fr\n - 05 63 03 80 88\n <br />\n <br />\n CAUE DU VAR\n - 26 Place Vincent Raspail\n - 83000    TOULON Cedex\n - contact&#64;cauevar.fr\n - 04 94 22 65 75\n <br />\n <br />\n CAUE DE LA VENDEE\n - 33 rue de l&#039;atlantique\n - CS 40685\n - 85000    LA ROCHE-SUR-YON Cedex\n - caue85&#64;caue85.com\n - 02 51 37 44 95\n <br />\n <br />\n CAUE DE LA HAUTE-VIENNE\n - 1 rue des Allois\n - 87000    LIMOGES\n - caue87&#64;wanadoo.fr\n - 05 53 32 32 40\n <br />\n <br />\n CAUE DES VOSGES\n - Conseil Départemental\n - 88088    EPINAL Cedex 9\n - caue88&#64;vosges.fr\n - 03 29 29 89 40\n <br />\n <br />\n CAUE L&#039;YONNE\n - 8 avenue du 4e R.I.\n - 89000    AUXERRE\n - contact&#64;caue89.fr\n - 03 58 43 80 33\n <br />\n <br />\n CAUE DE L&#039;ESSONNE\n - 9 Cours Blaise Pascal\n - 91000    EVRY\n - caue91&#64;caue91.asso.fr\n - 01 60 79 35 44\n <br />\n <br />\n CAUE DES HAUTS-DE-SEINE\n - 279 terrasse de l&#039;Université\n - 92000    NANTERRE\n - contact&#64;caue92.com\n - 01 71 04 52 49\n <br />\n <br />\n CAUE DU VAL-DE-MARNE\n - 36 rue Edmond Nocard\n - 94700    MAISONS-ALFORT\n - contact&#64;caue94.fr\n - 01 48 52 55 20\n <br />\n <br />\n CAUE DU VAL-D&#039;OISE\n - Moulin de la couleuvre\n - Rue des Deux Ponts\n - 95300    PONTOISE\n - caue95&#64;caue95.org\n - 01 30 38 68 68\n <br />\n <br />\n CAUE DE LA GUADELOUPE\n - Centre commercial le Pérou\n - Bat B - N°46\n - BP 136\n - 97181    ABYMES Cedex\n - contact&#64;caue971.org\n - 05 90 81 83 85\n <br />\n <br />\n CAUE DE LA MARTINIQUE\n - 31 avenue Pasteur\n - 97200    FORT-DE-FRANCE\n - caue972&#64;wanadoo.fr\n - 05 96 70 10 10\n <br />\n <br />\n CAUE DE LA GUYANE\n - 13 avenue Léopold Héder\n - 97300    CAYENNE\n - caue973&#64;orange.fr\n - 05 94 31 42 82\n <br />\n <br />\n CAUE DE-LA-RÉUNION\n - 12 rue Monseigneur de Beaumont\n - BP 868\n - 97477    SAINT-DENIS Cedex\n - courrier&#64;caue974.com\n - 02 62 21 60 86\n <br />\n <br />\n CAUE DE MAYOTTE\n - Département de Mayotte\n - BP101\n - 97600    MAYOTTE\n - feda.soidri&#64;cg976.fr\n - 02 69 66 06 84\n <br />\n <br />\n</p>\n<p>\n <a href=\"https://www.fncaue.com/repertoire-caue-urcaue/\" rel=\"noopener\" target=\"_blank\">\n  Retrouvez l&#039;annuaire des CAUE ici\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n </a>\n <br />\n</p>",
+      "recurrence": "Permanente",
+      "project_examples": "<p>\n L&#039;ARCHITECTURE – LA CONSTRUCTION\n <br />\n Bâtiment / EcoConstruction / Rénovation / Réhabilitation / Habitat / Logement / Savoir-faire locaux / Patrimoine /Accessibilité / Énergie / Accueil de la petite enfance / Ecoles / Collège / Lycée / Équipement public / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Autorisation d&#039;urbanisme / Droit de la construction / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Equipement public\n / Patrimoine religieux\n / Ecomatériaux\n / Polyvalence des usages du bâti\n <br />\n <br />\n L&#039;URBANISME – L&#039;AMÉNAGEMENT\n <br />\n Stratégie et planification territoriale /Urbanisme réglementaire / Urbanisme de projet / Urbanisme opérationnel / Climat / Foncier/ Aménagement d&#039;espace public / Aménagement paysager / Revitalisation des centres-villes / Traversée de bourg / Zone d&#039;activité / Commerce / Politique de la ville / Quartier / Urbain / Rural\n / Petite ville de demain\n (PVD) / Action Coeur de Ville\n / Sobriété foncière / Rural / Périurbain / Urbain\n / Densification / Requalification de friches\n / Fonds vert / Transition écologique et énergétique / Changement climatique / Villages d&#039;avenir\n <br />\n <br />\n L&#039;ENVIRONNEMENT – LE PAYSAGE\n <br />\n Paysage / Espace naturel / Espace vert / Démarche paysagère / Plan de paysage / Fleurissement / Embellissement / Biodiversité / Eau /Trame verte et bleue / Trame brune et noire / Risques naturels / Ecologie / Jardins / Aires de jeux  / Renaturation / Végétalisation / Arbre / Jardin\n / Nature en ville / Désimperméabilisation / Eau / Aménagement paysager /Atlas de paysage / Observatoires photographiques / Sol\n <br />\n <br />\n TRANSVERSALEMENT\n <br />\n</p>\n<p>\n Accessibilité / Mobilité / Voies de communication / Publicité / Tourisme / Transition énergétique / Aménagement du territoire / Vivre ensemble / Action Educative Artistique et Culturelle / Application numérique/ Culture\n / Médiation / Résidences\n <br />\n</p>",
+      "import_data_url": null,
+      "import_data_mention": null,
+      "import_share_licence": null,
+      "date_created": "2021-02-24T17:24:00+00:00",
+      "date_updated": "2024-11-21T13:30:34+00:00",
+      "project_references": [
+        "Accompagner le déploiement des zones à faibles émissions",
+        "Acquisition d'une parcelle",
+        "Aménagement d’une aire de jeux",
+        "Changement des fenêtres/portes d’un bâtiment public",
+        "Construction d'une piscine",
+        "Construction d’un éclairage public",
+        "Construction d’un gymnase",
+        "Construction d’une cantine scolaire",
+        "Construction d’une école",
+        "Cour d’école : végétaliser, désimperméabiliser, jeux, voiles ombrages",
+        "Création d’un city park / city stade / terrain multisports",
+        "Création d’un terrain de football",
+        "Création d’une bibliothèque municipale",
+        "Création d’une crèche",
+        "Création d’une maison de santé",
+        "Création d’une voie douce / piste cyclable",
+        "Création de jardins partagés",
+        "Création de logements sociaux",
+        "Développer les infrastructures de covoiturage",
+        "Entretien / restauration des haies",
+        "Installation de panneaux photovoltaïques/panneaux solaires sur les toits et façades des bâtiments publics",
+        "Installation de ralentisseur",
+        "Isolation du bâtiment",
+        "Mise en place d’un café / bistrot",
+        "Mise en place d’un commerce de proximité",
+        "Mise en place de l’accessibilité dans les bâtiments publics",
+        "Réaménagement de la cantine scolaire / Acquisition de mobiliers et matériels pour les cantines",
+        "Réfection/aménagement de la voirie",
+        "Rénovation de l’éclairage public",
+        "Rénovation du gymnase",
+        "Rénovation énergétique école",
+        "Rénover le réseau d’assainissement",
+        "Restauration du patrimoine religieux",
+        "Restauration écologique / continuité écologique",
+        "Végétalisation du cimetière"
+      ],
+      "european_aid": null,
+      "is_live": true
+    },
+    {
+      "id": 82912,
+      "slug": "56d5-copie-13h45-se-former-a-larchitecture-lurbani",
+      "url": "/aides/56d5-copie-13h45-se-former-a-larchitecture-lurbani/",
+      "name": "Se former à l'architecture, l'urbanisme, l'environnement et le paysage",
+      "name_initial": null,
+      "short_title": null,
+      "financers": [
+        "CAUE du Calvados",
+        "CAUE du Lot",
+        "CAUE du Var",
+        "CAUE du Cher",
+        "CAUE du Gard",
+        "CAUE du Gers",
+        "CAUE du Tarn",
+        "CAUE d'Alsace",
+        "CAUE de Corse",
+        "CAUE de l'Ain",
+        "CAUE de la Somme",
+        "CAUE de l'Eure",
+        "CAUE de l'Oise",
+        "CAUE de l'Orne",
+        "CAUE du Cantal",
+        "CAUE du Loiret",
+        "CAUE de Corrèze",
+        "CAUE de l'Aisne",
+        "CAUE de l'Isère",
+        "CAUE de la Vendée",
+        "CAUE du Morbihan",
+        "CAUE de Mayotte",
+        "CAUE des Landes",
+        "CAUE des Vosges",
+        "CAUE de l'Allier",
+        "CAUE de l'Ariège",
+        "CAUE de la Drôme",
+        "CAUE de la Meuse",
+        "CAUE de l'Aude",
+        "CAUE de l'Yonne",
+        "CAUE du Maine-et-Loire",
+        "CAUE de l'Ardèche",
+        "CAUE de l'Aveyron",
+        "CAUE de l'Essonne",
+        "CAUE de l'Hérault",
+        "CAUE de la Creuse",
+        "CAUE de la Guyane",
+        "CAUE de la Manche",
+        "CAUE de la Seine-Maritime",
+        "CAUE de la Côte-d'Or",
+        "CAUE de Guadeloupe",
+        "CAUE de la Gironde",
+        "CAUE de la Mayenne",
+        "CAUE de la Moselle",
+        "CAUE du Val d'Oise",
+        "CAUE de la Charente",
+        "CAUE de la Dordogne",
+        "CAUE du Puy-de-Dôme",
+        "CAUE de la Seine-et-Marne",
+        "CAUE des Deux-Sèvres",
+        "CAUE du Loir-et-Cher",
+        "CAUE du Val-de-Marne",
+        "CAUE de la Martinique",
+        "CAUE des Hautes-Alpes",
+        "CAUE du Pas-de-Calais",
+        "CAUE de la Haute-Saône",
+        "CAUE de la Haute-Loire",
+        "Conseils d'architecture, d'urbanisme et d'environnement (CAUE)",
+        "CAUE de la Haute-Savoie",
+        "CAUE de la Haute-Vienne",
+        "CAUE de Rhône-Métropole",
+        "CAUE des Hauts-de-Seine",
+        "CAUE du Tarn-et-Garonne",
+        "CAUE de l’Indre-et-Loire",
+        "CAUE de la Haute-Garonne",
+        "CAUE de la Savoie",
+        "CAUE de la Sarthe",
+        "CAUE Lot-et-Garonne",
+        "CAUE des Bouches-du-Rhône",
+        "CAUE de Meurthe-et-Moselle",
+        "CAUE de l'Île-de-la-Réunion",
+        "CAUE de la Charente-Maritime",
+        "CAUE des Pyrénées-Orientales",
+        "CAUE des Pyrénées-Atlantiques",
+        "Fédération Nationale des Conseils d'Architecture, d'Urbanisme et de l'Environnement",
+        "CAUE des Hautes-Pyrénées"
+      ],
+      "financers_full": [
+        {
+          "id": 738,
+          "name": "CAUE du Calvados",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-calvados_logo.png"
+        },
+        {
+          "id": 760,
+          "name": "CAUE du Lot",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-46-1726574546.jpg"
+        },
+        {
+          "id": 801,
+          "name": "CAUE du Var",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-83-1726578669.png"
+        },
+        {
+          "id": 741,
+          "name": "CAUE du Cher",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-cher_logo.jpeg"
+        },
+        {
+          "id": 750,
+          "name": "CAUE du Gard",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-gard_logo.jpeg"
+        },
+        {
+          "id": 728,
+          "name": "CAUE du Gers",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-32-1726567109.png"
+        },
+        {
+          "id": 447,
+          "name": "CAUE du Tarn",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-tarn_logo.png"
+        },
+        {
+          "id": 2436,
+          "name": "CAUE d'Alsace",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-1712065535.png"
+        },
+        {
+          "id": 2431,
+          "name": "CAUE de Corse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logos-caue-corse-original-1712064665.png"
+        },
+        {
+          "id": 729,
+          "name": "CAUE de l'Ain",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/vignette-logo-102020-1726500658.jpg"
+        },
+        {
+          "id": 2437,
+          "name": "CAUE de la Somme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue80-2019-1712065848.png"
+        },
+        {
+          "id": 748,
+          "name": "CAUE de l'Eure",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue27-414x583-retina-png-1726566260.webp"
+        },
+        {
+          "id": 767,
+          "name": "CAUE de l'Oise",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-60-1-1726576581.png"
+        },
+        {
+          "id": 768,
+          "name": "CAUE de l'Orne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-61-1726576303.png"
+        },
+        {
+          "id": 739,
+          "name": "CAUE du Cantal",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-cantal_logo.png"
+        },
+        {
+          "id": 2434,
+          "name": "CAUE du Loiret",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-45-1726574960.png"
+        },
+        {
+          "id": 742,
+          "name": "CAUE de Corrèze",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-19-1726501612.jpg"
+        },
+        {
+          "id": 730,
+          "name": "CAUE de l'Aisne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue02-1726500914.png"
+        },
+        {
+          "id": 755,
+          "name": "CAUE de l'Isère",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue38-1726566676.jpg"
+        },
+        {
+          "id": 787,
+          "name": "CAUE de la Vendée",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-85-1726578570.png"
+        },
+        {
+          "id": 2435,
+          "name": "CAUE du Morbihan",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-56-1726576701.png"
+        },
+        {
+          "id": 2438,
+          "name": "CAUE de Mayotte",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/images-1-1712066056.png"
+        },
+        {
+          "id": 757,
+          "name": "CAUE des Landes",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-landes_logo.png"
+        },
+        {
+          "id": 790,
+          "name": "CAUE des Vosges",
+          "logo": null
+        },
+        {
+          "id": 731,
+          "name": "CAUE de l'Allier",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-3-1726501029.webp"
+        },
+        {
+          "id": 734,
+          "name": "CAUE de l'Ariège",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-09-1726501414.png"
+        },
+        {
+          "id": 747,
+          "name": "CAUE de la Drôme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/26-1726566336.gif"
+        },
+        {
+          "id": 508,
+          "name": "CAUE de la Meuse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-55-1726576868.png"
+        },
+        {
+          "id": 735,
+          "name": "CAUE de l'Aude",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-laude_logo.png"
+        },
+        {
+          "id": 791,
+          "name": "CAUE de l'Yonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-lyonne_logo.jpeg"
+        },
+        {
+          "id": 762,
+          "name": "CAUE du Maine-et-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-49-1726576184.jpg"
+        },
+        {
+          "id": 733,
+          "name": "CAUE de l'Ardèche",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-07-1726501480.jpg"
+        },
+        {
+          "id": 736,
+          "name": "CAUE de l'Aveyron",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-12-1726501277.png"
+        },
+        {
+          "id": 792,
+          "name": "CAUE de l'Essonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-91-1726578870.jpg"
+        },
+        {
+          "id": 754,
+          "name": "CAUE de l'Hérault",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-34-1726567021.jpg"
+        },
+        {
+          "id": 2432,
+          "name": "CAUE de la Creuse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-23-512px-1712065002.webp"
+        },
+        {
+          "id": 798,
+          "name": "CAUE de la Guyane",
+          "logo": null
+        },
+        {
+          "id": 763,
+          "name": "CAUE de la Manche",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-50-1726576144.jpg"
+        },
+        {
+          "id": 783,
+          "name": "CAUE de la Seine-Maritime",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-76-1726578297.jpg"
+        },
+        {
+          "id": 745,
+          "name": "CAUE de la Côte-d'Or",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-21-1726566604.jpg"
+        },
+        {
+          "id": 796,
+          "name": "CAUE de Guadeloupe",
+          "logo": null
+        },
+        {
+          "id": 753,
+          "name": "CAUE de la Gironde",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-33-1726567062.png"
+        },
+        {
+          "id": 764,
+          "name": "CAUE de la Mayenne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-53-1726576090.jpg"
+        },
+        {
+          "id": 766,
+          "name": "CAUE de la Moselle",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-57-1726576650.jpg"
+        },
+        {
+          "id": 795,
+          "name": "CAUE du Val d'Oise",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-val-doise_logo.png"
+        },
+        {
+          "id": 740,
+          "name": "CAUE de la Charente",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-16-1726565592.png"
+        },
+        {
+          "id": 746,
+          "name": "CAUE de la Dordogne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-24-1726566413.png"
+        },
+        {
+          "id": 770,
+          "name": "CAUE du Puy-de-Dôme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-63-1726577658.jpg"
+        },
+        {
+          "id": 784,
+          "name": "CAUE de la Seine-et-Marne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-77-1726578265.jpg"
+        },
+        {
+          "id": 786,
+          "name": "CAUE des Deux-Sèvres",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-deux-sevres_logo.jpeg"
+        },
+        {
+          "id": 2433,
+          "name": "CAUE du Loir-et-Cher",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue41-2x-1712065103.png"
+        },
+        {
+          "id": 794,
+          "name": "CAUE du Val-de-Marne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-val-de-marne_logo.jpeg"
+        },
+        {
+          "id": 797,
+          "name": "CAUE de la Martinique",
+          "logo": null
+        },
+        {
+          "id": 732,
+          "name": "CAUE des Hautes-Alpes",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-05-1726501177.png"
+        },
+        {
+          "id": 769,
+          "name": "CAUE du Pas-de-Calais",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-pas-de-calais_logo.jpeg"
+        },
+        {
+          "id": 777,
+          "name": "CAUE de la Haute-Saône",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-70-1726577892.jpg"
+        },
+        {
+          "id": 759,
+          "name": "CAUE de la Haute-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-43-1726575023.jpg"
+        },
+        {
+          "id": 1805,
+          "name": "Conseils d'architecture, d'urbanisme et d'environnement (CAUE)",
+          "logo": null
+        },
+        {
+          "id": 781,
+          "name": "CAUE de la Haute-Savoie",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-74-1726578412.jpg"
+        },
+        {
+          "id": 789,
+          "name": "CAUE de la Haute-Vienne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-87-1726579460.png"
+        },
+        {
+          "id": 776,
+          "name": "CAUE de Rhône-Métropole",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-rhone-metropole_logo.gif"
+        },
+        {
+          "id": 793,
+          "name": "CAUE des Hauts-de-Seine",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-92-1726578842.jpg"
+        },
+        {
+          "id": 808,
+          "name": "CAUE du Tarn-et-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-tarn-et-garonne_logo.jpeg"
+        },
+        {
+          "id": 805,
+          "name": "CAUE de l’Indre-et-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-37-img-couverture-1726566981.jpg"
+        },
+        {
+          "id": 751,
+          "name": "CAUE de la Haute-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-31-1726567192.png"
+        },
+        {
+          "id": 780,
+          "name": "CAUE de la Savoie",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-73-1726577722.png"
+        },
+        {
+          "id": 779,
+          "name": "CAUE de la Sarthe",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-72-1726577816.jpg"
+        },
+        {
+          "id": 761,
+          "name": "CAUE Lot-et-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-lot-et-garonne_logo.jpeg"
+        },
+        {
+          "id": 737,
+          "name": "CAUE des Bouches-du-Rhône",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-bouches-du-rhone_logo.gif"
+        },
+        {
+          "id": 765,
+          "name": "CAUE de Meurthe-et-Moselle",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-meurthe-et-moselle_logo.png"
+        },
+        {
+          "id": 799,
+          "name": "CAUE de l'Île-de-la-Réunion",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-lile-de-la-reunion_logo.png"
+        },
+        {
+          "id": 810,
+          "name": "CAUE de la Charente-Maritime",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-17-1726565258.jpg"
+        },
+        {
+          "id": 773,
+          "name": "CAUE des Pyrénées-Orientales",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-66-1726577210.jpg"
+        },
+        {
+          "id": 771,
+          "name": "CAUE des Pyrénées-Atlantiques",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-64-1726577599.webp"
+        },
+        {
+          "id": 2439,
+          "name": "Fédération Nationale des Conseils d'Architecture, d'Urbanisme et de l'Environnement",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-fncaue-1712066635.jpg"
+        },
+        {
+          "id": 772,
+          "name": "CAUE des Hautes-Pyrénées",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-65-1726577290.png"
+        }
+      ],
+      "instructors": [],
+      "instructors_full": [],
+      "programs": [
+        "Petites villes de demain",
+        "Action cœur de ville",
+        "Nouveaux lieux, nouveaux liens",
+        "Avenir Montagnes",
+        "Cités éducatives",
+        "France 2030",
+        "Renaturation des villes",
+        "Fonds vert Ingénierie",
+        "Fonds Biodiversité"
+      ],
+      "description": "<p>\n <strong>\n  Les CAUE vous forment en étant dégagés de tout intérêt dans la maîtrise d&#039;oeuvre.\n </strong>\n <br />\n</p>\n<p>\n Les Caue ont pour objet la promotion de la qualité de l&#039;architecture, de l&#039;urbanisme et de l&#039;environnement. Organismes départementaux issus de la loi sur l&#039;architecture du 3 janvier 1977, ils assument des missions d&#039;intérêt public.\n ils sont répartis sur quasiment tout le territoire national et travaillent en réseau.\n <br />\n</p>\n<p>\n Les équipes sont pluridisciplinaires et sauront aller chercher les expertises nécessaires pour vos besoin de formation.\n <br />\n</p>\n<p>\n <strong>\n  Les formations proposées par les CAUE ont plusieurs objectifs :\n </strong>\n <br />\n</p>\n<ul>\n <li>\n  mettre à jour ou approfondir les connaissances des professionnels\n </li>\n <li>\n  permettre aux maîtres d&#039;ouvrages publics, aux maires, de mieux connaître leur territoire, ses évolutions et ses enjeux, les démarches et procédures d&#039;aménagement et d&#039;urbanisme, les outils à leur disposition, les techniques les plus appropriées à leurs actions et à l&#039;implication des habitants ou usagers\n </li>\n <li>\n  permettre aux enseignants d&#039;intégrer les enjeux inhérents à l&#039;architecture, l&#039;urbanisme et l&#039;environnement dans les projets pédagogiques\n </li>\n <li>\n  participer aux formations des publics scolaires afin de contribuer à l&#039;ouverture d&#039;esprit et/ou d&#039;élargir leurs compétences en tant que citoyens ou futurs professionnels.\n </li>\n</ul>\n<p>\n <strong>\n  Les modalités :\n </strong>\n</p>\n<ul>\n <li>\n  de nombreux CAUE sont datadockés\n </li>\n <li>\n  les formations peuvent être basées sur des cas pratiques, des visites de chantiers et/ou des retours d&#039;expérience, des pratiques innovantes et/ou expérimentales...\n </li>\n</ul>\n<p>\n Ces temps de travail peuvent prendre la forme d&#039;interventions de quelques heures, de plusieurs jours ou de voyages d&#039;étude qui nourrissent les réflexions à partir de vos besoins.\n</p>\n<p>\n Leurs formations s&#039;appuyent toujours sur une connaissance fine du territoire et/ou des actions inspirantes liées au travail en réseau.\n</p>\n<p>\n <br />\n NB : Nature de l&#039;aide complémentaire aux formations\n <br />\n Ingenierie territoriale / Aide à la décision / conseil / diagnostic / note d&#039;enjeux / préparation à la programmation / guide / organisation de la concertation / animation du débat public / participation à des jury / médiation / publications / expérimentations, des programmes actions-recherche...\n <br />\n Par leur posture neutre, leurs compétences, leur connaissance des territoires, dans un environnement de plus en plus complexe, les CAUE renforcent la capacité de chacun à agir, à atteindre les changements durables voulus. Promoteurs d&#039;une culture de l&#039;Architecture, de l&#039;Urbanisme, de l&#039;Environnement et du conseil, ils sont la mémoire des territoires facilitateurs de liens entre acteurs locaux, départementaux, régionaux, nationaux et de ressources d&#039;une grande richesse.\n <br />\n <br />\n</p>",
+      "eligibility": null,
+      "perimeter": "France",
+      "perimeter_scale": "Pays",
+      "mobilization_steps": [
+        "Réflexion / conception",
+        "Mise en œuvre / réalisation",
+        "Usage / valorisation"
+      ],
+      "origin_url": "https://www.fncaue.com",
+      "categories": [
+        "Eau et milieux aquatiques / Eau pluviale",
+        "Eau et milieux aquatiques / Assainissement des eaux",
+        "Eau et milieux aquatiques / Eau souterraine",
+        "Eau et milieux aquatiques / Cours d'eau / canaux / plans d'eau",
+        "Culture et identité collective / patrimoine / sports / Patrimoine et monuments historiques",
+        "Culture et identité collective / patrimoine / sports / Culture et identité collective",
+        "Culture et identité collective / patrimoine / sports / Arts plastiques et photographie",
+        "Culture et identité collective / patrimoine / sports / Musée",
+        "Culture et identité collective / patrimoine / sports / Sports et loisirs",
+        "Développement économique / production et consommation / Tourisme",
+        "Nature / environnement / Forêts",
+        "Nature / environnement / Montagne",
+        "Nature / environnement / Sols",
+        "Urbanisme / logement / aménagement / Espaces verts",
+        "Urbanisme / logement / aménagement / Espace public",
+        "Urbanisme / logement / aménagement / Friche",
+        "Urbanisme / logement / aménagement / Foncier",
+        "Urbanisme / logement / aménagement / Voirie et réseaux",
+        "Énergies / Déchets / Transition énergétique",
+        "Énergies / Déchets / Economie d'énergie et rénovation énergétique",
+        "Énergies / Déchets / Réseaux de chaleur",
+        "Énergies / Déchets / Recyclage et valorisation des déchets",
+        "Solidarités / lien social / Cohésion sociale et inclusion",
+        "Solidarités / lien social / Citoyenneté",
+        "Solidarités / lien social / Education et renforcement des compétences",
+        "Développement économique / production et consommation / Commerces et services",
+        "Développement économique / production et consommation / Tiers-lieux",
+        "Développement économique / production et consommation / Economie circulaire",
+        "Développement économique / production et consommation / Economie locale et circuits courts",
+        "Développement économique / production et consommation / Agriculture et agroalimentaire",
+        "Développement économique / production et consommation / Revitalisation",
+        "Développement économique / production et consommation / Innovation, créativité et recherche",
+        "Nature / environnement / Risques naturels",
+        "Nature / environnement / Qualité de l'air",
+        "Nature / environnement / Biodiversité",
+        "Urbanisme / logement / aménagement / Equipement public",
+        "Urbanisme / logement / aménagement / Bâtiments et construction",
+        "Urbanisme / logement / aménagement / Réhabilitation",
+        "Urbanisme / logement / aménagement / Logement et habitat",
+        "Urbanisme / logement / aménagement / Architecture",
+        "Urbanisme / logement / aménagement / Paysage",
+        "Urbanisme / logement / aménagement / Accessibilité",
+        "Développement économique / production et consommation / International",
+        "Développement économique / production et consommation / Attractivité économique",
+        "Fonctions support / Appui méthodologique",
+        "Fonctions support / Animation et mise en réseau",
+        "Fonctions support / Valorisation d'actions",
+        "Développement économique / production et consommation / Artisanat",
+        "Mobilité / transports / Mobilité partagée",
+        "Mobilité / transports / Logistique urbaine",
+        "Mobilité / transports / Mobilité pour tous",
+        "Mobilité / transports / Connaissance de la mobilité",
+        "Mobilité / transports / Modes actifs : vélo, marche et aménagements associés",
+        "Eau et milieux aquatiques / Mers et océans"
+      ],
+      "is_call_for_project": false,
+      "application_url": null,
+      "targeted_audiences": [
+        "Commune",
+        "Intercommunalité / Pays",
+        "Département",
+        "Région",
+        "Collectivité d’outre-mer à statut particulier",
+        "Etablissement public dont services de l'Etat",
+        "Association",
+        "Entreprise privée",
+        "Particulier",
+        "Agriculteur",
+        "Recherche"
+      ],
+      "aid_types": [
+        "Ingénierie technique"
+      ],
+      "aid_types_full": [
+        {
+          "id": 6,
+          "name": "Ingénierie technique",
+          "group": {
+            "id": 2,
+            "name": "Aide en ingénierie"
+          }
+        }
+      ],
+      "is_charged": false,
+      "destinations": [
+        "Dépenses de fonctionnement",
+        "Dépenses d’investissement"
+      ],
+      "start_date": null,
+      "predeposit_date": null,
+      "submission_deadline": null,
+      "subvention_rate_lower_bound": null,
+      "subvention_rate_upper_bound": null,
+      "subvention_comment": null,
+      "loan_amount": null,
+      "recoverable_advance_amount": null,
+      "contact": "<p>\n Contactez le CAUE de votre département pour plus d&#039;informations.\n <br />\n</p>\n<p>\n CAUE DE L&#039;AIN - 34 rue Delestraint - 01000 BOURG-EN-BRESSE - contact&#64;caue-ain.com - 04 74 21 11 31\n <br />\n</p>\n<p>\n CAUE DE L&#039;AISNE - 34 rue Sérurier - 02000 LAON - info&#64;caue02.com - 03 23 79 00 03\n <br />\n</p>\n<p>\n CAUE de l&#039;ALLIER - Hôtel de Sampigny - 14 rue de Decize - 03000 MOULINS - 04 70 20 11 00\n <br />\n <br />\n CAUE DES HAUTES-ALPES - 1 avenue Alexandre Didier - BP 55 - 05200 EMBRUN - caue05&#64;orange.fr - 04 92 43 60 31\n <br />\n <br />\n CAUE DE L&#039;ARDÈCHE - 2 bis avenue de l&#039;Europe Unie - BP 102 - 07002 PRIVAS Cedex - caue-07&#64;wanadoo.fr - 04 75 64 36 04\n <br />\n <br />\n CAUE DE L&#039;ARIEGE - 26 bis avenue du stade - 09001 FOIX - caue.ariege&#64;orange.fr - 05 34 09 78 30\n <br />\n <br />\n CAUE DE L&#039; AUDE - Maison de l&#039;Architecture et de l&#039;Environnement - 28 avenue Claude Bernard - 11000 CARCASSONNE - caue.aude&#64;gmail.com - 04 68 11 56 20\n <br />\n <br />\n CAUE DE L&#039; AVEYRON - 5 place Sainte-Catherine - Immeuble Sainte Catherine - 12000 RODEZ - caue&#64;caueaveyron.fr - 05 65 68 66 45\n <br />\n <br />\n CAUE DES BOUCHES-DU-RHÔNE - 18 rue Neuve Sainte-Catherine - 13007 MARSEILLE - caue13&#64;caue13.fr - 04 96 11 01 20\n <br />\n <br />\n CAUE DU CALVADOS - 28 rue Jean Eudes - 14000 CAEN - contact&#64;caue14.fr - 02 31 15 59 60\n <br />\n <br />\n CAUE DU CANTAL - 19 avenue de la République - 15000 AURILLAC - caue.cantal&#64;wanadoo.fr - 04 71 48 50 22\n <br />\n <br />\n CAUE DE LA CHARENTE - 31 boulevard Besson Bey - 16000 ANGOULEME - contact&#64;caue16.fr - 05 45 92 95 93\n <br />\n <br />\n CAUE DE LA CHARENTE-MARITIME - 85 boulevard de la République - Les Minimes - 17076 LA ROCHELLE Cedex 09 - contact&#64;caue17.fr - 05 46 31 71 90\n <br />\n <br />\n CAUE DU CHER - 27 boulevard de Strasbourg - 18000 BOURGES - contact&#64;caue18.fr - 02 48 50 75 18\n <br />\n <br />\n CAUE DE CORRÈZE - 45 Quai Aristide Briand - 19000 TULLE - caue.19&#64;wanadoo.fr - 05 55 26 06 48\n <br />\n <br />\n CAUE CORSE - Immeuble l&#039;Expo - Avenue de la Libération - 20600 BASTIA - cauedecorse&#64;orange.fr - 04 95 21 19 48\n <br />\n</p>\n<p>\n CAUE DE LA CÔTE-D&#039;OR - 1 rue de Soissons - 21000 DIJON - info&#64;caue21.fr - 03 80 30 02 38\n <br />\n</p>\n<p>\n CAUE DE LA CREUSE - 1 avenue Jean-Baptiste Defumade - 23320 SAINT-VAURY - caue23&#64;caue23.fr - 05 44 30 27 56\n</p>\n<p>\n CAUE DE LA DORDOGNE - 2 place Hôche - 24000 PÉRIGUEUX - courriel&#64;cauedordogne.com - 05 53 08 37 13\n <br />\n</p>\n<p>\n CAUE DE LA DRÔME - 44 rue Faventines - BP 1022 - 26010 VALENCE Cedex - co-caue&#64;dromenet.org - 04 75 79 04 19\n <br />\n <br />\n CAUE DE L&#039; EURE - 22 rue Joséphine - 27000 EVREUX - contact&#64;caue27.fr - 02 32 33 15 78\n <br />\n <br />\n CAUE DU GARD - 29 rue Charlemagne - 30000 NIMES - accueil&#64;caue30.fr - 04 66 36 10 60\n <br />\n <br />\n CAUE DE LA HAUTE-GARONNE - 1 rue Matabiau - 31000 TOULOUSE - caue&#64;caue31.org - 05 62 73 73 62\n <br />\n <br />\n CAUE DU GERS - 93 route de Pessan - 32000 AUCH - cauegers&#64;caue32.fr - 05 62 05 75 34\n <br />\n <br />\n CAUE DE LA GIRONDE - 283 rue d&#039;Ornano - 33000 BORDEAUX - contact&#64;cauegironde.com - 05 56 97 81 89\n <br />\n</p>\n<p>\n CAUE DE L&#039;HÉRAULT - 19 rue Saint Louis - 34000 MONTPELLIER - contact&#64;caue34.fr - 04 99 13 37 00\n <br />\n <br />\n CAUE D&#039;INDRE-ET-LOIRE - 34, place de la Préfecture - 37000 TOURS - administration&#64;caue37.fr - 02 47 31 13 40\n <br />\n <br />\n CAUE DE L&#039;ISÈRE - 22 rue Hébert - 38000 GRENOBLE - contact&#64;caue-isere.org - 04 76 00 02 21\n <br />\n <br />\n CAUE DES LANDES - 155 rue Martin Luther King - 40000 MONT-DE-MARSAN - contact&#64;caue40.com - 05 58 06 11 77\n <br />\n <br />\n CAUE DU LOIR-ET-CHER - 34 avenue Maunoury - 41000 BLOIS - contact&#64;caue41.fr - 02 54 51 56 50\n <br />\n <br />\n CAUE DE LA HAUTE-LOIRE - 16 rue Jean Solvain - 43000 LE PUY-EN-VELAY - contact&#64;caue43.fr - 04 71 07 41 76\n <br />\n</p>\n<p>\n CAUE DU LOIRET - 36 Quai du Châtelet, 45000 Orléans - 02 38 54 13 98\n</p>\n<p>\n CAUE DU LOT - Cité Bessières - Rue Pierre Mendès France - 46000 CAHORS - caue.46&#64;wanadoo.fr - 05 65 30 14 35\n <br />\n <br />\n CAUE LOT-ET-GARONNE - 9 rue Etienne Dolet - 47000 AGEN - secretariat.vr&#64;caue47.com - 05 53 48 46 70\n <br />\n <br />\n CAUE DE MAINE-ET-LOIRE - Maison de l&#039;architecture des territoires et du paysage - 312 avenue René Gasnier - 49100 ANGERS - contact&#64;caue49.com - 02 41 22 99 99\n <br />\n <br />\n CAUE DE LA MANCHE - 2 Place de Gaulle - 50000 SAINT-LO - courrier&#64;caue50.fr - 02 33 77 20 77\n <br />\n <br />\n CAUE DE LA MAYENNE - 2 rue de l&#039;Ermitage - 53000 LAVAL - accueil&#64;caue53.com - 02 43 56 41 79\n <br />\n <br />\n CAUE DE MEURTHE-ET-MOSELLE - 48 esplanade Jacques Baudot - Rue du Sergent Blandan - co 90019 - 54035 NANCY Cedex - caue&#64;caue54.departement54.fr - 03 83 94 51 78\n <br />\n <br />\n CAUE DE LA MEUSE - 28 rue des Romains - 55000 BAR-LE-DUC - contact&#64;caue55.fr - 03 29 45 77 68\n <br />\n</p>\n<p>\n CAUE DU MORBIHAN - 2 All. Nicolas Leblanc, 56000 Vannes - 02 97 62 40 90\n <br />\n</p>\n<p>\n CAUE DE LA MOSELLE - 17 Quai Wiltzer - 57000 METZ - contact&#64;caue57.com - 03 87 74 46 06\n <br />\n <br />\n CAUE DE L&#039;OISE - 4 rue de l&#039;Abbé du Bos - 60000 BEAUVAIS - caue60&#64;wanadoo.fr - 03 44 82 14 14\n <br />\n <br />\n CAUE DE L&#039;ORNE - 54 rue Saint-Blaise - 61000 ALENÇON - contact&#64;caue61.fr - 02 33 26 14 14\n <br />\n <br />\n CAUE DU PAS-DE-CALAIS - 43 rue d&#039;Amiens - 62018 ARRAS Cedex 9 - caue62&#64;caue62.org - 03 21 21 65 65\n <br />\n <br />\n CAUE DU PUY-DE-DÔME - Maison de l&#039;Habitat - 129 avenue de la République - 63100 CLERMONT-FERRAND - contact&#64;caue63.com - 04 73 42 21 20\n <br />\n <br />\n CAUE DES PYRÉNÉES-ATLANTIQUES - 4 place Reine Marguerite - 64000 PAU - contact&#64;caue64.fr - 05 59 84 53 66\n <br />\n <br />\n CAUE DES HAUTES-PYRÉNÉES - 14 boulevard Claude Debussy - 65000 TARBES - caue-65&#64;orange.fr - 05 62 56 71 45\n <br />\n <br />\n CAUE DES PYRÉNÉES-ORIENTALES - 11 rue du Bastion Saint-François - 66000 PERPIGNAN - contact&#64;caue66.fr - 04 68 34 12 37\n <br />\n <br />\n CAUE D&#039;ALSACE - 5 rue Hannong - 67000 STRASBOURG - caue&#64;caue-alsace.com - 03 88 15 02 30\n <br />\n <br />\n CAUE DE RHÔNE-METROPOLE DE LYON- 6 bis quai Saint-Vincent - 69283 LYON Cedex 01 - caue69&#64;caue69.fr - 04 72 07 44 55\n <br />\n <br />\n CAUE DE LA HAUTE-SAÔNE - 5 A route de Saint Loup - 70005 VESOUL Cedex - contact&#64;caue70.fr - 03 84 96 97 77\n <br />\n <br />\n CAUE DE LA SARTHE - 1 rue de la Mariette - 72000 LE MANS - caue.sarthe&#64;wanadoo.fr - 02 43 72 35 31\n <br />\n <br />\n CAUE DE LA SAVOIE - Bâtiment Evolution - 25 Rue Jean Pellerin - CS 42632 - 73026 CHAMBERY Cedex - caue&#64;cauesavoie.org - 04 79 60 75 50\n <br />\n <br />\n CAUE DE LA HAUTE-SAVOIE - L&#039;Ilot-S - 7 esplanade Paul Grimault - BP 339 - 74008 ANNECY Cedex - caue74&#64;caue74.fr - 04 50 88 21 10\n <br />\n <br />\n CAUE DE LA SEINE-MARITIME - 27 rue François Mitterrand - BP 90241 - 76142 PETIT-QUEVILLY Cedex - caue&#64;caue76.org - 02 35 72 94 50\n <br />\n <br />\n CAUE DE LA SEINE-ET-MARNE - 27 rue du Marché - 77120 COULOMMIERS - accueil&#64;caue77.fr - 01 64 03 30 62\n <br />\n <br />\n CAUE DES DEUX-SÈVRES - Maison du Département - Mail Lucie Aubrac - CS 58882 - 79000 NIORT - caue&#64;caue79.fr - 05 49 28 06 28\n <br />\n <br />\n CAUE DE LA SOMME - 35 mail Albert 1er - 80000 AMIENS - caue80&#64;caue80.asso.fr - 03 22 91 11 65\n <br />\n <br />\n CAUE DE TARN - 188 rue de Jarlard - 81000 ALBI - caue&#64;caue81.fr - 05 63 60 16 70\n <br />\n <br />\n CAUE DE TARN-ET-GARONNE - Hôtel du Département - 100 boulevard Hubert Gouze - 82000 MONTAUBAN - caue82&#64;ledepartement82.fr - 05 63 03 80 88\n <br />\n <br />\n CAUE DU VAR - 26 Place Vincent Raspail - 83000 TOULON Cedex - contact&#64;cauevar.fr - 04 94 22 65 75\n <br />\n <br />\n CAUE DE LA VENDEE - 33 rue de l&#039;atlantique - CS 40685 - 85000 LA ROCHE-SUR-YON Cedex - caue85&#64;caue85.com - 02 51 37 44 95\n <br />\n <br />\n CAUE DE LA HAUTE-VIENNE - 1 rue des Allois - 87000 LIMOGES - caue87&#64;wanadoo.fr - 05 53 32 32 40\n <br />\n <br />\n CAUE DES VOSGES - Conseil Départemental - 88088 EPINAL Cedex 9 - caue88&#64;vosges.fr - 03 29 29 89 40\n <br />\n <br />\n CAUE L&#039;YONNE - 8 avenue du 4e R.I. - 89000 AUXERRE - contact&#64;caue89.fr - 03 58 43 80 33\n <br />\n <br />\n CAUE DE L&#039;ESSONNE - 9 Cours Blaise Pascal - 91000 EVRY - caue91&#64;caue91.asso.fr - 01 60 79 35 44\n <br />\n <br />\n CAUE DES HAUTS-DE-SEINE - 279 terrasse de l&#039;Université - 92000 NANTERRE - contact&#64;caue92.com - 01 71 04 52 49\n <br />\n <br />\n CAUE DU VAL-DE-MARNE - 36 rue Edmond Nocard - 94700 MAISONS-ALFORT - contact&#64;caue94.fr - 01 48 52 55 20\n <br />\n <br />\n CAUE DU VAL-D&#039;OISE - Moulin de la couleuvre - Rue des Deux Ponts - 95300 PONTOISE - caue95&#64;caue95.org - 01 30 38 68 68\n <br />\n <br />\n CAUE DE LA GUADELOUPE - Centre commercial le Pérou - Bat B - N°46 - BP 136 - 97181 ABYMES Cedex - contact&#64;caue971.org - 05 90 81 83 85\n <br />\n <br />\n CAUE DE LA MARTINIQUE - 31 avenue Pasteur - 97200 FORT-DE-FRANCE - caue972&#64;wanadoo.fr - 05 96 70 10 10\n <br />\n <br />\n CAUE DE LA GUYANE - 13 avenue Léopold Héder - 97300 CAYENNE - caue973&#64;orange.fr - 05 94 31 42 82\n <br />\n <br />\n CAUE DE-LA-RÉUNION - 12 rue Monseigneur de Beaumont - BP 868 - 97477 SAINT-DENIS Cedex - courrier&#64;caue974.com - 02 62 21 60 86\n <br />\n <br />\n CAUE DE MAYOTTE - Département de Mayotte - BP101 - 97600 MAYOTTE - feda.soidri&#64;cg976.fr - 02 69 66 06 84\n <br />\n <br />\n</p>\n<p>\n <a href=\"https://www.fncaue.com/repertoire-caue-urcaue/\" rel=\"noopener\" target=\"_blank\">\n  Retrouvez l&#039;annuaire des CAUE ici\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n </a>\n</p>",
+      "recurrence": "Permanente",
+      "project_examples": "<p>\n Formations dans les domaines de:\n <br />\n</p>\n<p>\n <strong>\n  L&#039;ARCHITECTURE – LA CONSTRUCTION\n  <br />\n </strong>\n Bâtiment / EcoConstruction / Rénovation / Réhabilitation / Habitat / Logement / Savoir-faire locaux / Patrimoine /Accessibilité / Énergie / Accueil de la petite enfance / Ecoles / Collège / Lycée / Équipement public / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Autorisation d&#039;urbanisme / Droit de la construction / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Equipement public / Patrimoine religieux / Ecomatériaux / Polyvalence des usages du bâti\n <strong>\n  <br />\n  <br />\n  L&#039;URBANISME – L&#039;AMÉNAGEMENT\n  <br />\n </strong>\n Stratégie et planification territoriale /Urbanisme réglementaire / Urbanisme de projet / Urbanisme opérationnel / Climat / Foncier/ Aménagement d&#039;espace public / Aménagement paysager / Revitalisation des centres-villes / Traversée de bourg / Zone d&#039;activité / Commerce / Politique de la ville / Quartier / Urbain / Rural / Petite ville de demain (PVD) / Action Coeur de Ville / Sobriété foncière / Rural / Périurbain / Urbain / Densification / Requalification de friches / Fonds vert / Transition écologique et énergétique / Changement climatique / Villages d&#039;avenir\n <strong>\n  <br />\n  <br />\n  L&#039;ENVIRONNEMENT – LE PAYSAGE\n  <br />\n </strong>\n Paysage / Espace naturel / Espace vert / Démarche paysagère / Plan de paysage / Fleurissement / Embellissement / Biodiversité / Eau /Trame verte et bleue / Trame brune et noire / Risques naturels / Ecologie / Jardins / Aires de jeux / Renaturation / Végétalisation / Arbre / Jardin / Nature en ville / Désimperméabilisation / Eau / Aménagement paysager /Atlas de paysage / Observatoires photographiques / Sol\n <strong>\n  <br />\n  <br />\n  TRANSVERSALEMENT\n  <br />\n </strong>\n Accessibilité / Mobilité / Voies de communication / Publicité / Tourisme / Transition énergétique / Aménagement du territoire / Vivre ensemble / Action Educative Artistique et Culturelle / Application numérique/ Culture / Médiation / Résidences / Place de l&#039;élu\n <strong>\n  <br />\n </strong>\n <br />\n</p>",
+      "import_data_url": null,
+      "import_data_mention": null,
+      "import_share_licence": null,
+      "date_created": "2021-02-24T14:45:00+00:00",
+      "date_updated": "2024-11-21T13:29:25+00:00",
+      "project_references": [
+        "Construction d'une piscine"
+      ],
+      "european_aid": null,
+      "is_live": true
+    },
+    {
+      "id": 82911,
+      "slug": "0b95-copie-12h28-etre-aide-dans-la-realisation-dac",
+      "url": "/aides/0b95-copie-12h28-etre-aide-dans-la-realisation-dac/",
+      "name": "Etre aidé dans la réalisation d’actions culturelles sur la construction, l'architecture, urbanisme, le paysage et l'environnement",
+      "name_initial": null,
+      "short_title": null,
+      "financers": [
+        "CAUE de l'Oise",
+        "CAUE du Cher",
+        "CAUE du Gard",
+        "CAUE du Gers",
+        "CAUE du Tarn",
+        "CAUE d'Alsace",
+        "CAUE de Corse",
+        "CAUE de l'Yonne",
+        "CAUE de la Haute-Saône",
+        "CAUE de la Sarthe",
+        "CAUE du Var",
+        "CAUE de l'Orne",
+        "CAUE du Cantal",
+        "CAUE du Loiret",
+        "CAUE de Corrèze",
+        "CAUE de l'Aisne",
+        "CAUE de l'Isère",
+        "CAUE de l'Ain",
+        "CAUE du Morbihan",
+        "CAUE de l'Aude",
+        "CAUE de Mayotte",
+        "CAUE des Landes",
+        "CAUE des Vosges",
+        "CAUE de l'Allier",
+        "CAUE de l'Ariège",
+        "CAUE de la Drôme",
+        "CAUE de la Meuse",
+        "CAUE de la Somme",
+        "CAUE du Lot",
+        "CAUE du Maine-et-Loire",
+        "CAUE de l'Aveyron",
+        "CAUE de l'Essonne",
+        "CAUE de l'Hérault",
+        "CAUE de la Creuse",
+        "CAUE de la Guyane",
+        "CAUE de la Manche",
+        "CAUE du Calvados",
+        "CAUE de l'Eure",
+        "CAUE de la Côte-d'Or",
+        "CAUE des Deux-Sèvres",
+        "CAUE de la Gironde",
+        "CAUE de la Mayenne",
+        "CAUE de la Moselle",
+        "CAUE du Val d'Oise",
+        "CAUE de la Charente",
+        "CAUE de la Dordogne",
+        "CAUE du Puy-de-Dôme",
+        "CAUE de la Seine-et-Marne",
+        "CAUE des Hautes-Pyrénées",
+        "Conseils d'architecture, d'urbanisme et d'environnement (CAUE)",
+        "CAUE du Loir-et-Cher",
+        "CAUE du Val-de-Marne",
+        "CAUE de la Martinique",
+        "CAUE des Hautes-Alpes",
+        "CAUE de la Haute-Loire",
+        "CAUE du Pas-de-Calais",
+        "CAUE de Guadeloupe",
+        "CAUE de l'Ardèche",
+        "CAUE de la Haute-Savoie",
+        "CAUE de la Haute-Vienne",
+        "CAUE de Rhône-Métropole",
+        "CAUE des Hauts-de-Seine",
+        "CAUE du Tarn-et-Garonne",
+        "CAUE de l’Indre-et-Loire",
+        "CAUE de la Savoie",
+        "CAUE Lot-et-Garonne",
+        "CAUE de la Vendée",
+        "CAUE de la Seine-Maritime",
+        "CAUE des Bouches-du-Rhône",
+        "CAUE de Meurthe-et-Moselle",
+        "CAUE de l'Île-de-la-Réunion",
+        "CAUE de la Charente-Maritime",
+        "CAUE des Pyrénées-Orientales",
+        "CAUE des Pyrénées-Atlantiques",
+        "CAUE de la Haute-Garonne"
+      ],
+      "financers_full": [
+        {
+          "id": 767,
+          "name": "CAUE de l'Oise",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-60-1-1726576581.png"
+        },
+        {
+          "id": 741,
+          "name": "CAUE du Cher",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-cher_logo.jpeg"
+        },
+        {
+          "id": 750,
+          "name": "CAUE du Gard",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-gard_logo.jpeg"
+        },
+        {
+          "id": 728,
+          "name": "CAUE du Gers",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-32-1726567109.png"
+        },
+        {
+          "id": 447,
+          "name": "CAUE du Tarn",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-tarn_logo.png"
+        },
+        {
+          "id": 2436,
+          "name": "CAUE d'Alsace",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-1712065535.png"
+        },
+        {
+          "id": 2431,
+          "name": "CAUE de Corse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logos-caue-corse-original-1712064665.png"
+        },
+        {
+          "id": 791,
+          "name": "CAUE de l'Yonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-lyonne_logo.jpeg"
+        },
+        {
+          "id": 777,
+          "name": "CAUE de la Haute-Saône",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-70-1726577892.jpg"
+        },
+        {
+          "id": 779,
+          "name": "CAUE de la Sarthe",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-72-1726577816.jpg"
+        },
+        {
+          "id": 801,
+          "name": "CAUE du Var",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-83-1726578669.png"
+        },
+        {
+          "id": 768,
+          "name": "CAUE de l'Orne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-61-1726576303.png"
+        },
+        {
+          "id": 739,
+          "name": "CAUE du Cantal",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-cantal_logo.png"
+        },
+        {
+          "id": 2434,
+          "name": "CAUE du Loiret",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-45-1726574960.png"
+        },
+        {
+          "id": 742,
+          "name": "CAUE de Corrèze",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-19-1726501612.jpg"
+        },
+        {
+          "id": 730,
+          "name": "CAUE de l'Aisne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue02-1726500914.png"
+        },
+        {
+          "id": 755,
+          "name": "CAUE de l'Isère",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue38-1726566676.jpg"
+        },
+        {
+          "id": 729,
+          "name": "CAUE de l'Ain",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/vignette-logo-102020-1726500658.jpg"
+        },
+        {
+          "id": 2435,
+          "name": "CAUE du Morbihan",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-56-1726576701.png"
+        },
+        {
+          "id": 735,
+          "name": "CAUE de l'Aude",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-laude_logo.png"
+        },
+        {
+          "id": 2438,
+          "name": "CAUE de Mayotte",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/images-1-1712066056.png"
+        },
+        {
+          "id": 757,
+          "name": "CAUE des Landes",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-landes_logo.png"
+        },
+        {
+          "id": 790,
+          "name": "CAUE des Vosges",
+          "logo": null
+        },
+        {
+          "id": 731,
+          "name": "CAUE de l'Allier",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-3-1726501029.webp"
+        },
+        {
+          "id": 734,
+          "name": "CAUE de l'Ariège",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-09-1726501414.png"
+        },
+        {
+          "id": 747,
+          "name": "CAUE de la Drôme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/26-1726566336.gif"
+        },
+        {
+          "id": 508,
+          "name": "CAUE de la Meuse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-55-1726576868.png"
+        },
+        {
+          "id": 2437,
+          "name": "CAUE de la Somme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue80-2019-1712065848.png"
+        },
+        {
+          "id": 760,
+          "name": "CAUE du Lot",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-46-1726574546.jpg"
+        },
+        {
+          "id": 762,
+          "name": "CAUE du Maine-et-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-49-1726576184.jpg"
+        },
+        {
+          "id": 736,
+          "name": "CAUE de l'Aveyron",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-12-1726501277.png"
+        },
+        {
+          "id": 792,
+          "name": "CAUE de l'Essonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-91-1726578870.jpg"
+        },
+        {
+          "id": 754,
+          "name": "CAUE de l'Hérault",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-34-1726567021.jpg"
+        },
+        {
+          "id": 2432,
+          "name": "CAUE de la Creuse",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue-23-512px-1712065002.webp"
+        },
+        {
+          "id": 798,
+          "name": "CAUE de la Guyane",
+          "logo": null
+        },
+        {
+          "id": 763,
+          "name": "CAUE de la Manche",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-50-1726576144.jpg"
+        },
+        {
+          "id": 738,
+          "name": "CAUE du Calvados",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-calvados_logo.png"
+        },
+        {
+          "id": 748,
+          "name": "CAUE de l'Eure",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue27-414x583-retina-png-1726566260.webp"
+        },
+        {
+          "id": 745,
+          "name": "CAUE de la Côte-d'Or",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-21-1726566604.jpg"
+        },
+        {
+          "id": 786,
+          "name": "CAUE des Deux-Sèvres",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-deux-sevres_logo.jpeg"
+        },
+        {
+          "id": 753,
+          "name": "CAUE de la Gironde",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-33-1726567062.png"
+        },
+        {
+          "id": 764,
+          "name": "CAUE de la Mayenne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-53-1726576090.jpg"
+        },
+        {
+          "id": 766,
+          "name": "CAUE de la Moselle",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-57-1726576650.jpg"
+        },
+        {
+          "id": 795,
+          "name": "CAUE du Val d'Oise",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-val-doise_logo.png"
+        },
+        {
+          "id": 740,
+          "name": "CAUE de la Charente",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-16-1726565592.png"
+        },
+        {
+          "id": 746,
+          "name": "CAUE de la Dordogne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-24-1726566413.png"
+        },
+        {
+          "id": 770,
+          "name": "CAUE du Puy-de-Dôme",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-63-1726577658.jpg"
+        },
+        {
+          "id": 784,
+          "name": "CAUE de la Seine-et-Marne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-77-1726578265.jpg"
+        },
+        {
+          "id": 772,
+          "name": "CAUE des Hautes-Pyrénées",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-65-1726577290.png"
+        },
+        {
+          "id": 1805,
+          "name": "Conseils d'architecture, d'urbanisme et d'environnement (CAUE)",
+          "logo": null
+        },
+        {
+          "id": 2433,
+          "name": "CAUE du Loir-et-Cher",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/logo-caue41-2x-1712065103.png"
+        },
+        {
+          "id": 794,
+          "name": "CAUE du Val-de-Marne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-val-de-marne_logo.jpeg"
+        },
+        {
+          "id": 797,
+          "name": "CAUE de la Martinique",
+          "logo": null
+        },
+        {
+          "id": 732,
+          "name": "CAUE des Hautes-Alpes",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-05-1726501177.png"
+        },
+        {
+          "id": 759,
+          "name": "CAUE de la Haute-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-43-1726575023.jpg"
+        },
+        {
+          "id": 769,
+          "name": "CAUE du Pas-de-Calais",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-pas-de-calais_logo.jpeg"
+        },
+        {
+          "id": 796,
+          "name": "CAUE de Guadeloupe",
+          "logo": null
+        },
+        {
+          "id": 733,
+          "name": "CAUE de l'Ardèche",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-07-1726501480.jpg"
+        },
+        {
+          "id": 781,
+          "name": "CAUE de la Haute-Savoie",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-74-1726578412.jpg"
+        },
+        {
+          "id": 789,
+          "name": "CAUE de la Haute-Vienne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-87-1726579460.png"
+        },
+        {
+          "id": 776,
+          "name": "CAUE de Rhône-Métropole",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-rhone-metropole_logo.gif"
+        },
+        {
+          "id": 793,
+          "name": "CAUE des Hauts-de-Seine",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-92-1726578842.jpg"
+        },
+        {
+          "id": 808,
+          "name": "CAUE du Tarn-et-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-du-tarn-et-garonne_logo.jpeg"
+        },
+        {
+          "id": 805,
+          "name": "CAUE de l’Indre-et-Loire",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-37-img-couverture-1726566981.jpg"
+        },
+        {
+          "id": 780,
+          "name": "CAUE de la Savoie",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-73-1726577722.png"
+        },
+        {
+          "id": 761,
+          "name": "CAUE Lot-et-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-lot-et-garonne_logo.jpeg"
+        },
+        {
+          "id": 787,
+          "name": "CAUE de la Vendée",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-85-1726578570.png"
+        },
+        {
+          "id": 783,
+          "name": "CAUE de la Seine-Maritime",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-76-1726578297.jpg"
+        },
+        {
+          "id": 737,
+          "name": "CAUE des Bouches-du-Rhône",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-des-bouches-du-rhone_logo.gif"
+        },
+        {
+          "id": 765,
+          "name": "CAUE de Meurthe-et-Moselle",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-meurthe-et-moselle_logo.png"
+        },
+        {
+          "id": 799,
+          "name": "CAUE de l'Île-de-la-Réunion",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-de-lile-de-la-reunion_logo.png"
+        },
+        {
+          "id": 810,
+          "name": "CAUE de la Charente-Maritime",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-17-1726565258.jpg"
+        },
+        {
+          "id": 773,
+          "name": "CAUE des Pyrénées-Orientales",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-66-1726577210.jpg"
+        },
+        {
+          "id": 771,
+          "name": "CAUE des Pyrénées-Atlantiques",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-64-1726577599.webp"
+        },
+        {
+          "id": 751,
+          "name": "CAUE de la Haute-Garonne",
+          "logo": "https://aides-territoires-prod-2.s3.fr-par.scw.cloud/aides-territoires-prod/backers/caue-31-1726567192.png"
+        }
+      ],
+      "instructors": [],
+      "instructors_full": [],
+      "programs": [
+        "Petites villes de demain",
+        "France Relance",
+        "Action cœur de ville",
+        "Actions pour la Relance (complémentaires à France Relance)",
+        "Territoires d'industrie",
+        "4ème Programme d’investissements d’avenir - PIA 4",
+        "Cités éducatives",
+        "Tourisme Ingénierie Développement",
+        "Destination France",
+        "Renaturation des villes",
+        "Fonds vert Ingénierie"
+      ],
+      "description": "<p>\n <strong>\n  Acteurs de la culture, les CAUE sont des centres de ressources, source de pédagogie et d&#039;outils de sensibilisation.\n </strong>\n <br />\n</p>\n<p>\n Présents depuis plus de 40 ans, ils mettent à disposition leurs connaissances des territoires et de leurs mutations. Ils produisent des\n <strong>\n  outils et des actions à vocation éducative ou culturelle et vous accompagnent dans vos projets.\n </strong>\n <br />\n</p>\n<p>\n Ils s&#039;adressent aux élus, aux maires, au jeune public (en milieu scolaire, périscolaire et  autres), aux étudiants, au grand public, aux professionnels, aux services de l&#039;Etat.\n <br />\n <br />\n Leurs équipes sont pluridisciplinaires et œuvrent au quotidien sur le terrain. Elles peuvent vous accompagner dans des démarches expérimentales, innovantes.\n <br />\n <br />\n <strong>\n  La palette de leurs interventions est multiple :\n </strong>\n <br />\n</p>\n<ul>\n <li>\n  Apport de données, d&#039;expertises et d&#039;informations\n </li>\n <li>\n  Atlas de paysages, observatoires\n </li>\n <li>\n  Parcours numériques\n  <br />\n </li>\n <li>\n  Ateliers\n </li>\n <li>\n  Conférences\n </li>\n <li>\n  Journées de sensibilisation\n </li>\n <li>\n  Visites de sites, voyage d&#039;études\n </li>\n <li>\n  Randonnées, lectures de paysages, balades urbaines\n  <br />\n </li>\n <li>\n  Rendez-vous culturels\n </li>\n <li>\n  Organisation et réalisation de prix, palmarès,\n </li>\n <li>\n  Concours, appels à idées\n </li>\n <li>\n  Réalisation de plaquettes\n </li>\n <li>\n  Publications, ouvrages, guides\n </li>\n <li>\n  Vidéos\n </li>\n <li>\n  Expositions\n </li>\n <li>\n  Participation à des commissions techniques thématiques (commerce, agriculture...)\n </li>\n <li>\n  Actions pédagogiques en milieu scolaire et hors ce milieu\n </li>\n <li>\n  Résidences\n </li>\n <li>\n  ...\n  <br />\n </li>\n</ul>",
+      "eligibility": null,
+      "perimeter": "France",
+      "perimeter_scale": "Pays",
+      "mobilization_steps": [
+        "Réflexion / conception",
+        "Mise en œuvre / réalisation",
+        "Usage / valorisation"
+      ],
+      "origin_url": "https://www.fncaue.com/",
+      "categories": [
+        "Eau et milieux aquatiques / Eau pluviale",
+        "Eau et milieux aquatiques / Assainissement des eaux",
+        "Eau et milieux aquatiques / Eau souterraine",
+        "Eau et milieux aquatiques / Cours d'eau / canaux / plans d'eau",
+        "Culture et identité collective / patrimoine / sports / Patrimoine et monuments historiques",
+        "Culture et identité collective / patrimoine / sports / Culture et identité collective",
+        "Culture et identité collective / patrimoine / sports / Arts plastiques et photographie",
+        "Culture et identité collective / patrimoine / sports / Musée",
+        "Culture et identité collective / patrimoine / sports / Sports et loisirs",
+        "Développement économique / production et consommation / Tourisme",
+        "Nature / environnement / Forêts",
+        "Nature / environnement / Montagne",
+        "Nature / environnement / Sols",
+        "Urbanisme / logement / aménagement / Espaces verts",
+        "Urbanisme / logement / aménagement / Espace public",
+        "Urbanisme / logement / aménagement / Friche",
+        "Urbanisme / logement / aménagement / Foncier",
+        "Urbanisme / logement / aménagement / Voirie et réseaux",
+        "Énergies / Déchets / Transition énergétique",
+        "Énergies / Déchets / Economie d'énergie et rénovation énergétique",
+        "Énergies / Déchets / Réseaux de chaleur",
+        "Énergies / Déchets / Recyclage et valorisation des déchets",
+        "Solidarités / lien social / Personnes âgées",
+        "Solidarités / lien social / Jeunesse",
+        "Solidarités / lien social / Famille et enfance",
+        "Solidarités / lien social / Cohésion sociale et inclusion",
+        "Solidarités / lien social / Citoyenneté",
+        "Solidarités / lien social / Santé",
+        "Solidarités / lien social / Education et renforcement des compétences",
+        "Développement économique / production et consommation / Commerces et services",
+        "Développement économique / production et consommation / Tiers-lieux",
+        "Développement économique / production et consommation / Economie circulaire",
+        "Développement économique / production et consommation / Economie locale et circuits courts",
+        "Développement économique / production et consommation / Agriculture et agroalimentaire",
+        "Développement économique / production et consommation / Revitalisation",
+        "Développement économique / production et consommation / Innovation, créativité et recherche",
+        "Nature / environnement / Risques naturels",
+        "Nature / environnement / Qualité de l'air",
+        "Nature / environnement / Biodiversité",
+        "Urbanisme / logement / aménagement / Equipement public",
+        "Urbanisme / logement / aménagement / Bâtiments et construction",
+        "Urbanisme / logement / aménagement / Réhabilitation",
+        "Urbanisme / logement / aménagement / Logement et habitat",
+        "Urbanisme / logement / aménagement / Architecture",
+        "Urbanisme / logement / aménagement / Paysage",
+        "Urbanisme / logement / aménagement / Accessibilité",
+        "Développement économique / production et consommation / International",
+        "Développement économique / production et consommation / Attractivité économique",
+        "Fonctions support / Appui méthodologique",
+        "Fonctions support / Animation et mise en réseau",
+        "Fonctions support / Valorisation d'actions",
+        "Développement économique / production et consommation / Artisanat",
+        "Mobilité / transports / Mobilité partagée",
+        "Mobilité / transports / Logistique urbaine",
+        "Mobilité / transports / Mobilité pour tous",
+        "Mobilité / transports / Connaissance de la mobilité",
+        "Mobilité / transports / Modes actifs : vélo, marche et aménagements associés",
+        "Eau et milieux aquatiques / Mers et océans",
+        "Nature / environnement / Milieux humides",
+        "Urbanisme / logement / aménagement / Cimetières et funéraire"
+      ],
+      "is_call_for_project": false,
+      "application_url": "https://www.fncaue.com/",
+      "targeted_audiences": [
+        "Commune",
+        "Intercommunalité / Pays",
+        "Département",
+        "Région",
+        "Collectivité d’outre-mer à statut particulier",
+        "Etablissement public dont services de l'Etat",
+        "Entreprise publique locale (Sem, Spl, SemOp)",
+        "Association",
+        "Entreprise privée",
+        "Particulier",
+        "Agriculteur",
+        "Recherche"
+      ],
+      "aid_types": [
+        "Ingénierie technique"
+      ],
+      "aid_types_full": [
+        {
+          "id": 6,
+          "name": "Ingénierie technique",
+          "group": {
+            "id": 2,
+            "name": "Aide en ingénierie"
+          }
+        }
+      ],
+      "is_charged": false,
+      "destinations": [
+        "Dépenses de fonctionnement",
+        "Dépenses d’investissement"
+      ],
+      "start_date": null,
+      "predeposit_date": null,
+      "submission_deadline": null,
+      "subvention_rate_lower_bound": null,
+      "subvention_rate_upper_bound": null,
+      "subvention_comment": null,
+      "loan_amount": null,
+      "recoverable_advance_amount": null,
+      "contact": "<p>\n <strong>\n  Contactez le CAUE de votre département pour plus d&#039;informations.\n </strong>\n</p>\n<br />\n<p>\n CAUE DE L&#039;AIN - 34 rue Delestraint - 01000 BOURG-EN-BRESSE - contact&#64;caue-ain.com - 04 74 21 11 31\n</p>\n<p>\n CAUE DE L&#039;AISNE - 34 rue Sérurier - 02000 LAON - info&#64;caue02.com - 03 23 79 00 03\n</p>\n<p>\n CAUE de l&#039;ALLIER - Hôtel de Sampigny - 14 rue de Decize - 03000 MOULINS - 04 70 20 11 00\n</p>\n<p>\n CAUE DES HAUTES-ALPES - 1 avenue Alexandre Didier - BP 55 - 05200 EMBRUN - caue05&#64;orange.fr - 04 92 43 60 31\n</p>\n<p>\n CAUE DE L&#039;ARDÈCHE - 2 bis avenue de l&#039;Europe Unie - BP 102 - 07002 PRIVAS Cedex - caue-07&#64;wanadoo.fr - 04 75 64 36 04\n</p>\n<p>\n CAUE DE L&#039;ARIEGE - 26 bis avenue du stade - 09001 FOIX - caue.ariege&#64;orange.fr - 05 34 09 78 30\n</p>\n<p>\n CAUE DE L&#039; AUDE - Maison de l&#039;Architecture et de l&#039;Environnement - 28 avenue Claude Bernard - 11000 CARCASSONNE - caue.aude&#64;gmail.com - 04 68 11 56 20\n</p>\n<p>\n CAUE DE L&#039; AVEYRON - 5 place Sainte-Catherine - Immeuble Sainte Catherine - 12000 RODEZ - caue&#64;caueaveyron.fr - 05 65 68 66 45\n</p>\n<p>\n CAUE DES BOUCHES-DU-RHÔNE - 18 rue Neuve Sainte-Catherine - 13007 MARSEILLE - caue13&#64;caue13.fr - 04 96 11 01 20\n</p>\n<p>\n CAUE DU CALVADOS - 28 rue Jean Eudes - 14000 CAEN - contact&#64;caue14.fr - 02 31 15 59 60\n</p>\n<p>\n CAUE DU CANTAL - 19 avenue de la République - 15000 AURILLAC - caue.cantal&#64;wanadoo.fr - 04 71 48 50 22\n</p>\n<p>\n CAUE DE LA CHARENTE - 31 boulevard Besson Bey - 16000 ANGOULEME - contact&#64;caue16.fr - 05 45 92 95 93\n</p>\n<p>\n CAUE DE LA CHARENTE-MARITIME - 85 boulevard de la République - Les Minimes - 17076 LA ROCHELLE Cedex 09 - contact&#64;caue17.fr - 05 46 31 71 90\n</p>\n<p>\n CAUE DU CHER - 27 boulevard de Strasbourg - 18000 BOURGES - contact&#64;caue18.fr - 02 48 50 75 18\n</p>\n<p>\n CAUE DE CORRÈZE - 45 Quai Aristide Briand - 19000 TULLE - caue.19&#64;wanadoo.fr - 05 55 26 06 48\n</p>\n<p>\n CAUE CORSE - Immeuble l&#039;Expo - Avenue de la Libération - 20600 BASTIA - cauedecorse&#64;orange.fr - 04 95 21 19 48\n</p>\n<p>\n CAUE DE LA CÔTE-D&#039;OR - 1 rue de Soissons - 21000 DIJON - info&#64;caue21.fr - 03 80 30 02 38\n</p>\n<p>\n CAUE DE LA CREUSE - 1 avenue Jean-Baptiste Defumade - 23320 SAINT-VAURY - caue23&#64;caue23.fr - 05 44 30 27 56\n</p>\n<p>\n CAUE DE LA DORDOGNE - 2 place Hôche - 24000 PÉRIGUEUX - courriel&#64;cauedordogne.com - 05 53 08 37 13\n</p>\n<p>\n CAUE DE LA DRÔME - 44 rue Faventines - BP 1022 - 26010 VALENCE Cedex - co-caue&#64;dromenet.org - 04 75 79 04 19\n</p>\n<p>\n CAUE DE L&#039; EURE - 22 rue Joséphine - 27000 EVREUX - contact&#64;caue27.fr - 02 32 33 15 78\n</p>\n<p>\n CAUE DU GARD - 29 rue Charlemagne - 30000 NIMES - accueil&#64;caue30.fr - 04 66 36 10 60\n</p>\n<p>\n CAUE DE LA HAUTE-GARONNE - 1 rue Matabiau - 31000 TOULOUSE - caue&#64;caue31.org - 05 62 73 73 62\n</p>\n<p>\n CAUE DU GERS - 93 route de Pessan - 32000 AUCH - cauegers&#64;caue32.fr - 05 62 05 75 34\n</p>\n<p>\n CAUE DE LA GIRONDE - 283 rue d&#039;Ornano - 33000 BORDEAUX - contact&#64;cauegironde.com - 05 56 97 81 89\n</p>\n<p>\n CAUE DE L&#039;HÉRAULT - 19 rue Saint Louis - 34000 MONTPELLIER - contact&#64;caue34.fr - 04 99 13 37 00\n</p>\n<p>\n CAUE D&#039;INDRE-ET-LOIRE - 34, place de la Préfecture - 37000 TOURS - administration&#64;caue37.fr - 02 47 31 13 40\n</p>\n<p>\n CAUE DE L&#039;ISÈRE - 22 rue Hébert - 38000 GRENOBLE - contact&#64;caue-isere.org - 04 76 00 02 21\n</p>\n<p>\n CAUE DES LANDES - 155 rue Martin Luther King - 40000 MONT-DE-MARSAN - contact&#64;caue40.com - 05 58 06 11 77\n</p>\n<p>\n CAUE DU LOIR-ET-CHER - 34 avenue Maunoury - 41000 BLOIS - contact&#64;caue41.fr - 02 54 51 56 50\n</p>\n<p>\n CAUE DE LA HAUTE-LOIRE - 16 rue Jean Solvain - 43000 LE PUY-EN-VELAY - contact&#64;caue43.fr - 04 71 07 41 76\n <br />\n</p>\n<p>\n CAUE DU LOIRET - 36 Quai du Châtelet, 45000 Orléans - 02 38 54 13 98\n <br />\n</p>\n<p>\n CAUE DU LOT - Cité Bessières - Rue Pierre Mendès France - 46000 CAHORS - caue.46&#64;wanadoo.fr - 05 65 30 14 35\n</p>\n<p>\n CAUE LOT-ET-GARONNE - 9 rue Etienne Dolet - 47000 AGEN - secretariat.vr&#64;caue47.com - 05 53 48 46 70\n</p>\n<p>\n CAUE DE MAINE-ET-LOIRE - Maison de l&#039;architecture des territoires et du paysage - 312 avenue René Gasnier - 49100 ANGERS - contact&#64;caue49.com - 02 41 22 99 99\n</p>\n<p>\n CAUE DE LA MANCHE - 2 Place de Gaulle - 50000 SAINT-LO - courrier&#64;caue50.fr - 02 33 77 20 77\n</p>\n<p>\n CAUE DE LA MAYENNE - 2 rue de l&#039;Ermitage - 53000 LAVAL - accueil&#64;caue53.com - 02 43 56 41 79\n</p>\n<p>\n CAUE DE MEURTHE-ET-MOSELLE - 48 esplanade Jacques Baudot - Rue du Sergent Blandan - co 90019 - 54035 NANCY Cedex - caue&#64;caue54.departement54.fr - 03 83 94 51 78\n</p>\n<p>\n CAUE DE LA MEUSE - 28 rue des Romains - 55000 BAR-LE-DUC - contact&#64;caue55.fr - 03 29 45 77 68\n <br />\n</p>\n<p>\n CAUE DU MORBIHAN -  2 All. Nicolas Leblanc, 56000 Vannes - 02 97 62 40 90\n <br />\n</p>\n<p>\n CAUE DE LA MOSELLE - 17 Quai Wiltzer - 57000 METZ - contact&#64;caue57.com - 03 87 74 46 06\n</p>\n<p>\n CAUE DE L&#039;OISE - 4 rue de l&#039;Abbé du Bos - 60000 BEAUVAIS - caue60&#64;wanadoo.fr - 03 44 82 14 14\n</p>\n<p>\n CAUE DE L&#039;ORNE - 54 rue Saint-Blaise - 61000 ALENÇON - contact&#64;caue61.fr - 02 33 26 14 14\n</p>\n<p>\n CAUE DU PAS-DE-CALAIS - 43 rue d&#039;Amiens - 62018 ARRAS Cedex 9 - caue62&#64;caue62.org - 03 21 21 65 65\n</p>\n<p>\n CAUE DU PUY-DE-DÔME - Maison de l&#039;Habitat - 129 avenue de la République - 63100 CLERMONT-FERRAND - contact&#64;caue63.com - 04 73 42 21 20\n</p>\n<p>\n CAUE DES PYRÉNÉES-ATLANTIQUES - 4 place Reine Marguerite - 64000 PAU - contact&#64;caue64.fr - 05 59 84 53 66\n</p>\n<p>\n CAUE DES HAUTES-PYRÉNÉES - 14 boulevard Claude Debussy - 65000 TARBES - caue-65&#64;orange.fr - 05 62 56 71 45\n</p>\n<p>\n CAUE DES PYRÉNÉES-ORIENTALES - 11 rue du Bastion Saint-François - 66000 PERPIGNAN - contact&#64;caue66.fr - 04 68 34 12 37\n</p>\n<p>\n CAUE D&#039;ALSACE - 5 rue Hannong - 67000 STRASBOURG - caue&#64;caue-alsace.com - 03 88 15 02 30\n</p>\n<p>\n CAUE DE RHÔNE-METROPOLE DE LYON- 6 bis quai Saint-Vincent - 69283 LYON Cedex 01 - caue69&#64;caue69.fr - 04 72 07 44 55\n</p>\n<p>\n CAUE DE LA HAUTE-SAÔNE - 5 A route de Saint Loup - 70005 VESOUL Cedex - contact&#64;caue70.fr - 03 84 96 97 77\n</p>\n<p>\n CAUE DE LA SARTHE - 1 rue de la Mariette - 72000 LE MANS - caue.sarthe&#64;wanadoo.fr - 02 43 72 35 31\n</p>\n<p>\n CAUE DE LA SAVOIE - Bâtiment Evolution - 25 Rue Jean Pellerin - CS 42632 - 73026 CHAMBERY Cedex - caue&#64;cauesavoie.org - 04 79 60 75 50\n</p>\n<p>\n CAUE DE LA HAUTE-SAVOIE - L&#039;Ilot-S - 7 esplanade Paul Grimault - BP 339 - 74008 ANNECY Cedex - caue74&#64;caue74.fr - 04 50 88 21 10\n</p>\n<p>\n CAUE DE LA SEINE-MARITIME - 27 rue François Mitterrand - BP 90241 - 76142 PETIT-QUEVILLY Cedex - caue&#64;caue76.org - 02 35 72 94 50\n</p>\n<p>\n CAUE DE LA SEINE-ET-MARNE - 27 rue du Marché - 77120 COULOMMIERS - accueil&#64;caue77.fr - 01 64 03 30 62\n</p>\n<p>\n CAUE DES DEUX-SÈVRES - Maison du Département - Mail Lucie Aubrac - CS 58882 - 79000 NIORT - caue&#64;caue79.fr - 05 49 28 06 28\n</p>\n<p>\n CAUE DE LA SOMME - 35 mail Albert 1er - 80000 AMIENS - caue80&#64;caue80.asso.fr - 03 22 91 11 65\n</p>\n<p>\n CAUE DE TARN - 188 rue de Jarlard - 81000 ALBI - caue&#64;caue81.fr - 05 63 60 16 70\n</p>\n<p>\n CAUE DE TARN-ET-GARONNE - Hôtel du Département - 100 boulevard Hubert Gouze - 82000 MONTAUBAN - caue82&#64;ledepartement82.fr - 05 63 03 80 88\n</p>\n<p>\n CAUE DU VAR - 26 Place Vincent Raspail - 83000 TOULON Cedex - contact&#64;cauevar.fr - 04 94 22 65 75\n</p>\n<p>\n CAUE DE LA VENDEE - 33 rue de l&#039;atlantique - CS 40685 - 85000 LA ROCHE-SUR-YON Cedex - caue85&#64;caue85.com - 02 51 37 44 95</p><p>\n CAUE DE LA HAUTE-VIENNE - 1 rue des Allois - 87000 LIMOGES - caue87&#64;wanadoo.fr - 05 53 32 32 40\n</p>\n<p>\n CAUE DES VOSGES - Conseil Départemental - 88088 EPINAL Cedex 9 - caue88&#64;vosges.fr - 03 29 29 89 40\n</p>\n<p>\n CAUE L&#039;YONNE - 8 avenue du 4e R.I. - 89000 AUXERRE - contact&#64;caue89.fr - 03 58 43 80 33\n</p>\n<p>\n CAUE DE L&#039;ESSONNE - 9 Cours Blaise Pascal - 91000 EVRY - caue91&#64;caue91.asso.fr - 01 60 79 35 44\n</p>\n<p>\n CAUE DES HAUTS-DE-SEINE - 279 terrasse de l&#039;Université - 92000 NANTERRE - contact&#64;caue92.com - 01 71 04 52 49\n</p>\n<p>\n CAUE DU VAL-DE-MARNE - 36 rue Edmond Nocard - 94700 MAISONS-ALFORT - contact&#64;caue94.fr - 01 48 52 55 20\n</p>\n<p>\n CAUE DU VAL-D&#039;OISE - Moulin de la couleuvre - Rue des Deux Ponts - 95300 PONTOISE - caue95&#64;caue95.org - 01 30 38 68 68\n</p>\n<p>\n CAUE DE LA GUADELOUPE - Centre commercial le Pérou - Bat B - N°46 - BP 136 - 97181 ABYMES Cedex - contact&#64;caue971.org - 05 90 81 83 85\n</p>\n<p>\n CAUE DE LA MARTINIQUE - 31 avenue Pasteur - 97200 FORT-DE-FRANCE - caue972&#64;wanadoo.fr - 05 96 70 10 10\n</p>\n<p>\n CAUE DE LA GUYANE - 13 avenue Léopold Héder - 97300 CAYENNE - caue973&#64;orange.fr - 05 94 31 42 82\n</p>\n<p>\n CAUE DE-LA-RÉUNION - 12 rue Monseigneur de Beaumont - BP 868 - 97477 SAINT-DENIS Cedex - courrier&#64;caue974.com - 02 62 21 60 86\n</p>\n<p>\n CAUE DE MAYOTTE - Département de Mayotte - BP101 - 97600 MAYOTTE - feda.soidri&#64;cg976.fr - 02 69 66 06 84\n</p>\n<br />\n<p>\n <br />\n</p>\n<p>\n <a href=\"https://www.fncaue.com/repertoire-caue-urcaue/\" rel=\"noopener\" target=\"_blank\">\n  Retrouvez l&#039;annuaire des CAUE ici\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n  <span>\n   Ouvre une nouvelle fenêtre\n  </span>\n </a>\n</p>",
+      "recurrence": "Permanente",
+      "project_examples": "<p>\n <strong>\n  Actions locales accompagnées liées aux politiques publiques relatives à :\n </strong>\n <br />\n <br />\n L&#039;ARCHITECTURE – LA CONSTRUCTION\n <br />\n Bâtiment / EcoConstruction / Rénovation / Réhabilitation / Habitat / Logement / Savoir-faire locaux / Patrimoine /Accessibilité / Énergie / Accueil de la petite enfance / Ecoles / Collège / Lycée / Équipement public / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Autorisation d&#039;urbanisme / Droit de la construction / Salle des fêtes / Médiathèque / Piscine / Espaces sportifs / Equipement public / Patrimoine religieux / Ecomatériaux / Polyvalence des usages du bâti\n <br />\n <br />\n L&#039;URBANISME – L&#039;AMÉNAGEMENT\n <br />\n Stratégie et planification territoriale /Urbanisme réglementaire / Urbanisme de projet / Urbanisme opérationnel / Climat / Foncier/ Aménagement d&#039;espace public / Aménagement paysager / Revitalisation des centres-villes / Traversée de bourg / Zone d&#039;activité / Commerce / Politique de la ville / Quartier / Urbain / Rural / Petite ville de demain (PVD) / Action Coeur de Ville / Sobriété foncière / Rural / Périurbain / Urbain / Densification / Requalification de friches / Fonds vert / Transition écologique et énergétique / Changement climatique / Villages d&#039;avenir\n / Ecoquartier<br />\n <br />\n L&#039;ENVIRONNEMENT – LE PAYSAGE\n <br />\n Paysage / Espace naturel / Espace vert / Démarche paysagère / Plan de paysage / Fleurissement / Embellissement / Biodiversité / Eau /Trame verte et bleue / Trame brune et noire / Risques naturels / Ecologie / Jardins / Aires de jeux / Renaturation / Végétalisation / Arbre / Jardin / Nature en ville / Désimperméabilisation / Eau / Aménagement paysager /Atlas de paysage / Observatoires photographiques / Sol\n <br />\n <br />\n TRANSVERSALEMENT\n <br />\n Accessibilité / Mobilité / Voies de communication / Publicité / Tourisme / Transition énergétique / Aménagement du territoire / Vivre ensemble / Action Educative Artistique et Culturelle / Application numérique/ Culture / Médiation / Résidences\n <br />\n <br />\n</p>\n<p>\n <br />\n</p>",
+      "import_data_url": null,
+      "import_data_mention": null,
+      "import_share_licence": null,
+      "date_created": "2021-02-24T13:28:00+00:00",
+      "date_updated": "2025-04-24T08:26:30+00:00",
+      "project_references": [
+        "Construction d'une piscine",
+        "Création de jardins partagés"
+      ],
+      "european_aid": null,
+      "is_live": true
+    }
+  ]
+}

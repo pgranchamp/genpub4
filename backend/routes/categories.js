@@ -1,11 +1,11 @@
 /**
  * Routes pour la gestion des catégories
  */
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { supabaseAdminRequest } = require('../utils/supabaseClient');
-const { authenticate } = require('../middleware/auth');
-const asyncHandler = require('express-async-handler');
+import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import { authenticate } from '../middleware/auth.js';
+import asyncHandler from 'express-async-handler';
 
 /**
  * @route   GET /categories/aides-territoire
@@ -72,4 +72,4 @@ router.get('/aides-territoire', authenticate, asyncHandler(async (req, res) => {
   }
 }));
 
-module.exports = router;
+export default router;

@@ -17,6 +17,9 @@ import ContactForm from './pages/ContactForm';
 import CreateOrganization from './pages/CreateOrganization';
 import SubmitProject from './pages/SubmitProject';
 import ProjectDetail from './pages/ProjectDetail';
+import ProjectAides from './pages/ProjectAides';
+import TestAidesTerritoires from './pages/TestAidesTerritoires'; // Importer la page de test
+import OnboardingPage from './pages/OnboardingPage'; // Importer la nouvelle page
 import InvitePage from './pages/InvitePage';
 import './App.css';
 
@@ -95,6 +98,18 @@ const router = createBrowserRouter([
       {
         path: 'projects/:id',
         element: <ProjectDetail />
+      },
+      {
+        path: 'projects/:projectId/aides', 
+        element: <ProjectAides />
+      },
+      {
+        path: 'test-aides', // Nouvelle route pour la page de test
+        element: <TestAidesTerritoires />
+      },
+      {
+        path: 'onboarding', // Nouvelle route pour la page d'onboarding
+        element: <OnboardingPage />
       }
     ]
   },

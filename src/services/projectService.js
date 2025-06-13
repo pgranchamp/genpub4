@@ -3,7 +3,7 @@
  * Gère les opérations liées aux projets
  */
 
-import { API_BASE_URL, fetchWithAuth } from './httpClient';
+import { fetchWithAuth } from './httpClient'; // API_BASE_URL supprimé
 
 /**
  * Récupère tous les projets de l'utilisateur
@@ -12,7 +12,8 @@ import { API_BASE_URL, fetchWithAuth } from './httpClient';
  */
 export const getProjects = async () => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects`);
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects`);
     return response.data || [];
   } catch (error) {
     console.error('Erreur lors de la récupération des projets:', error);
@@ -28,7 +29,8 @@ export const getProjects = async () => {
  */
 export const getProject = async (projectId) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}`);
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects/${projectId}`);
     return response.data;
   } catch (error) {
     console.error(`Erreur lors de la récupération du projet ${projectId}:`, error);
@@ -51,7 +53,8 @@ export const createProject = async (projectData, organisationId) => {
       organisation_id: organisationId
     };
     
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects`, {
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects`, {
       method: 'POST',
       body: JSON.stringify(dataWithOrg)
     });
@@ -71,7 +74,8 @@ export const createProject = async (projectData, organisationId) => {
  */
 export const updateProject = async (projectId, projectData) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}`, {
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects/${projectId}`, {
       method: 'PATCH',
       body: JSON.stringify(projectData)
     });
@@ -83,20 +87,21 @@ export const updateProject = async (projectId, projectData) => {
 };
 
 /**
- * Crée un projet à partir d'une invitation
- * @param {string} description - La description du projet
- * @param {string|number} organisationId - L'ID de l'organisation
+ * Crée un projet à partir d'une invitation (description et potentiels fichiers joints)
+ * @param {FormData} formData - Les données du formulaire contenant la description, l'ID de l'organisation et les fichiers.
  * @returns {Promise<Object>} Le projet créé
  * @throws {Error} Si la création échoue
  */
-export const createProjectFromInvite = async (description, organisationId) => {
+export const createProjectFromInvite = async (formData) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects/from-invite`, {
+    // Utiliser un chemin relatif
+    // fetchWithAuth doit être capable de gérer FormData.
+    // Si fetchWithAuth ajoute Content-Type: application/json par défaut, il faudra peut-être le modifier
+    // ou utiliser une version de fetchWithAuth qui n'ajoute pas cet header pour FormData.
+    const response = await fetchWithAuth(`/api/projects/from-invite`, {
       method: 'POST',
-      body: JSON.stringify({
-        description,
-        organisation_id: organisationId
-      })
+      body: formData // Envoyer directement FormData
+      // Ne pas définir 'Content-Type': 'multipart/form-data', le navigateur le fait.
     });
     return response.data;
   } catch (error) {
@@ -113,7 +118,8 @@ export const createProjectFromInvite = async (description, organisationId) => {
  */
 export const getProjectAides = async (projectId) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/aides`);
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects/${projectId}/aides`);
     return response.data || [];
   } catch (error) {
     console.error(`Erreur lors de la récupération des aides du projet ${projectId}:`, error);
@@ -130,7 +136,8 @@ export const getProjectAides = async (projectId) => {
  */
 export const linkAideToProject = async (projectId, aideData) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/aides`, {
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects/${projectId}/aides`, {
       method: 'POST',
       body: JSON.stringify(aideData)
     });
@@ -160,7 +167,8 @@ export const uploadProjectFile = async (projectId, file) => {
     const formData = new FormData();
     formData.append('file', file);
     
-    const response = await fetch(`${API_BASE_URL}/projects/${projectId}/files`, {
+    // Utiliser un chemin relatif
+    const response = await fetch(`/api/projects/${projectId}/files`, {
       method: 'POST',
       headers: {
         'Authorization': token ? `Bearer ${token}` : ''
@@ -189,7 +197,8 @@ export const uploadProjectFile = async (projectId, file) => {
  */
 export const getProjectFiles = async (projectId) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/files`);
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects/${projectId}/files`);
     return response.data || [];
   } catch (error) {
     console.error(`Erreur lors de la récupération des fichiers du projet ${projectId}:`, error);
@@ -206,12 +215,33 @@ export const getProjectFiles = async (projectId) => {
  */
 export const deleteProjectFile = async (projectId, fileId) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/projects/${projectId}/files/${fileId}`, {
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/projects/${projectId}/files/${fileId}`, {
       method: 'DELETE'
     });
     return response.data;
   } catch (error) {
     console.error(`Erreur lors de la suppression du fichier ${fileId} du projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Met à jour un projet avec les résultats de l'analyse
+ * @param {string|number} projectId - L'ID du projet
+ * @param {Object} analysisData - Les données de l'analyse
+ * @returns {Promise<Object>} Le projet mis à jour
+ * @throws {Error} Si la mise à jour échoue
+ */
+export const updateProjectAnalysisResults = async (projectId, analysisData) => {
+  try {
+    const response = await fetchWithAuth(`/api/projects/${projectId}/analysis-results`, {
+      method: 'PATCH',
+      body: JSON.stringify(analysisData)
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la mise à jour des résultats d'analyse pour le projet ${projectId}:`, error);
     throw error;
   }
 };

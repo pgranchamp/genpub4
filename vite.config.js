@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // Rediriger les requêtes commençant par /api vers le serveur backend local
       '/api': {
-        target: 'http://localhost:3001', // URL de votre backend local (ajustez le port si nécessaire)
+        target: 'http://localhost:3000', // URL de votre backend local (ajustez le port si nécessaire)
         changeOrigin: true, // Nécessaire pour les hôtes virtuels
         // Optionnel: si votre backend n'a pas de préfixe /api sur ses routes
         // rewrite: (path) => path.replace(/^\/api/, ''), 

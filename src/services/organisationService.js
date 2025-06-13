@@ -3,7 +3,7 @@
  * Gère les opérations liées aux organisations
  */
 
-import { API_BASE_URL, fetchWithAuth } from './httpClient';
+import { fetchWithAuth } from './httpClient'; // API_BASE_URL supprimé
 
 /**
  * Crée une nouvelle organisation
@@ -12,7 +12,8 @@ import { API_BASE_URL, fetchWithAuth } from './httpClient';
  * @throws {Error} Si la création échoue
  */
 export const createOrganisation = async (organisationData) => {
-  return await fetchWithAuth(`${API_BASE_URL}/organisations`, {
+  // Utiliser un chemin relatif
+  return await fetchWithAuth(`/api/organisations`, {
     method: 'POST',
     body: JSON.stringify(organisationData)
   });
@@ -24,7 +25,8 @@ export const createOrganisation = async (organisationData) => {
  * @throws {Error} Si la récupération échoue
  */
 export const getOrganisations = async () => {
-  return await fetchWithAuth(`${API_BASE_URL}/organisations`);
+  // Utiliser un chemin relatif
+  return await fetchWithAuth(`/api/organisations`);
 };
 
 /**
@@ -34,7 +36,8 @@ export const getOrganisations = async () => {
  * @throws {Error} Si la récupération échoue
  */
 export const getOrganisation = async (organisationId) => {
-  return await fetchWithAuth(`${API_BASE_URL}/organisations/${organisationId}`);
+  // Utiliser un chemin relatif
+  return await fetchWithAuth(`/api/organisations/${organisationId}`);
 };
 
 /**
@@ -57,7 +60,8 @@ export const updateOrganisation = async (organisationId, data) => {
     console.log(`Envoi des données au backend:`, data);
     
     // Appel à l'API pour mettre à jour l'organisation
-    const response = await fetchWithAuth(`${API_BASE_URL}/organisations/${organisationId}`, {
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/organisations/${organisationId}`, {
       method: 'PATCH',
       body: JSON.stringify(data)
     });
@@ -79,13 +83,35 @@ export const updateOrganisation = async (organisationId, data) => {
  */
 export const updateUserOrganisation = async (userId, organisationId) => {
   try {
-    const response = await fetchWithAuth(`${API_BASE_URL}/users/${userId}/organisation`, {
+    // Utiliser un chemin relatif
+    const response = await fetchWithAuth(`/api/users/${userId}/organisation`, {
       method: 'PATCH',
       body: JSON.stringify({ organisation_id: organisationId })
     });
     return response.data;
   } catch (error) {
     console.error(`Erreur lors de l'association de l'organisation ${organisationId} à l'utilisateur ${userId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Récupère l'organisation principale de l'utilisateur connecté
+ * @returns {Promise<Object>} L'organisation de l'utilisateur
+ * @throws {Error} Si la récupération échoue
+ */
+export const getMyOrganisation = async () => {
+  // Utiliser un chemin relatif. Le backend déterminera l'utilisateur via son token.
+  const response = await fetchWithAuth(`/api/organisations/me`);
+  return response.data; // La route backend devrait retourner directement l'objet organisation
+};
+
+export const getOrganisationStatus = async () => {
+  try {
+    const response = await fetchWithAuth('/api/organisations/me/status');
+    return response;
+  } catch (error) {
+    console.error('Erreur lors de la récupération du statut de l\'organisation:', error);
     throw error;
   }
 };

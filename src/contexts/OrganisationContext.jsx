@@ -1,5 +1,6 @@
-import { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { getMyOrganisation } from '../services/api'; // Importer la nouvelle fonction API
 
 // Création du contexte d'organisation
 const OrganisationContext = createContext();
@@ -15,41 +16,40 @@ export const OrganisationProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
-  useEffect(() => {
-    const loadOrganisation = async () => {
-      // Vérifier si l'utilisateur a des organisations
-      if (user?.organisations && user.organisations.length > 0) {
-        try {
-          // Utiliser la première organisation de la liste
-          const firstOrg = user.organisations[0];
-          setOrganisation(firstOrg);
-        } catch (err) {
-          console.error("Erreur lors du chargement de l'organisation:", err);
-        } finally {
-          setLoading(false);
-        }
-      } else {
+  const fetchOrganisation = useCallback(async () => {
+    if (user) {
+      setLoading(true);
+      try {
+        const orgData = await getMyOrganisation(); // Appel API pour récupérer les données complètes
+        setOrganisation(orgData);
+        return orgData; // Retourner les données fraîches
+      } catch (err) {
+        console.error("Erreur lors du chargement de l'organisation depuis l'API:", err);
+        // Si l'utilisateur n'a pas encore d'organisation, ce n'est pas une erreur fatale
+        setOrganisation(null);
+      } finally {
         setLoading(false);
       }
-    };
-
-    if (user) {
-      loadOrganisation();
     } else {
+      // Pas d'utilisateur, pas d'organisation
+      setOrganisation(null);
       setLoading(false);
     }
   }, [user]);
 
-  // Fonction pour mettre à jour l'organisation dans le contexte
-  const updateOrganisationContext = (orgData) => {
-    setOrganisation(orgData);
-  };
+  useEffect(() => {
+    fetchOrganisation();
+  }, [fetchOrganisation]);
+
+  const isAnalysisPending = organisation?.website_url && !organisation?.key_elements;
 
   const value = {
     organisation,
-    setOrganisation: updateOrganisationContext,
+    setOrganisation, // Exposer directement setOrganisation pour les mises à jour
+    refreshOrganisation: fetchOrganisation, // Fournir une fonction pour rafraîchir les données
     loading,
-    hasOrganisation: !!organisation
+    hasOrganisation: !!organisation,
+    isAnalysisPending, // Exposer le statut de l'analyse
   };
 
   return (

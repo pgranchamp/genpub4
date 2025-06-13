@@ -1,33 +1,32 @@
 import { useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { signup as apiSignup } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 const Signup = () => {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [orgName, setOrgName] = useState('');
   const [orgType, setOrgType] = useState('association');
   const [siret, setSiret] = useState('');
+  const [websiteUrl, setWebsiteUrl] = useState('');
+  const [adresseLigne1, setAdresseLigne1] = useState('');
+  const [codePostal, setCodePostal] = useState('');
+  const [ville, setVille] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
-  const { signup, isAuthenticated } = useAuth();
-
-  // Si l'utilisateur est déjà connecté, rediriger vers le dashboard
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  const { signup } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Validation des champs
     if (password !== confirmPassword) {
       setError('Les mots de passe ne correspondent pas.');
       setLoading(false);
@@ -40,6 +39,12 @@ const Signup = () => {
       return;
     }
 
+    if (!firstName.trim() || !lastName.trim()) {
+      setError('Le prénom et le nom sont requis.');
+      setLoading(false);
+      return;
+    }
+
     if (!orgName.trim()) {
       setError('Le nom de l\'organisation est requis.');
       setLoading(false);
@@ -47,22 +52,26 @@ const Signup = () => {
     }
 
     try {
-      // Préparer les données de l'organisation
       const organisationData = {
-        name: orgName,
+        name: orgName.trim(),
         type: orgType,
-        siret: siret.trim() || null, // Si le SIRET est vide, on envoie null
-        address: null // Ajout du champ address même s'il est null
+        siret: siret.trim() || null,
+        website_url: websiteUrl.trim() || null,
+        adresse_ligne1: adresseLigne1.trim(),
+        code_postal: codePostal.trim(),
+        ville: ville.trim(),
       };
 
-      // Appel à l'API pour créer un compte et une organisation
-      const userData = await apiSignup(email, password, name, organisationData);
+      if (!organisationData.adresse_ligne1 || !organisationData.code_postal || !organisationData.ville) {
+        setError('L\'adresse complète de l\'organisation est requise (adresse, code postal, ville).');
+        setLoading(false);
+        return;
+      }
+
+      const userData = await apiSignup(email, password, firstName, lastName, organisationData);
       
-      // Mise à jour du contexte d'authentification
       await signup(userData);
-      
-      // Redirection vers le dashboard
-      navigate('/dashboard');
+      navigate('/onboarding');
     } catch (err) {
       console.error('Erreur d\'inscription:', err);
       setError('Erreur lors de la création du compte. Cet email est peut-être déjà utilisé.');
@@ -91,22 +100,31 @@ const Signup = () => {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="name" className="sr-only">Nom complet</label>
+            <div className="grid grid-cols-2 gap-px">
               <input
-                id="name"
-                name="name"
+                id="first-name"
+                name="first-name"
                 type="text"
-                autoComplete="name"
+                autoComplete="given-name"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Nom complet"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-tl-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Prénom"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <input
+                id="last-name"
+                name="last-name"
+                type="text"
+                autoComplete="family-name"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-tr-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Nom"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="email-address" className="sr-only">Adresse email</label>
               <input
                 id="email-address"
                 name="email"
@@ -120,7 +138,6 @@ const Signup = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">Mot de passe</label>
               <input
                 id="password"
                 name="password"
@@ -134,14 +151,13 @@ const Signup = () => {
               />
             </div>
             <div>
-              <label htmlFor="confirm-password" className="sr-only">Confirmer le mot de passe</label>
               <input
                 id="confirm-password"
                 name="confirm-password"
                 type="password"
                 autoComplete="new-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Confirmer le mot de passe"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -167,6 +183,55 @@ const Signup = () => {
                   onChange={(e) => setOrgName(e.target.value)}
                 />
               </div>
+
+              <div>
+                <label htmlFor="adresse-ligne1" className="block text-sm font-medium text-gray-700">
+                  Adresse (ligne 1)
+                </label>
+                <input
+                  id="adresse-ligne1"
+                  name="adresse-ligne1"
+                  type="text"
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Numéro et nom de rue"
+                  value={adresseLigne1}
+                  onChange={(e) => setAdresseLigne1(e.target.value)}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="code-postal" className="block text-sm font-medium text-gray-700">
+                    Code Postal
+                  </label>
+                  <input
+                    id="code-postal"
+                    name="code-postal"
+                    type="text"
+                    required
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Code Postal"
+                    value={codePostal}
+                    onChange={(e) => setCodePostal(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="ville" className="block text-sm font-medium text-gray-700">
+                    Ville
+                  </label>
+                  <input
+                    id="ville"
+                    name="ville"
+                    type="text"
+                    required
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Ville"
+                    value={ville}
+                    onChange={(e) => setVille(e.target.value)}
+                  />
+                </div>
+              </div>
+              
               <div>
                 <label htmlFor="siret" className="block text-sm font-medium text-gray-700">
                   Numéro SIRET (optionnel)
@@ -184,6 +249,22 @@ const Signup = () => {
                   title="Le SIRET doit contenir uniquement des chiffres"
                 />
               </div>
+
+              <div>
+                <label htmlFor="org-website" className="block text-sm font-medium text-gray-700">
+                  Site Web de l'organisation (optionnel)
+                </label>
+                <input
+                  id="org-website"
+                  name="org-website"
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="votre-domaine.fr"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                />
+              </div>
+
               <div>
                 <label htmlFor="org-type" className="block text-sm font-medium text-gray-700">
                   Type d'organisation
@@ -191,15 +272,22 @@ const Signup = () => {
                 <select
                   id="org-type"
                   name="org-type"
+                  required
                   className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                   value={orgType}
                   onChange={(e) => setOrgType(e.target.value)}
                 >
                   <option value="association">Association</option>
-                  <option value="entreprise">Entreprise</option>
-                  <option value="collectivite">Collectivité</option>
-                  <option value="personnel">Personnel</option>
-                  <option value="autre">Autre</option>
+                  <option value="entreprise_privee">Entreprise privée</option>
+                  <option value="particulier">Particulier</option>
+                  <option value="agriculteur">Agriculteur</option>
+                  <option value="commune">Commune</option>
+                  <option value="intercommunalite_pays">Intercommunalité/pays</option>
+                  <option value="departement">Département</option>
+                  <option value="region">Région</option>
+                  <option value="collectivite_outre_mer">Collectivité d'Outre-Mer à statut particulier</option>
+                  <option value="etablissement_public_etat">Etablissement public dont Services de l'Etat</option>
+                  <option value="entreprise_publique_locale">Entreprise publique locale (SEM, SPL, SemOp)</option>
                 </select>
               </div>
             </div>

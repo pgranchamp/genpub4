@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOrganisation } from '../contexts/OrganisationContext';
-import * as api from '../services/api';
+import { createProject } from '../services';
 
 /**
  * Composant de formulaire pour soumettre une description libre de projet
@@ -9,10 +9,16 @@ import * as api from '../services/api';
  */
 const InviteForm = () => {
   const [description, setDescription] = useState('');
+  const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const { organisation } = useOrganisation();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    setFiles(Array.from(e.target.files));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,14 +37,18 @@ const InviteForm = () => {
     setError(null);
     
     try {
-      // Appeler l'API pour traiter la description avec OpenAI et créer le projet
-      await api.createProjectFromInvite(description, organisation.id);
+      const projectData = {
+        title: description.substring(0, 50) + '...', // Titre temporaire
+        description: description,
+      };
+
+      const newProject = await createProject(projectData, organisation.id);
       
-      // Rediriger vers la page des projets
-      navigate('/projects');
+      // Rediriger vers la page de détail du projet nouvellement créé
+      navigate(`/projects/${newProject.id}`);
     } catch (error) {
-      console.error('Erreur lors de la soumission du projet:', error);
-      setError(error.message || 'Une erreur est survenue lors de la soumission du projet');
+      console.error('Erreur lors de la création du projet:', error);
+      setError(error.message || 'Une erreur est survenue lors de la création du projet');
     } finally {
       setIsSubmitting(false);
     }
@@ -67,6 +77,40 @@ const InviteForm = () => {
           <p className="mt-2 text-sm text-gray-500">
             Soyez aussi précis que possible pour obtenir les meilleures suggestions d'aides.
           </p>
+        </div>
+
+        <div className="mb-6">
+          <label 
+            htmlFor="attachments" 
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Joindre des fichiers (optionnel, max 5 fichiers : PDF, TXT, DOC, DOCX)
+          </label>
+          <input
+            type="file"
+            id="attachments"
+            multiple
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".pdf,.txt,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            className="block w-full text-sm text-gray-500
+                       file:mr-4 file:py-2 file:px-4
+                       file:rounded-md file:border-0
+                       file:text-sm file:font-semibold
+                       file:bg-blue-50 file:text-blue-700
+                       hover:file:bg-blue-100"
+            disabled={isSubmitting}
+          />
+          {files.length > 0 && (
+            <div className="mt-2 text-sm text-gray-600">
+              <p>Fichiers sélectionnés :</p>
+              <ul>
+                {files.map(file => (
+                  <li key={file.name}>- {file.name} ({Math.round(file.size / 1024)} Ko)</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         
         {error && (

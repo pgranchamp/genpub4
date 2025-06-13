@@ -1,7 +1,7 @@
 /**
  * Middleware d'authentification
  */
-const { verifyToken } = require('../utils/jwt');
+import { verifyToken } from '../utils/jwt.js';
 
 /**
  * Middleware pour vérifier l'authentification via JWT
@@ -9,7 +9,7 @@ const { verifyToken } = require('../utils/jwt');
  * @param {Object} res - Réponse Express
  * @param {Function} next - Fonction next d'Express
  */
-const authenticate = (req, res, next) => {
+export const authenticate = (req, res, next) => {
   try {
     // Récupérer le token depuis l'en-tête Authorization
     const authHeader = req.headers.authorization;
@@ -48,8 +48,4 @@ const authenticate = (req, res, next) => {
       code: 'UNAUTHORIZED'
     });
   }
-};
-
-module.exports = {
-  authenticate
 };

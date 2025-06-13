@@ -1,14 +1,16 @@
 /**
  * Routes d'authentification
  */
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const asyncHandler = require('express-async-handler');
-const { supabaseAdminRequest } = require('../utils/supabaseClient');
-const { generateToken } = require('../utils/jwt');
-const { validate, schemas } = require('../middleware/validate');
-const { authenticate } = require('../middleware/auth');
+import bcrypt from 'bcrypt';
+import asyncHandler from 'express-async-handler';
+import fetch from 'node-fetch';
+import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import { generateToken } from '../utils/jwt.js';
+import { validate, schemas } from '../middleware/validate.js';
+import { authenticate } from '../middleware/auth.js';
+import { analyzeAndStoreKeyElements } from '../services/organisationAnalysisService.js';
 
 const SALT_ROUNDS = 10;
 
@@ -17,9 +19,13 @@ const SALT_ROUNDS = 10;
  * @desc    Inscription d'un utilisateur et création d'une organisation
  * @access  Public
  */
-router.post('/signup', validate(schemas.signupSchema), asyncHandler(async (req, res) => {
-  console.log('Requête d\'inscription reçue avec les données:', JSON.stringify(req.body, null, 2));
-  const { email, password, full_name, organisation } = req.body;
+router.post('/signup', (req, res, next) => {
+  // Log du corps de la requête avant la validation
+  console.log('Corps de la requête reçu sur /signup:', JSON.stringify(req.body, null, 2));
+  // Passer au middleware de validation
+  validate(schemas.signupSchema)(req, res, next);
+}, asyncHandler(async (req, res) => {
+  const { email, password, first_name, last_name, organisation } = req.body;
   let userId;
 
   try {
@@ -48,7 +54,8 @@ router.post('/signup', validate(schemas.signupSchema), asyncHandler(async (req, 
     const userData = {
       email,
       password_hash,
-      full_name
+      first_name,
+      last_name
     };
 
     const newUser = await supabaseAdminRequest('POST', 'users', userData);
@@ -65,17 +72,65 @@ router.post('/signup', validate(schemas.signupSchema), asyncHandler(async (req, 
     userId = newUser[0].id;
     console.log('ID de l\'utilisateur créé:', userId);
 
-    // 4. Créer l'organisation
-    console.log('Étape 4: Tentative de création de l\'organisation avec les données:', organisation);
+    // 4. Préparer et créer l'organisation
+    console.log('Étape 4: Préparation des données de l\'organisation avec géocodage');
+    let organisationDataForDb = { ...organisation }; // Copie des données reçues
+
+    const adresseLigne1PourGeocodage = organisation.adresse_ligne1 || '';
+    const codePostalPourGeocodage = organisation.code_postal || '';
+    const villePourGeocodage = organisation.ville || '';
+
+    const adresseQuery = `${organisation.nom || ''} ${adresseLigne1PourGeocodage} ${codePostalPourGeocodage} ${villePourGeocodage}`.trim().replace(/\s+/g, '+');
+    
+    let perimeterCode = null;
+    if (adresseQuery) {
+      try {
+        console.log(`Géocodage de l'adresse: ${adresseQuery}`);
+        const geoResponse = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(adresseQuery)}&limit=1`);
+        if (geoResponse.ok) {
+          const geoData = await geoResponse.json();
+          if (geoData.features && geoData.features.length > 0) {
+            perimeterCode = geoData.features[0].properties.citycode;
+            console.log(`Code INSEE (perimeter_code) trouvé: ${perimeterCode}`);
+          } else {
+            console.warn('Aucun résultat de géocodage pour l\'adresse fournie.');
+          }
+        } else {
+          console.warn(`Erreur de l'API Adresse: ${geoResponse.status}`);
+        }
+      } catch (geoError) {
+        console.error('Erreur lors de l\'appel à l\'API Adresse:', geoError);
+      }
+    } else {
+      console.warn('Aucune information d\'adresse fournie pour l\'organisation, impossible de géocoder.');
+    }
+
+    const organisationPourDb = {
+      name: organisationDataForDb.name,
+      type: organisationDataForDb.type,
+      siret: organisationDataForDb.siret,
+      website_url: organisationDataForDb.website_url,
+      adresse_ligne1: organisationDataForDb.adresse_ligne1, 
+      code_postal: organisationDataForDb.code_postal,
+      ville: organisationDataForDb.ville,
+      perimeter_code: perimeterCode
+    };
+    
+    Object.keys(organisationPourDb).forEach(key => {
+      if (organisationPourDb[key] === undefined) {
+        delete organisationPourDb[key];
+      }
+    });
+
+    console.log('Données de l\'organisation à enregistrer (mappées pour la DB):', organisationPourDb);
+    
     let organisationId;
     try {
-      const newOrganisation = await supabaseAdminRequest('POST', 'organisations', organisation);
+      const newOrganisation = await supabaseAdminRequest('POST', 'organisations', organisationPourDb);
       console.log('Réponse de la création de l\'organisation:', newOrganisation);
       
       if (!newOrganisation || !newOrganisation[0] || !newOrganisation[0].id) {
-        // Supprimer l'utilisateur créé en cas d'échec
         await supabaseAdminRequest('DELETE', `users?id=eq.${userId}`);
-        
         return res.status(500).json({
           success: false,
           error: 'Erreur lors de la création de l\'organisation',
@@ -86,22 +141,27 @@ router.post('/signup', validate(schemas.signupSchema), asyncHandler(async (req, 
       organisationId = newOrganisation[0].id;
       console.log('ID de l\'organisation créée:', organisationId);
 
-      // 5. Associer l'utilisateur à l'organisation (table de liaison)
+      if (organisation && organisation.website_url) {
+        console.log(`[AuthSignup] URL de site web fournie: ${organisation.website_url}. Lancement de l'analyse pour l'organisation ${organisationId}.`);
+        analyzeAndStoreKeyElements(organisationId, organisation.website_url)
+          .catch(err => console.error(`[AuthSignup] Erreur non bloquante lors de l'analyse du site web pour l'organisation ${organisationId}:`, err));
+      } else {
+        console.log('[AuthSignup] Aucune URL de site web fournie. L\'analyse n\'est pas lancée.');
+      }
+
       console.log('Étape 5: Association de l\'utilisateur à l\'organisation');
       const userOrganisationData = {
         user_id: userId,
         organisation_id: organisationId,
-        role: 'admin' // Rôle par défaut
+        role: 'admin'
       };
 
       await supabaseAdminRequest('POST', 'users_organisations', userOrganisationData);
       console.log('Association réussie');
 
-      // 6. Générer un token JWT
       console.log('Étape 6: Génération du token JWT');
-      const token = generateToken({ id: userId, email, full_name });
+      const token = generateToken({ id: userId, email, first_name, last_name });
 
-      // 7. Retourner les informations utilisateur et le token
       console.log('Étape 7: Envoi de la réponse');
       res.status(201).json({
         success: true,
@@ -109,7 +169,8 @@ router.post('/signup', validate(schemas.signupSchema), asyncHandler(async (req, 
           user: {
             id: userId,
             email,
-            full_name
+            first_name,
+            last_name
           },
           organisation: {
             id: organisationId,
@@ -120,9 +181,7 @@ router.post('/signup', validate(schemas.signupSchema), asyncHandler(async (req, 
       });
     } catch (error) {
       console.error('Erreur détaillée lors de la création de l\'organisation:', error);
-      // Supprimer l'utilisateur créé en cas d'échec
       await supabaseAdminRequest('DELETE', `users?id=eq.${userId}`);
-      
       return res.status(500).json({
         success: false,
         error: 'Erreur lors de la création de l\'organisation',
@@ -148,35 +207,47 @@ router.post('/signup', validate(schemas.signupSchema), asyncHandler(async (req, 
  */
 router.post('/login', validate(schemas.loginSchema), asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  console.log(`[Login] Tentative de connexion pour l'email: ${email}`);
 
-  // 1. Récupérer l'utilisateur par email
   const users = await supabaseAdminRequest('GET', 'users', null, {
-    select: '*',
+    select: 'id, email, first_name, last_name, password_hash, created_at',
     email: `eq.${email}`
   });
 
-  if (!users || users.length === 0) {
+  const user = users && users.length > 0 ? users[0] : null;
+
+  if (!user) {
+    console.warn(`[Login] Échec: Utilisateur non trouvé pour l'email: ${email}`);
     return res.status(401).json({
       success: false,
       error: 'Email ou mot de passe incorrect',
       code: 'INVALID_CREDENTIALS'
     });
   }
+  
+  console.log(`[Login] Utilisateur trouvé: ${user.id}. Hash stocké: ${user.password_hash.substring(0, 10)}...`);
+  console.log(`[Login] Mot de passe reçu (longueur): ${password.length}`);
 
-  const user = users[0];
-
-  // 2. Vérifier le mot de passe
-  const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+  let isPasswordValid = false;
+  try {
+    isPasswordValid = await bcrypt.compare(password, user.password_hash);
+    console.log(`[Login] Résultat de bcrypt.compare pour l'utilisateur ${user.id}: ${isPasswordValid}`);
+  } catch (compareError) {
+    console.error(`[Login] Erreur lors de bcrypt.compare pour l'utilisateur ${user.id}:`, compareError);
+    return res.status(500).json({ success: false, error: 'Erreur serveur lors de la vérification du mot de passe' });
+  }
 
   if (!isPasswordValid) {
+    console.warn(`[Login] Échec: Mot de passe incorrect pour l'utilisateur ${user.id}`);
     return res.status(401).json({
       success: false,
       error: 'Email ou mot de passe incorrect',
       code: 'INVALID_CREDENTIALS'
     });
   }
+  
+  console.log(`[Login] Connexion réussie pour l'utilisateur ${user.id}`);
 
-  // 3. Récupérer les organisations de l'utilisateur
   const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
     select: 'organisation_id,role',
     user_id: `eq.${user.id}`
@@ -184,7 +255,6 @@ router.post('/login', validate(schemas.loginSchema), asyncHandler(async (req, re
 
   let organisations = [];
   if (userOrganisations && userOrganisations.length > 0) {
-    // Récupérer les détails des organisations
     const organisationIds = userOrganisations.map(uo => uo.organisation_id);
     const organisationIdsQuery = `in.(${organisationIds.join(',')})`;
     
@@ -193,7 +263,6 @@ router.post('/login', validate(schemas.loginSchema), asyncHandler(async (req, re
       id: organisationIdsQuery
     });
 
-    // Ajouter le rôle à chaque organisation
     organisations = organisations.map(org => {
       const userOrg = userOrganisations.find(uo => uo.organisation_id === org.id);
       return {
@@ -203,21 +272,21 @@ router.post('/login', validate(schemas.loginSchema), asyncHandler(async (req, re
     });
   }
 
-  // 4. Générer un token JWT
   const token = generateToken({
     id: user.id,
     email: user.email,
-    full_name: user.full_name
+    first_name: user.first_name,
+    last_name: user.last_name
   });
 
-  // 5. Retourner les informations utilisateur, organisations et le token
   res.json({
     success: true,
     data: {
       user: {
         id: user.id,
         email: user.email,
-        full_name: user.full_name,
+        first_name: user.first_name,
+        last_name: user.last_name,
         created_at: user.created_at
       },
       organisations,
@@ -234,9 +303,8 @@ router.post('/login', validate(schemas.loginSchema), asyncHandler(async (req, re
 router.get('/me', authenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
-  // 1. Récupérer l'utilisateur par ID
   const users = await supabaseAdminRequest('GET', 'users', null, {
-    select: 'id,email,full_name,created_at',
+    select: 'id,email,first_name,last_name,created_at',
     id: `eq.${userId}`
   });
 
@@ -250,7 +318,6 @@ router.get('/me', authenticate, asyncHandler(async (req, res) => {
 
   const user = users[0];
 
-  // 2. Récupérer les organisations de l'utilisateur
   const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
     select: 'organisation_id,role',
     user_id: `eq.${userId}`
@@ -258,7 +325,6 @@ router.get('/me', authenticate, asyncHandler(async (req, res) => {
 
   let organisations = [];
   if (userOrganisations && userOrganisations.length > 0) {
-    // Récupérer les détails des organisations
     const organisationIds = userOrganisations.map(uo => uo.organisation_id);
     const organisationIdsQuery = `in.(${organisationIds.join(',')})`;
     
@@ -267,7 +333,6 @@ router.get('/me', authenticate, asyncHandler(async (req, res) => {
       id: organisationIdsQuery
     });
 
-    // Ajouter le rôle à chaque organisation
     organisations = organisations.map(org => {
       const userOrg = userOrganisations.find(uo => uo.organisation_id === org.id);
       return {
@@ -277,7 +342,6 @@ router.get('/me', authenticate, asyncHandler(async (req, res) => {
     });
   }
 
-  // 3. Retourner les informations utilisateur et organisations
   res.json({
     success: true,
     data: {
@@ -295,14 +359,12 @@ router.get('/me', authenticate, asyncHandler(async (req, res) => {
 router.post('/forgot-password', validate(schemas.forgotPasswordSchema), asyncHandler(async (req, res) => {
   const { email } = req.body;
 
-  // 1. Vérifier si l'utilisateur existe
   const users = await supabaseAdminRequest('GET', 'users', null, {
     select: 'id',
     email: `eq.${email}`
   });
 
   if (!users || users.length === 0) {
-    // Pour des raisons de sécurité, ne pas indiquer si l'email existe ou non
     return res.json({
       success: true,
       message: 'Si votre email est enregistré, vous recevrez un code de réinitialisation.'
@@ -311,23 +373,18 @@ router.post('/forgot-password', validate(schemas.forgotPasswordSchema), asyncHan
 
   const userId = users[0].id;
 
-  // 2. Générer un code de réinitialisation aléatoire
   const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-  const resetCodeExpires = new Date(Date.now() + 3600000); // 1 heure
+  const resetCodeExpires = new Date(Date.now() + 3600000);
 
-  // 3. Stocker le code de réinitialisation dans la base de données
   await supabaseAdminRequest('PATCH', `users?id=eq.${userId}`, {
     reset_code: resetCode,
     reset_code_expires: resetCodeExpires.toISOString()
   });
 
-  // 4. Dans une application réelle, envoyer un email avec le code de réinitialisation
-  // Pour le développement, nous retournons le code directement
   res.json({
     success: true,
     message: 'Si votre email est enregistré, vous recevrez un code de réinitialisation.',
-    // En production, ne pas inclure le code dans la réponse
-    reset_code: resetCode // À supprimer en production
+    reset_code: resetCode
   });
 }));
 
@@ -339,7 +396,6 @@ router.post('/forgot-password', validate(schemas.forgotPasswordSchema), asyncHan
 router.post('/reset-password', validate(schemas.resetPasswordSchema), asyncHandler(async (req, res) => {
   const { email, reset_code, new_password } = req.body;
 
-  // 1. Récupérer l'utilisateur par email
   const users = await supabaseAdminRequest('GET', 'users', null, {
     select: 'id,reset_code,reset_code_expires',
     email: `eq.${email}`
@@ -355,7 +411,6 @@ router.post('/reset-password', validate(schemas.resetPasswordSchema), asyncHandl
 
   const user = users[0];
 
-  // 2. Vérifier si le code de réinitialisation est valide et non expiré
   if (user.reset_code !== reset_code) {
     return res.status(400).json({
       success: false,
@@ -373,10 +428,8 @@ router.post('/reset-password', validate(schemas.resetPasswordSchema), asyncHandl
     });
   }
 
-  // 3. Hacher le nouveau mot de passe
   const password_hash = await bcrypt.hash(new_password, SALT_ROUNDS);
 
-  // 4. Mettre à jour le mot de passe et supprimer le code de réinitialisation
   await supabaseAdminRequest('PATCH', `users?id=eq.${user.id}`, {
     password_hash,
     reset_code: null,
@@ -389,4 +442,4 @@ router.post('/reset-password', validate(schemas.resetPasswordSchema), asyncHandl
   });
 }));
 
-module.exports = router;
+export default router;

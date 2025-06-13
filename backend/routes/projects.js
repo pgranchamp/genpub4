@@ -1,13 +1,30 @@
 /**
  * Routes pour la gestion des projets
  */
-const express = require('express');
-const router = express.Router();
-const asyncHandler = require('express-async-handler');
-const { supabaseAdminRequest } = require('../utils/supabaseClient');
-const { processUserPrompt } = require('../utils/openaiClient');
-const { authenticate } = require('../middleware/auth');
-const { validate, schemas } = require('../middleware/validate');
+import express from 'express';
+const router = express.Router(); // express.Router() est correct
+import asyncHandler from 'express-async-handler';
+import multer from 'multer';
+// import pdfParse from 'pdf-parse'; // Supprimé pour import dynamique
+import mammoth from 'mammoth';
+import { supabaseAdminRequest } from '../utils/supabaseClient.js'; // Ajout de .js si c'est un module ES
+import { processUserPrompt } from '../utils/openaiClient.js'; // Sera probablement modifié pour accepter plus de données et ajout de .js
+import { authenticate } from '../middleware/auth.js'; // Ajout de .js
+import { validate, schemas } from '../middleware/validate.js'; // Importer les exports nommés
+
+// Configuration de Multer pour le stockage en mémoire et le filtrage des fichiers
+const storage = multer.memoryStorage();
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'application/pdf' || 
+      file.mimetype === 'text/plain' || 
+      file.mimetype === 'application/msword' || 
+      file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    cb(null, true);
+  } else {
+    cb(new Error('Type de fichier non supporté. Uniquement PDF, TXT, DOC, DOCX.'), false);
+  }
+};
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 /**
  * @route   POST /projects
@@ -173,7 +190,21 @@ router.get('/:id', authenticate, asyncHandler(async (req, res) => {
 
   const organisationId = projectsOrganisations[0].organisation_id;
 
-  // 3. Vérifier si l'utilisateur a accès à cette organisation
+  // 3. Récupérer les détails de l'organisation
+  let organisationDetails = null;
+  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
+    select: '*', // Récupérer tous les champs, y compris perimeter_code et type
+    id: `eq.${organisationId}`
+  });
+
+  if (organisations && organisations.length > 0) {
+    organisationDetails = organisations[0];
+  } else {
+    // Gérer le cas où l'organisation n'est pas trouvée, bien que peu probable si l'association existe
+    console.warn(`Organisation avec ID ${organisationId} non trouvée pour le projet ${projectId}`);
+  }
+
+  // 4. Vérifier si l'utilisateur a accès à cette organisation
   const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
     select: 'role',
     user_id: `eq.${userId}`,
@@ -188,15 +219,16 @@ router.get('/:id', authenticate, asyncHandler(async (req, res) => {
     });
   }
 
-  // 4. Retourner le projet avec l'ID de l'organisation
-  const projectWithOrg = {
+  // 5. Retourner le projet avec les détails de l'organisation
+  const projectWithFullOrgDetails = {
     ...project,
-    organisation_id: organisationId
+    organisation_id: organisationId, // Garder l'ID pour référence
+    organisation: organisationDetails // Ajouter l'objet organisation complet
   };
 
   res.json({
     success: true,
-    data: projectWithOrg
+    data: projectWithFullOrgDetails
   });
 }));
 
@@ -352,12 +384,45 @@ router.get('/:id/aides', authenticate, asyncHandler(async (req, res) => {
 
 /**
  * @route   POST /projects/from-invite
- * @desc    Créer un projet à partir d'une description libre (invite)
+ * @desc    Créer un projet à partir d'une description libre (invite) et de fichiers joints
  * @access  Privé
  */
-router.post('/from-invite', authenticate, validate(schemas.projectFromInviteSchema), asyncHandler(async (req, res) => {
-  const { description, organisation_id } = req.body;
+// Utiliser upload.array('attachments', 5) pour accepter jusqu'à 5 fichiers sous le nom 'attachments'
+router.post('/from-invite', authenticate, upload.array('attachments', 5), validate(schemas.projectFromInviteSchema), asyncHandler(async (req, res) => {
+  const { description: initialDescription, organisation_id } = req.body;
   const userId = req.user.id;
+  const files = req.files || [];
+
+  let combinedDescription = initialDescription;
+  let attachedFileContents = [];
+
+  if (files.length > 0) {
+    console.log(`Traitement de ${files.length} fichier(s) joint(s)...`);
+    for (const file of files) {
+      try {
+        let textContent = '';
+        if (file.mimetype === 'application/pdf') {
+          const { default: pdfParseFn } = await import('pdf-parse');
+          const data = await pdfParseFn(file.buffer);
+          textContent = data.text;
+        } else if (file.mimetype === 'text/plain') {
+          textContent = file.buffer.toString('utf8');
+        } else if (file.mimetype === 'application/msword' || file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+          const { value } = await mammoth.extractRawText({ buffer: file.buffer });
+          textContent = value;
+        }
+        if (textContent) {
+          attachedFileContents.push(`--- Contenu du fichier ${file.originalname} ---\n${textContent}\n--- Fin du contenu du fichier ${file.originalname} ---`);
+        }
+      } catch (error) {
+        console.error(`Erreur lors du traitement du fichier ${file.originalname}:`, error);
+        // Continuer sans ce fichier ou retourner une erreur ? Pour l'instant, on continue.
+      }
+    }
+    if (attachedFileContents.length > 0) {
+      combinedDescription += "\n\nInformations complémentaires provenant des fichiers joints:\n" + attachedFileContents.join("\n\n");
+    }
+  }
 
   // 1. Vérifier si l'utilisateur a accès à l'organisation
   const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
@@ -375,16 +440,20 @@ router.post('/from-invite', authenticate, validate(schemas.projectFromInviteSche
   }
 
   try {
-    // 2. Appeler OpenAI pour traiter la description
-    console.log('Traitement de la description avec OpenAI...');
-    const openaiResponse = await processUserPrompt(description);
+    // 2. Appeler OpenAI pour traiter la description combinée
+    console.log('Traitement de la description combinée avec OpenAI...');
+    // processUserPrompt devra être adapté pour retourner title, summary, keywords, et aid_categories
+    const openaiResponse = await processUserPrompt(combinedDescription, organisation_id); // Passer organisation_id si nécessaire pour récupérer les catégories d'aides
     console.log('Réponse OpenAI reçue:', openaiResponse);
 
     // 3. Créer le projet avec les données générées par OpenAI
     const projectData = {
       title: openaiResponse.title,
-      summary: openaiResponse.summary,
-      description: openaiResponse.description
+      summary: openaiResponse.summary, // Ce sera le résumé enrichi
+      description: initialDescription, // On garde la description initiale de l'utilisateur
+      keywords: openaiResponse.keywords, // Nouveau champ
+      aid_categories: openaiResponse.aid_categories, // Nouveau champ (liste d'IDs ou d'objets)
+      // Il faudra peut-être ajouter un champ pour stocker les noms des fichiers joints ou leur contenu si besoin
     };
 
     const newProject = await supabaseAdminRequest('POST', 'projects', projectData);
@@ -407,21 +476,31 @@ router.post('/from-invite', authenticate, validate(schemas.projectFromInviteSche
 
     await supabaseAdminRequest('POST', 'projects_organisations', projectOrganisationData);
 
-    // 5. Retourner les informations du projet créé avec les mots-clés
+    // 5. Retourner les informations du projet créé avec les nouvelles données
     res.status(201).json({
       success: true,
       data: {
         id: projectId,
         title: openaiResponse.title,
         summary: openaiResponse.summary,
-        description: openaiResponse.description,
+        description: initialDescription, // Description originale
         keywords: openaiResponse.keywords,
+        aid_categories: openaiResponse.aid_categories,
         created_at: newProject[0].created_at,
         organisation_id
+        // Ajouter ici les infos sur les fichiers si stockées
       }
     });
   } catch (error) {
     console.error('Erreur lors du traitement de l\'invite:', error);
+    // Gestion spécifique si l'erreur vient de multer (ex: type de fichier)
+    if (error.message.includes('Type de fichier non supporté')) {
+      return res.status(400).json({
+        success: false,
+        error: error.message,
+        code: 'INVALID_FILE_TYPE'
+      });
+    }
     return res.status(500).json({
       success: false,
       error: `Erreur lors du traitement de l'invite: ${error.message}`,
@@ -539,4 +618,37 @@ router.post('/:id/aides', authenticate, validate(schemas.projectAideSchema), asy
   });
 }));
 
-module.exports = router;
+/**
+ * @route   PATCH /projects/:id/analysis-results
+ * @desc    Mettre à jour un projet avec les résultats de l'analyse
+ * @access  Privé
+ */
+router.patch('/:id/analysis-results', authenticate, asyncHandler(async (req, res) => {
+  const projectId = req.params.id;
+  const { title, reformulation, keywords, id_categories_aides_territoire } = req.body;
+
+  const updateData = {
+    title,
+    reformulation,
+    keywords: JSON.stringify(keywords),
+    id_categories_aides_territoire: JSON.stringify(id_categories_aides_territoire),
+    status: 'reformule'
+  };
+
+  const updatedProject = await supabaseAdminRequest('PATCH', `projects?id=eq.${projectId}`, updateData);
+
+  if (!updatedProject || updatedProject.length === 0) {
+    return res.status(500).json({
+      success: false,
+      error: 'Erreur lors de la mise à jour du projet avec les résultats de l\'analyse',
+      code: 'SERVER_ERROR'
+    });
+  }
+
+  res.json({
+    success: true,
+    data: updatedProject[0]
+  });
+}));
+
+export default router;

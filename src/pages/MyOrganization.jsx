@@ -5,15 +5,19 @@ import { updateOrganisation } from '../services/api';
 
 const MyOrganization = () => {
   const { user } = useAuth();
-  const { organisation, setOrganisation } = useOrganisation();
+  const { organisation, refreshOrganisation } = useOrganisation();
   
   const [formData, setFormData] = useState({
-    nom: '',
+    name: '',
     type: 'association',
-    adresse: '',
-    siret: ''
+    adresse_ligne1: '',
+    code_postal: '',
+    ville: '',
+    siret: '',
+    website_url: ''
   });
   
+  const [keyElements, setKeyElements] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -23,11 +27,29 @@ const MyOrganization = () => {
     if (organisation) {
       console.log("Organisation chargée dans le formulaire:", organisation);
       setFormData({
-        nom: organisation.name || '',
+        name: organisation.name || '',
         type: organisation.type || 'association',
-        adresse: organisation.address || '',
-        siret: organisation.siret || ''
+        adresse_ligne1: organisation.adresse_ligne1 || '',
+        code_postal: organisation.code_postal || '',
+        ville: organisation.ville || '',
+        siret: organisation.siret || '',
+        website_url: organisation.website_url || ''
       });
+
+      if (organisation.key_elements) {
+        try {
+          // key_elements est stocké en tant que chaîne JSON, nous devons le parser
+          const parsedElements = typeof organisation.key_elements === 'string' 
+            ? JSON.parse(organisation.key_elements) 
+            : organisation.key_elements;
+          setKeyElements(parsedElements);
+        } catch (e) {
+          console.error("Erreur de parsing des key_elements:", e);
+          setKeyElements({ error: "Format de données invalide" });
+        }
+      } else {
+        setKeyElements(null);
+      }
     }
   }, [organisation]);
   
@@ -57,14 +79,14 @@ const MyOrganization = () => {
         const orgId = user.organisations[0].id;
         console.log("ID de l'organisation récupéré depuis user.organisations[0].id:", orgId);
         
-        const updatedOrg = await updateOrganisation(orgId, formData);
-        setOrganisation(updatedOrg);
+        await updateOrganisation(orgId, formData);
+        await refreshOrganisation();
       } else {
         // Utiliser l'ID de l'organisation du contexte
         console.log("ID de l'organisation récupéré depuis le contexte:", organisation.id);
         
-        const updatedOrg = await updateOrganisation(organisation.id, formData);
-        setOrganisation(updatedOrg);
+        await updateOrganisation(organisation.id, formData);
+        await refreshOrganisation();
       }
       
       setSuccess(true);
@@ -99,14 +121,14 @@ const MyOrganization = () => {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="nom" className="block text-sm font-bold text-genie-navy font-inter">
+          <label htmlFor="name" className="block text-sm font-bold text-genie-navy font-inter">
             Nom de l'organisation
           </label>
           <input
             type="text"
-            name="nom"
-            id="nom"
-            value={formData.nom}
+            name="name"
+            id="name"
+            value={formData.name}
             onChange={handleChange}
             className="mt-1 focus:ring-genie-blue focus:border-genie-blue block w-full shadow-sm sm:text-sm border-gray-300 rounded-md font-inter font-normal"
             required
@@ -117,29 +139,25 @@ const MyOrganization = () => {
           <label htmlFor="type" className="block text-sm font-bold text-genie-navy font-inter">
             Type de structure
           </label>
-          <select
-            id="type"
+          <input
+            type="text"
             name="type"
+            id="type"
             value={formData.type}
             onChange={handleChange}
-            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-genie-blue focus:border-genie-blue sm:text-sm font-inter font-normal"
-          >
-            <option value="association">Association</option>
-            <option value="entreprise">Entreprise</option>
-            <option value="collectivite">Collectivité</option>
-            <option value="autre">Autre</option>
-          </select>
+            className="mt-1 focus:ring-genie-blue focus:border-genie-blue block w-full shadow-sm sm:text-sm border-gray-300 rounded-md font-inter font-normal"
+          />
         </div>
-        
+
         <div>
-          <label htmlFor="adresse" className="block text-sm font-bold text-genie-navy font-inter">
+          <label htmlFor="adresse_ligne1" className="block text-sm font-bold text-genie-navy font-inter">
             Adresse
           </label>
-          <textarea
-            id="adresse"
-            name="adresse"
-            rows={3}
-            value={formData.adresse}
+          <input
+            type="text"
+            name="adresse_ligne1"
+            id="adresse_ligne1"
+            value={formData.adresse_ligne1}
             onChange={handleChange}
             className="mt-1 focus:ring-genie-blue focus:border-genie-blue block w-full shadow-sm sm:text-sm border-gray-300 rounded-md font-inter font-normal"
           />
@@ -158,6 +176,32 @@ const MyOrganization = () => {
             className="mt-1 focus:ring-genie-blue focus:border-genie-blue block w-full shadow-sm sm:text-sm border-gray-300 rounded-md font-inter font-normal"
           />
         </div>
+
+        <div>
+          <label htmlFor="website_url" className="block text-sm font-bold text-genie-navy font-inter">
+            Site Web
+          </label>
+          <input
+            type="text"
+            name="website_url"
+            id="website_url"
+            value={formData.website_url}
+            onChange={handleChange}
+            className="mt-1 focus:ring-genie-blue focus:border-genie-blue block w-full shadow-sm sm:text-sm border-gray-300 rounded-md font-inter font-normal"
+          />
+        </div>
+
+        {keyElements && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h2 className="text-lg font-bold text-genie-navy mb-2">Analyse de l'organisation (par IA)</h2>
+            {Object.entries(keyElements).map(([key, value]) => (
+              <div key={key} className="mb-2">
+                <p className="text-sm font-bold capitalize text-gray-600">{key.replace(/_/g, ' ')}</p>
+                <p className="text-sm text-gray-800">{value.toString()}</p>
+              </div>
+            ))}
+          </div>
+        )}
         
         <div className="flex justify-end">
           <button
