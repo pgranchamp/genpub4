@@ -1,0 +1,248 @@
+{
+  "name": "analyze-user-website",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3bb8e06e-6919-436f-b177-1557c5cafe6f",
+      "name": "When chat message received",
+      "webhookId": "68c5469c-4699-4b32-b48d-5f1abea585ff"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Tu es un assistant d'analyse d'organisations pour l'attribution d'aides et subventions publiques. \n\nAnalyse le contenu web suivant et extrais les informations selon le format JSON demandé.\n\nUtilise un vocabulaire administratif approprié pour les demandes de subventions.\n\nPour \"beneficiaries\", utilise des termes comme : \"entreprises privées\", \"communes\", \"associations\", \"grand public\", \"personnes âgées\", \"publics fragiles\", \"jeunes\", \"enfants\", \"très petites entreprises\", \"corporate\", etc.\n\nSi une ou plusieurs informations ne sont pas trouvées, indique \"NSP\".\n\nCONTENU À ANALYSER :\n{{ $json.cleanedContent }}\n\nRÉPONSE OBLIGATOIREMENT AU FORMAT JSON :\n{\n  \"sectors\": \"\",\n  \"missions\": \"\",\n  \"beneficiaries\": \"\",\n  \"partners\": \"\",\n  \"territory\": \"\",\n \"url_valid\": {{ $json.error ? false : true }}\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        760,
+        0
+      ],
+      "id": "04c30079-97c7-4dc0-8a1b-b2a55e2c68f9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "chatgpt-4o-latest"
+        },
+        "options": {
+          "maxTokens": 2000,
+          "responseFormat": "json_object",
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        740,
+        220
+      ],
+      "id": "6be16ef6-989d-48a9-9896-3460124b63cb",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AaBAEkezuocD9zVb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validation URL universelle - Chat Trigger OU Webhook\nconst inputData = $input.first().json;\nlet inputUrl = '';\n\nconsole.log('Type de données reçues:', typeof inputData);\nconsole.log('Données brutes:', JSON.stringify(inputData, null, 2));\n\n// Détection automatique de la source\nif (inputData.chatInput) {\n  // Source : Chat Trigger\n  inputUrl = inputData.chatInput;\n  console.log('Source détectée: Chat Trigger');\n} else if (inputData.body && inputData.body.url) {\n  // Source : Webhook avec body.url\n  inputUrl = inputData.body.url;\n  console.log('Source détectée: Webhook (body.url)');\n} else if (inputData.url) {\n  // Source : Webhook direct avec url\n  inputUrl = inputData.url;\n  console.log('Source détectée: Webhook (url direct)');\n} else if (inputData.website) {\n  // Source : Webhook avec website\n  inputUrl = inputData.website;\n  console.log('Source détectée: Webhook (website)');\n} else {\n  // Fallback : essayer de trouver une URL dans les valeurs\n  const possibleUrl = Object.values(inputData).find(val => \n    typeof val === 'string' && \n    (val.includes('http') || val.includes('www.') || val.includes('.com') || val.includes('.org'))\n  );\n  \n  if (possibleUrl) {\n    inputUrl = possibleUrl;\n    console.log('Source détectée: URL trouvée dans les valeurs');\n  } else {\n    inputUrl = 'https://www.vivacite.org'; // URL par défaut pour test\n    console.log('Aucune URL trouvée, utilisation URL par défaut');\n  }\n}\n\nconsole.log('URL extraite:', inputUrl);\n\n// Validation et normalisation d'URL\ninputUrl = String(inputUrl).trim();\n\nif (!inputUrl || inputUrl === '') {\n  console.log('Erreur: URL vide après nettoyage');\n  return [{ \n    error: \"URL manquante ou invalide\", \n    validUrl: \"https://www.vivacite.org\",\n    source: \"fallback\"\n  }];\n}\n\n// Ajouter https:// si manquant\nif (!inputUrl.startsWith('http://') && !inputUrl.startsWith('https://')) {\n  if (inputUrl.startsWith('www.')) {\n    inputUrl = 'https://' + inputUrl;\n  } else if (inputUrl.includes('.')) {\n    inputUrl = 'https://' + inputUrl;\n  }\n}\n\n// Supprimer le trailing slash\ninputUrl = inputUrl.replace(/\\/$/, '');\n\nconsole.log('URL finale normalisée:', inputUrl);\n\n// Extraction du domaine\nconst domainMatch = inputUrl.match(/^https?:\\/\\/([^\\/]+)/);\nconst domain = domainMatch ? domainMatch[1] : 'unknown';\n\n// Retourner le résultat unifié\nreturn [{\n  validUrl: inputUrl,\n  domain: domain,\n  origin: inputUrl.split('/').slice(0, 3).join('/'),\n  sourceType: inputData.chatInput ? 'chat' : 'webhook'\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "59254df1-07e4-4fc2-9eb8-23ac2cf22e87",
+      "name": "Validate URL1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.validUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        0
+      ],
+      "id": "ffa25440-85c2-4445-9041-98bf53e1b74e",
+      "name": "HTTP Request1",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Version corrigée pour n8n\nconst inputData = $input.first().json;\n\nconsole.log('=== DEBUG COMPLET ===');\nconsole.log('Data reçue:', JSON.stringify(inputData, null, 2));\n\ntry {\n  // CAS D'ERREUR\n  if (inputData.error) {\n    console.log('Erreur détectée');\n    return [{\n      json: {\n        cleanedContent: `TITRE: Site non accessible\n\nDESCRIPTION: Le site web demandé n'est pas accessible.\n\nCONTENU: \nErreur: ${inputData.error.code || 'URL invalide'}\nURL: ${inputData.validUrl || 'inconnue'}\n\nSite inaccessible ou URL incorrecte.`,\n        error: true\n      }\n    }];\n  }\n\n  // CAS NORMAL - Version sécurisée\n  const html = inputData.data || '';\n  console.log('HTML type:', typeof html, 'length:', html ? html.length : 0);\n  \n  if (!html) {\n    return [{\n      json: {\n        cleanedContent: \"TITRE: Pas de contenu\\n\\nCONTENU: Aucun HTML reçu\",\n        error: false\n      }\n    }];\n  }\n\n  // Nettoyage HTML minimal et sûr\n  const cleanText = String(html)\n    .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, ' ')\n    .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, ' ')\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim()\n    .substring(0, 2000);\n\n  console.log('Texte nettoyé length:', cleanText.length);\n\n  return [{\n    json: {\n      cleanedContent: `TITRE: Site analysé\n\nCONTENU:\n${cleanText}`,\n      error: false,\n      originalSize: html.length\n    }\n  }];\n\n} catch (error) {\n  console.error('Erreur dans le code:', error);\n  return [{\n    json: {\n      cleanedContent: \"TITRE: Erreur de traitement\\n\\nCONTENU: Erreur lors du nettoyage HTML\",\n      error: true\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "e63e69c8-b9b3-4da6-81cf-20faf2a9728f",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1080,
+        0
+      ],
+      "id": "6b0e3795-6818-4121-bbb1-b57221f34452",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "analyze-user-website",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        20,
+        180
+      ],
+      "id": "77828102-2d43-4070-b816-58058c136d75",
+      "name": "Webhook",
+      "webhookId": "937e255c-bab5-4f8b-8fa5-3eb4f6f48c58"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Validate URL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate URL1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate URL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1eeaca7c-eb3a-424e-a15d-f6f89abd57c1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "07ded2a5ddaa2e3ef818e39f2a91a69e11ab5e49fabe12ff8d8cad8daaff0acb"
+  },
+  "id": "mfbxEbt2A74e75CZ",
+  "tags": []
+}
