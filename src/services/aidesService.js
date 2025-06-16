@@ -428,6 +428,83 @@ export const searchAndFilterAides = async (projectContext) => {
   }
 };
 
+/**
+ * Se connecte au backend pour recevoir un flux d'aides raffinées via SSE.
+ * @param {object} projectContext - Le contexte du projet à envoyer.
+ * @param {function} onData - Callback exécuté pour chaque aide reçue.
+ * @param {function} onError - Callback exécuté en cas d'erreur.
+ * @param {function} onEnd - Callback exécuté à la fin du flux.
+ * @returns {function} Une fonction pour annuler la connexion.
+ */
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+
+export const refineAndStreamAides = (projectContext, token, onData, onError, onEnd) => {
+  const ctrl = new AbortController();
+
+  if (!token) {
+    onError(new Error("Le token d'authentification est manquant."));
+    return () => {}; // Retourne une fonction vide
+  }
+
+  fetchEventSource(`/api/aides/refine-and-stream`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(projectContext),
+    signal: ctrl.signal,
+    
+    onmessage(ev) {
+      if (ev.event === 'end') {
+        console.log('[refineAndStreamAides] Fin du flux reçue.');
+        onEnd();
+        ctrl.abort(); // Termine la connexion proprement
+      } else if (ev.event === 'error') {
+        console.error('[refineAndStreamAides] Erreur de flux reçue:', ev.data);
+        onError(JSON.parse(ev.data));
+      } else {
+        // C'est un message de donnée standard
+        onData(JSON.parse(ev.data));
+      }
+    },
+    
+    onclose() {
+      console.log('[refineAndStreamAides] La connexion a été fermée par le serveur.');
+      // Ne pas appeler onEnd() ici, car l'événement 'end' le gère déjà.
+    },
+
+    onerror(err) {
+      console.error('[refineAndStreamAides] Erreur de connexion fatale:', err);
+      onError(err);
+      ctrl.abort(); // S'assurer que tout est arrêté
+      // Il est important de ne pas relancer l'erreur ici pour éviter que la librairie ne tente de se reconnecter indéfiniment.
+    }
+  });
+
+  // Retourne une fonction pour permettre au composant d'annuler le fetch si nécessaire (ex: unmount)
+  return () => {
+    console.log('[refineAndStreamAides] Annulation de la connexion SSE demandée.');
+    ctrl.abort();
+  };
+};
+
+/**
+ * Récupère les aides déjà enregistrées pour un projet.
+ * @param {string} projectId - L'ID du projet.
+ * @returns {Promise<Array<Object>>} La liste des aides enregistrées.
+ */
+export const getSavedAides = async (projectId) => {
+  try {
+    console.log(`[aidesService] Récupération des aides enregistrées pour le projet ${projectId}`);
+    const response = await fetchWithAuth(`/api/projects/${projectId}/aides`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des aides enregistrées pour le projet ${projectId}:`, error);
+    throw error;
+  }
+};
+
 export const rechercherAidesOptimisees = async (project) => {
   try {
     console.log('Début de la recherche d\'aides optimisée pour le projet:', project.id);

@@ -85,15 +85,21 @@ const Dashboard = () => {
                     </div>
                     <div className="mt-2 sm:flex sm:justify-between">
                       <div className="sm:flex">
-                        <p className="flex items-center text-sm text-gray-500">
-                          {project.description?.substring(0, 100)}
-                          {project.description?.length > 100 ? '...' : ''}
+                        <p className="flex items-center text-sm text-gray-500 italic">
+                          {(project.reformulation || project.description || '').split(' ').slice(0, 60).join(' ')}
+                          {(project.reformulation || project.description || '').split(' ').length > 60 ? '...' : ''}
                         </p>
                       </div>
                       <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                        <p>
-                          Créé le {new Date(project.created_at).toLocaleDateString()}
-                        </p>
+                        {project.status === 'aides_identifiees' ? (
+                          <Link to={`/projects/${project.id}/aides`} className="px-3 py-1 text-sm font-medium text-white bg-green-600 rounded-full hover:bg-green-700">
+                            Accéder aux aides retenues
+                          </Link>
+                        ) : (
+                          <Link to={`/projects/${project.id}/aides`} className="px-3 py-1 text-sm font-medium text-white bg-indigo-600 rounded-full hover:bg-indigo-700">
+                            Explorer les aides
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </div>

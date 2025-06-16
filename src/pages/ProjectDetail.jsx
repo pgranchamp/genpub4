@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getProject } from '../services';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { getProject, getCategoriesList } from '../services';
 import ChatInterface from '../components/ChatInterface.jsx';
 
 const ProjectDetail = () => {
@@ -8,6 +8,7 @@ const ProjectDetail = () => {
   const navigate = useNavigate();
   
   const [project, setProject] = useState(null);
+  const [categoryNames, setCategoryNames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
@@ -15,9 +16,19 @@ const ProjectDetail = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        // Utiliser getProject au lieu de getProjects pour récupérer directement le projet par son ID
         const projectData = await getProject(id);
         setProject(projectData);
+
+        if (projectData && projectData.id_categories_aides_territoire) {
+          const allCategories = await getCategoriesList();
+          const flatCategories = allCategories.flatMap(group => group.categories);
+          const selectedIds = JSON.parse(projectData.id_categories_aides_territoire);
+          const names = selectedIds.map(id => {
+            const found = flatCategories.find(cat => cat.id === id);
+            return found ? found.categorie : `ID ${id}`;
+          });
+          setCategoryNames(names);
+        }
       } catch (err) {
         console.error('Erreur lors du chargement du projet:', err);
         setError('Impossible de charger les détails du projet.');
@@ -94,30 +105,51 @@ const ProjectDetail = () => {
               <div className="px-4 py-5 sm:px-6">
                 <h3 className="text-lg leading-6 font-bold text-genie-navy font-inter">Mots-clés thématiques</h3>
               </div>
-              <div className="border-t border-gray-200">
-                <div className="px-4 py-5 sm:p-6">
-                  <div className="flex flex-wrap gap-2">
-                    {JSON.parse(project.keywords).map((keyword, index) => (
-                      <span 
-                        key={index} 
-                        className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-gradient-genie text-white"
-                      >
-                        {keyword}
-                      </span>
-                    ))}
-                  </div>
+              <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
+                <div className="flex flex-wrap gap-2">
+                  {JSON.parse(project.keywords).map((keyword, index) => (
+                    <span key={index} className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {categoryNames.length > 0 && (
+            <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
+              <div className="px-4 py-5 sm:px-6">
+                <h3 className="text-lg leading-6 font-bold text-genie-navy font-inter">Catégories d'aides retenues</h3>
+              </div>
+              <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
+                <div className="flex flex-wrap gap-2">
+                  {categoryNames.map((name, index) => (
+                    <span key={index} className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                      {name}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
           )}
 
           <div className="flex justify-center mb-8">
-            <button
-              // onClick={handleSearchAides} // TODO: Implémenter la recherche d'aides
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-genie-purple hover:bg-genie-purple/90"
-            >
-              Chercher des aides
-            </button>
+            {project.status === 'aides_identifiees' ? (
+              <Link
+                to={`/projects/${project.id}/aides`}
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700"
+              >
+                Accéder aux aides retenues
+              </Link>
+            ) : (
+              <Link
+                to={`/projects/${project.id}/aides`}
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-genie-purple hover:bg-genie-purple/90"
+              >
+                Explorer les aides
+              </Link>
+            )}
           </div>
         </>
       )}

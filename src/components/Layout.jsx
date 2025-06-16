@@ -44,7 +44,7 @@ const Layout = () => {
               <div className="ml-3 relative">
                 <div className="flex items-center">
                   <span className="text-sm text-gray-500 mr-2">
-                    {user?.email}
+                    Bonjour, {user?.first_name || user?.email}
                   </span>
                   <button
                     onClick={handleLogout}

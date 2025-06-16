@@ -60,4 +60,141 @@ router.post('/search-and-filter', authenticate, asyncHandler(async (req, res) =>
   }
 }));
 
+/**
+ * @route   POST /aides/refine-and-stream
+ * @desc    Recherche, filtre et raffine les aides en streamant les résultats
+ * @access  Privé
+ */
+import { refineSingleAide } from '../services/aideRefinementService.js';
+import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+
+router.post('/refine-and-stream', authenticate, asyncHandler(async (req, res) => {
+  const { projectContext, keywords, key_elements, id_categories_aides_territoire, organisationType, perimeterCode, projectId, organisationId } = req.body;
+
+  // 1. Validation des entrées
+  if (!projectContext || !keywords || !key_elements || !id_categories_aides_territoire || !projectId || !organisationId) {
+    return res.status(400).json({ error: 'Les champs projectContext, keywords, key_elements, id_categories_aides_territoire, projectId et organisationId sont requis.' });
+  }
+
+  // 2. Configuration des headers pour le Server-Sent Events (SSE)
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+  try {
+    // 3. Logique de recherche et de filtrage initial (Phase 1)
+    const mapOrganisationTypeToOrganizationTypeSlugs = (orgType) => {
+      const lowerOrgType = orgType?.toLowerCase();
+      switch (lowerOrgType) {
+        case 'association': return ['association'];
+        case 'entreprise':
+        case 'entreprise_privee': return ['private-sector'];
+        case 'commune': return ['commune'];
+        case 'epci': return ['epci'];
+        case 'departement': return ['department'];
+        case 'region': return ['region'];
+        default: return [];
+      }
+    };
+
+    const searchParams = {
+      category_ids: id_categories_aides_territoire,
+      organization_type_slugs: mapOrganisationTypeToOrganizationTypeSlugs(organisationType),
+      perimeter_codes: perimeterCode ? [perimeterCode] : undefined,
+    };
+
+    const allAides = await searchAidesTerritoires(searchParams);
+    const filteredAidesResult = await filterAidesFromAPI(projectContext, keywords, allAides);
+    const aidesToRefine = filteredAidesResult.filter(aide => aide.decision === 'à voir');
+
+    console.log(`[refine-and-stream] Début du traitement en streaming pour ${aidesToRefine.length} aides.`);
+
+    // Envoyer un premier message de statut au client
+    const initialStatus = {
+      type: 'status',
+      totalAidesTrouvees: allAides.length,
+      aidesAPreselectionner: filteredAidesResult.length,
+      aidesSelectionnees: aidesToRefine.map(a => a.title)
+    };
+    res.write(`data: ${JSON.stringify(initialStatus)}\n\n`);
+
+
+    // 4. Boucle de traitement, raffinement et streaming (Phase 2)
+    for (const aide of aidesToRefine) {
+      try {
+        // a. Préparer le payload pour N8N
+        const n8nProjectContext = { projectId, organisationId, reformulation: projectContext, keywords, key_elements };
+        const aideDetails = { 
+          name: aide.title, // Correction: la propriété est 'title', pas 'name' à ce stade
+          description: aide.description, 
+          // Construire une URL absolue
+          url: `https://aides-territoires.beta.gouv.fr${aide.url}` 
+        };
+
+        // b. Appeler le workflow N8N
+        const n8nResponse = await refineSingleAide(aideDetails, n8nProjectContext);
+        const refinedData = n8nResponse[0]?.response || {}; // Accéder à l'objet de réponse principal
+
+        // Condition pour ne traiter que les aides pertinentes
+        const pertinence = refinedData.niveau_pertinence || '';
+        if (pertinence.toLowerCase() === 'faible' || pertinence.toLowerCase() === 'nulle') {
+          console.log(`[refine-and-stream] Aide "${aide.title}" jugée non pertinente, ignorée.`);
+          continue; // Passe à l'itération suivante de la boucle
+        }
+
+        // c. Préparer l'objet complet à insérer dans la table projects_aides
+        const dataToStore = {
+          project_id: projectId,
+          title: aide.title,
+          url: `https://aides-territoires.beta.gouv.fr${aide.url}`,
+          porteur: refinedData.body?.porteur_aide || aide.porteur || null,
+          details: refinedData.body?.description_aide || aide.description,
+          id_aide_ext: aide.id.toString(),
+          // Données de n8n
+          niveau_pertinence: refinedData.niveau_pertinence || null,
+          score_compatibilite: refinedData.score_compatibilite || null,
+          justification: refinedData.justification || null,
+          points_positifs: refinedData.points_positifs || null,
+          points_negatifs: refinedData.points_negatifs || null,
+          recommandations: refinedData.recommandations || null,
+        };
+
+        // d. Insérer la nouvelle ligne et récupérer les données insérées
+        const insertedData = await supabaseAdminRequest(
+          'POST',
+          'projects_aides',
+          dataToStore
+        );
+        
+        // e. Envoyer la ligne complète (avec son nouvel UUID) au client
+        res.write(`data: ${JSON.stringify(insertedData[0])}\n\n`);
+
+      } catch (aideError) {
+        console.error(`[refine-and-stream] Erreur lors du traitement de l'aide ${aide.id}:`, aideError);
+        // Envoyer une notification d'erreur pour cette aide spécifique au client
+        res.write(`data: ${JSON.stringify({ id: aide.id, error: true, message: aideError.message })}\n\n`);
+      }
+    }
+
+    // 5. Mettre à jour le statut du projet
+    await supabaseAdminRequest(
+      'PATCH',
+      `projects?id=eq.${projectId}`,
+      { status: 'aides_identifiees' }
+    );
+    console.log(`[refine-and-stream] Statut du projet ${projectId} mis à jour.`);
+
+    // 6. Fin du stream
+    res.write('event: end\ndata: Stream terminé\n\n');
+    console.log('[refine-and-stream] Stream terminé.');
+    res.end();
+
+  } catch (error) {
+    console.error('[refine-and-stream] Erreur globale dans le processus de streaming:', error);
+    res.write(`event: error\ndata: ${JSON.stringify({ message: 'Une erreur serveur est survenue.' })}\n\n`);
+    res.end();
+  }
+}));
+
 export default router;

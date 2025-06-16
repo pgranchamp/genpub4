@@ -1,0 +1,529 @@
+{
+  "name": "refineFilteredAides",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -840,
+        380
+      ],
+      "id": "b93f0ab0-2a63-41ed-972a-55aa97c19849",
+      "name": "When chat message received",
+      "webhookId": "663a9e88-211b-461a-8b03-2819f26df10b"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Tu es un expert en aides publiques et en financement de projets. Ton rôle est d'analyser la pertinence d'une aide publique par rapport à un projet spécifique.\n\nPROJET À ANALYSER :\n- Description du projet : {{ $('Parse').item.json.projet_reformulation }}\n- Mots-clés du projet : {{ $('Parse').item.json.mots_cles }}\n- Secteur d'activité de l'organisation : {{ $('Parse').item.json.key_elements_raw }}\n\nAIDE PUBLIQUE À ÉVALUER :\n- Titre de l'aide :{{ $('Parser').item.json.titre }} \n- Porteur de l'aide : {{ $('Parser').item.json.porteur_aide }}\n- Description : {{ $('Parser').item.json.description }}\n- Bénéficiaires éligibles : {{ $('Parser').item.json.beneficiaires }}\n- Types de financement : {{ $('Parser').item.json.types_financement }}\n- Montant : {{ $('Parser').item.json.montant }}\n- Dépenses éligibles : {{ $('Parser').item.json.depenses_eligibles }}\n- Modalités d'intervention : {{ $('Parser').item.json.modalites_intervention }}\n- Finalité : {{ $('Parser').item.json.finalite }}\n- Critères d'éligibilité : {{ $('Parser').item.json.criteres_eligibilite }}\n- Zone géographique : {{ $('Parser').item.json.zone_geographique }}\n- Thématiques de l'aide : {{ $('Parser').item.json.thematiques }}\n\nDÉTAIL COMPLÉMENTAIRE DE L'AIDE :\n{{ $json.corps_principal }}\nMISSION :\nAnalyse la compatibilité entre le projet et cette aide publique. Évalue le niveau de pertinence selon cette échelle :\n- \"PAS PERTINENTE DU TOUT\" : Aucune correspondance, secteurs ou objectifs incompatibles\n- \"PAS PERTINENTE\" : Correspondance faible, critères d'éligibilité non remplis\n- \"PERTINENTE\" : Correspondance correcte, aide utilisable avec quelques adaptations\n- \"TRÈS PERTINENTE\" : Correspondance excellente, aide parfaitement adaptée au projet\n\nRÉPONSE OBLIGATOIREMENT AU FORMAT JSON :\n{\n  \"niveau_pertinence\": \"[PAS PERTINENTE DU TOUT|PAS PERTINENTE|PERTINENTE|TRÈS PERTINENTE]\",\n  \"score_compatibilite\": [0-100],\n  \"justification\": \"Explication détaillée de ton analyse en 2-3 phrases\",\n  \"points_positifs\": [\"Point 1\", \"Point 2\", \"Point 3\"],\n  \"points_negatifs\": [\"Point 1\", \"Point 2\"],\n  \"recommandations\": \"Conseils pour améliorer la compatibilité ou confirmer l'adéquation\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        920,
+        255
+      ],
+      "id": "0996cbb6-9826-4a48-a575-b56152a41b87",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "chatgpt-4o-latest"
+        },
+        "options": {
+          "maxTokens": 2000,
+          "responseFormat": "json_object",
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1008,
+        475
+      ],
+      "id": "8e723e06-4785-464c-8744-ef4bc3f99c5a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AaBAEkezuocD9zVb",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validation URL universelle - Chat Trigger OU Webhook\nconst inputData = $input.first().json;\nlet inputUrl = '';\n\nconsole.log('Type de données reçues:', typeof inputData);\nconsole.log('Données brutes:', JSON.stringify(inputData, null, 2));\n\n// Détection automatique de la source\nif (inputData.chatInput) {\n  // Source : Chat Trigger\n  inputUrl = inputData.chatInput;\n  console.log('Source détectée: Chat Trigger');\n} else if (inputData.body && inputData.body.url) {\n  // Source : Webhook avec body.url\n  inputUrl = inputData.body.url;\n  console.log('Source détectée: Webhook (body.url)');\n} else if (inputData.url) {\n  // Source : Webhook direct avec url\n  inputUrl = inputData.url;\n  console.log('Source détectée: Webhook (url direct)');\n} else if (inputData.website) {\n  // Source : Webhook avec website\n  inputUrl = inputData.website;\n  console.log('Source détectée: Webhook (website)');\n} else {\n  // Fallback : essayer de trouver une URL dans les valeurs\n  const possibleUrl = Object.values(inputData).find(val => \n    typeof val === 'string' && \n    (val.includes('http') || val.includes('www.') || val.includes('.com') || val.includes('.org'))\n  );\n  \n  if (possibleUrl) {\n    inputUrl = possibleUrl;\n    console.log('Source détectée: URL trouvée dans les valeurs');\n  } else {\n    inputUrl = 'https://www.vivacite.org'; // URL par défaut pour test\n    console.log('Aucune URL trouvée, utilisation URL par défaut');\n  }\n}\n\nconsole.log('URL extraite:', inputUrl);\n\n// Validation et normalisation d'URL\ninputUrl = String(inputUrl).trim();\n\nif (!inputUrl || inputUrl === '') {\n  console.log('Erreur: URL vide après nettoyage');\n  return [{ \n    error: \"URL manquante ou invalide\", \n    validUrl: \"https://www.vivacite.org\",\n    source: \"fallback\"\n  }];\n}\n\n// Ajouter https:// si manquant\nif (!inputUrl.startsWith('http://') && !inputUrl.startsWith('https://')) {\n  if (inputUrl.startsWith('www.')) {\n    inputUrl = 'https://' + inputUrl;\n  } else if (inputUrl.includes('.')) {\n    inputUrl = 'https://' + inputUrl;\n  }\n}\n\n// Supprimer le trailing slash\ninputUrl = inputUrl.replace(/\\/$/, '');\n\nconsole.log('URL finale normalisée:', inputUrl);\n\n// Extraction du domaine\nconst domainMatch = inputUrl.match(/^https?:\\/\\/([^\\/]+)/);\nconst domain = domainMatch ? domainMatch[1] : 'unknown';\n\n// Retourner le résultat unifié\nreturn [{\n  validUrl: inputUrl,\n  domain: domain,\n  origin: inputUrl.split('/').slice(0, 3).join('/'),\n  sourceType: inputData.chatInput ? 'chat' : 'webhook'\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        280
+      ],
+      "id": "ca364740-467f-4189-9487-3497b86a47ec",
+      "name": "Validate URL1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.validUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -180,
+        280
+      ],
+      "id": "87c7bc24-c72c-4db4-931c-95f85df1234a",
+      "name": "HTTP Request1",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1296,
+        255
+      ],
+      "id": "abe72cb6-5a9d-4b14-bb55-93beb844d2fe",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "refineFilteredAides",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -840,
+        180
+      ],
+      "id": "be049e3d-12d2-48d1-b0b8-dbd40b032580",
+      "name": "Webhook1",
+      "webhookId": "937e255c-bab5-4f8b-8fa5-3eb4f6f48c58"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupération des données depuis chatInput\nconst rawInput = $input.first().json;\nconsole.log('Données brutes reçues:', rawInput);\n\n// Vérifier si c'est déjà un objet ou une string\nlet inputData;\nif (typeof rawInput.chatInput === 'string') {\n  // C'est une string JSON, on la parse\n  try {\n    inputData = JSON.parse(rawInput.chatInput);\n  } catch (error) {\n    console.error('Erreur parsing JSON string:', error);\n    console.log('Contenu chatInput:', rawInput.chatInput);\n    return [{ error: 'JSON string invalide', raw_content: rawInput.chatInput }];\n  }\n} else if (typeof rawInput.chatInput === 'object') {\n  // C'est déjà un objet\n  inputData = rawInput.chatInput;\n} else {\n  // Peut-être que les données sont directement dans rawInput\n  inputData = rawInput;\n}\n\nconsole.log('InputData après parsing:', inputData);\n\n// Parser les key_elements qui sont problématiques\nlet keyElementsParsed = {};\ntry {\n  if (inputData.projectContext?.key_elements) {\n    // Corriger les guillemets non échappés dans key_elements\n    let keyElementsString = inputData.projectContext.key_elements;\n    \n    // Méthode 1: regex pour corriger les guillemets\n    keyElementsString = keyElementsString.replace(/\"/g, '\\\\\"');\n    keyElementsString = keyElementsString.replace(/^\\\\\"|\"$/g, '\"'); // Garder les guillemets de début/fin\n    \n    // Méthode 2: extraction manuelle si regex échoue\n    if (keyElementsString.includes('sectors')) {\n      const sectorsMatch = keyElementsString.match(/sectors['\":]([^\"]*?)(?=[\"',])/);\n      const missionsMatch = keyElementsString.match(/missions['\":]([^\"]*?)(?=[\"',])/);\n      const beneficiariesMatch = keyElementsString.match(/beneficiaries['\":]([^\"]*?)(?=[\"',])/);\n      const territoryMatch = keyElementsString.match(/territory['\":]([^\"]*?)(?=[\"'}])/);\n      \n      keyElementsParsed = {\n        sectors: sectorsMatch ? sectorsMatch[1] : '',\n        missions: missionsMatch ? missionsMatch[1] : '',\n        beneficiaries: beneficiariesMatch ? beneficiariesMatch[1] : '',\n        territory: territoryMatch ? territoryMatch[1] : ''\n      };\n    }\n  }\n} catch (error) {\n  console.log('Extraction manuelle des key_elements');\n  // Extraction manuelle en dernier recours\n  const keyElementsRaw = inputData.projectContext?.key_elements || '';\n  keyElementsParsed = {\n    sectors: 'Extraction manuelle nécessaire',\n    missions: 'Extraction manuelle nécessaire', \n    beneficiaries: 'Extraction manuelle nécessaire',\n    territory: 'Extraction manuelle nécessaire',\n    raw: keyElementsRaw\n  };\n}\n\n// Extraction simple des champs principaux\nconst result = {\n  // Informations sur l'aide\n  aide_id: inputData.aideDetails?.id,\n  aide_nom: inputData.aideDetails?.name,\n  aide_description: inputData.aideDetails?.description,\n  aide_url: inputData.aideDetails?.url,\n  \n  // Contexte du projet  \n  projet_id: inputData.projectContext?.projectId,\n  organisation_id: inputData.projectContext?.organisationId,\n  projet_reformulation: inputData.projectContext?.reformulation,\n  \n  // Mots-clés\n  mots_cles: inputData.projectContext?.keywords,\n  mots_cles_string: inputData.projectContext?.keywords?.join(', '),\n  \n  // Éléments clés parsés\n  secteurs: keyElementsParsed.sectors,\n  missions: keyElementsParsed.missions,\n  beneficiaires: keyElementsParsed.beneficiaries,\n  territoire: keyElementsParsed.territory,\n  \n  // Éléments clés bruts (au cas où)\n  key_elements_raw: inputData.projectContext?.key_elements\n};\n\nconsole.log('Champs extraits:', result);\n\nreturn [result];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -620,
+        280
+      ],
+      "id": "37eb13e0-9721-42e4-8310-6d1ba38ec80e",
+      "name": "Parse"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url_plus_infos }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        540
+      ],
+      "id": "84adc1da-5c3c-4ed1-a22b-64b27603333f",
+      "name": "URL_plus_info",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -840,
+        715
+      ],
+      "id": "4b18238c-d90a-4332-811e-ad11cb11b1eb",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parser généraliste pour pages url_plus_infos (Bpifrance, etc.)\nconst inputData = $input.first().json;\n\nconsole.log('=== PARSER URL_PLUS_INFOS ===');\n\ntry {\n  // Récupération du HTML depuis HTTP Request\n  const html = inputData.data || inputData.body || inputData.html || inputData.content || '';\n  console.log('HTML length:', html.length);\n  \n  if (!html) {\n    return [{\n      json: {\n        error: true,\n        message: \"Aucun contenu HTML reçu\"\n      }\n    }];\n  }\n\n  // Fonction utilitaire pour nettoyer le texte\n  function cleanText(text) {\n    if (!text) return '';\n    return text\n      .replace(/<[^>]+>/g, ' ')\n      .replace(/\\s+/g, ' ')\n      .replace(/&[^;]+;/g, ' ')\n      .trim();\n  }\n\n  const result = {};\n\n  // 1. TITRE DE LA PAGE\n  const titleMatch = html.match(/<title[^>]*>([^<]+)/i);\n  result.titre = titleMatch ? cleanText(titleMatch[1]) : 'Titre non trouvé';\n\n  // 2. META DESCRIPTION\n  const metaDescPattern = /<meta[^>]*name=[\"']description[\"'][^>]*content=[\"']([^\"']+)[\"']/i;\n  const metaDescMatch = html.match(metaDescPattern);\n  result.meta_description = metaDescMatch ? cleanText(metaDescMatch[1]) : '';\n\n  // 3. META KEYWORDS (si présentes)\n  const metaKeywordsPattern = /<meta[^>]*name=[\"']keywords[\"'][^>]*content=[\"']([^\"']+)[\"']/i;\n  const metaKeywordsMatch = html.match(metaKeywordsPattern);\n  result.meta_keywords = metaKeywordsMatch ? cleanText(metaKeywordsMatch[1]) : '';\n\n  // 4. META AUTHOR (si présent)\n  const metaAuthorPattern = /<meta[^>]*name=[\"']author[\"'][^>]*content=[\"']([^\"']+)[\"']/i;\n  const metaAuthorMatch = html.match(metaAuthorPattern);\n  result.meta_author = metaAuthorMatch ? cleanText(metaAuthorMatch[1]) : '';\n\n  // 5. TITRE PRINCIPAL (H1)\n  const h1Pattern = /<h1[^>]*>([^<]+)<\\/h1>/i;\n  const h1Match = html.match(h1Pattern);\n  result.titre_principal = h1Match ? cleanText(h1Match[1]) : '';\n\n  // 6. SOUS-TITRES IMPORTANTS (H2, H3)\n  const sousTitres = [];\n  const hPattern = /<h[2-3][^>]*>([^<]+)<\\/h[2-3]>/gi;\n  const hMatches = [...html.matchAll(hPattern)];\n  \n  hMatches.forEach(match => {\n    const titre = cleanText(match[1]);\n    if (titre.length > 3 && titre.length < 150) {\n      sousTitres.push(titre);\n    }\n  });\n  result.sous_titres = sousTitres.slice(0, 10); // Limiter à 10\n\n  // 7. EXTRACTION DU CORPS PRINCIPAL\n  let corpsPrincipal = html;\n\n  // Supprimer les éléments non-informatifs\n  corpsPrincipal = corpsPrincipal\n    // Scripts, styles, navigation\n    .replace(/<script[^>]*>.*?<\\/script>/gis, ' ')\n    .replace(/<style[^>]*>.*?<\\/style>/gis, ' ')\n    .replace(/<nav[^>]*>.*?<\\/nav>/gis, ' ')\n    .replace(/<header[^>]*>.*?<\\/header>/gis, ' ')\n    .replace(/<footer[^>]*>.*?<\\/footer>/gis, ' ')\n    .replace(/<aside[^>]*>.*?<\\/aside>/gis, ' ')\n    \n    // Éléments techniques\n    .replace(/<!--.*?-->/gs, ' ')\n    .replace(/<meta[^>]*>/gi, ' ')\n    .replace(/<link[^>]*>/gi, ' ')\n    .replace(/<noscript[^>]*>.*?<\\/noscript>/gis, ' ')\n    \n    // Navigation et menus\n    .replace(/<div[^>]*class=\"[^\"]*menu[^\"]*\"[^>]*>.*?<\\/div>/gis, ' ')\n    .replace(/<div[^>]*class=\"[^\"]*nav[^\"]*\"[^>]*>.*?<\\/div>/gis, ' ')\n    .replace(/<div[^>]*class=\"[^\"]*breadcrumb[^\"]*\"[^>]*>.*?<\\/div>/gis, ' ')\n    .replace(/<ul[^>]*class=\"[^\"]*nav[^\"]*\"[^>]*>.*?<\\/ul>/gis, ' ')\n    \n    // Formulaires de newsletter/abonnement\n    .replace(/<form[^>]*>.*?<\\/form>/gis, ' ')\n    \n    // Supprimer toutes les balises HTML\n    .replace(/<[^>]+>/g, ' ')\n    \n    // Nettoyage final\n    .replace(/&[^;]+;/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .replace(/\\n\\s*\\n/g, '\\n')\n    .trim();\n\n  // Limiter la taille du corps (environ 3000 caractères)\n  if (corpsPrincipal.length > 3000) {\n    const cutPosition = corpsPrincipal.lastIndexOf(' ', 3000);\n    corpsPrincipal = corpsPrincipal.substring(0, cutPosition > 2500 ? cutPosition : 3000) + '...';\n  }\n\n  result.corps_principal = corpsPrincipal;\n\n  // 8. LIENS EXTERNES IMPORTANTS\n  const liensExternes = [];\n  const linkPattern = /<a[^>]+href=[\"']([^\"']+)[\"'][^>]*>(.*?)<\\/a>/gis;\n  const linkMatches = [...html.matchAll(linkPattern)];\n  \n  linkMatches.forEach(match => {\n    const url = match[1];\n    const text = cleanText(match[2]);\n    \n    // Garder uniquement les liens externes significatifs\n    if (url && text && \n        url.startsWith('http') && \n        text.length > 5 && text.length < 100 &&\n        !text.toLowerCase().includes('cookie') &&\n        !text.toLowerCase().includes('mention') &&\n        !text.toLowerCase().includes('politique')) {\n      \n      liensExternes.push(`${text} : ${url}`);\n    }\n  });\n  \n  result.liens_externes = liensExternes.slice(0, 8); // Limiter\n\n  // 9. MÉTADONNÉES TECHNIQUES\n  result.url_source = inputData.url || '';\n  result.taille_html = html.length;\n  result.extraction_date = new Date().toISOString();\n\n  // 10. SCORE DE QUALITÉ DU CONTENU\n  let scoreQualite = 0;\n  if (result.titre.length > 10) scoreQualite += 20;\n  if (result.meta_description.length > 20) scoreQualite += 15;\n  if (result.titre_principal.length > 5) scoreQualite += 15;\n  if (result.corps_principal.length > 500) scoreQualite += 25;\n  if (result.sous_titres.length > 2) scoreQualite += 15;\n  if (result.liens_externes.length > 1) scoreQualite += 10;\n\n  result.score_qualite = scoreQualite;\n  result.error = false;\n\n  console.log('Extraction terminée - Score qualité:', scoreQualite);\n  console.log('Taille corps principal:', result.corps_principal.length);\n\n  // RETOUR OBLIGATOIRE AVEC .json pour n8n\n  return [{\n    json: {\n      titre: result.titre,\n      meta_description: result.meta_description,\n      meta_keywords: result.meta_keywords,\n      meta_author: result.meta_author,\n      titre_principal: result.titre_principal,\n      sous_titres: result.sous_titres,\n      corps_principal: result.corps_principal,\n      liens_externes: result.liens_externes,\n      url_source: result.url_source,\n      taille_html: result.taille_html,\n      extraction_date: result.extraction_date,\n      score_qualite: result.score_qualite,\n      error: result.error\n    }\n  }];\n\n} catch (error) {\n  console.error('Erreur dans le parser:', error);\n  return [{\n    json: {\n      error: true,\n      message: 'Erreur lors de l\\'extraction des données',\n      details: error.message\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        520
+      ],
+      "id": "d1f9c716-cf86-42db-99ec-97d2f185ff4e",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parser complet pour pages aides-territoires avec extraction structurée\nconst inputData = $input.first().json;\n\nconsole.log('=== PARSER STRUCTURÉ AIDES-TERRITOIRES ===');\n\ntry {\n  // Récupération du HTML depuis HTTP Request\n  const html = inputData.data || inputData.body || inputData.html || inputData.content || '';\n  console.log('HTML length:', html.length);\n  \n  if (!html) {\n    return [{\n      json: {\n        error: true,\n        message: \"Aucun contenu HTML reçu\"\n      }\n    }];\n  }\n\n  // Fonction utilitaire pour nettoyer le texte\n  function cleanText(text) {\n    if (!text) return '';\n    return text\n      .replace(/<[^>]+>/g, ' ')\n      .replace(/\\s+/g, ' ')\n      .replace(/&[^;]+;/g, ' ')\n      .trim();\n  }\n\n  // Fonction pour extraire le texte après un label\n  function extractAfterLabel(html, label, maxLength = 500) {\n    const pattern = new RegExp(label + '[^>]*>\\\\s*([^<]+)', 'i');\n    const match = html.match(pattern);\n    return match ? cleanText(match[1]).substring(0, maxLength) : '';\n  }\n\n  // EXTRACTION DES DONNÉES STRUCTURÉES\n  const result = {};\n\n  // 1. TITRE DE L'AIDE\n  const titleMatch = html.match(/<title[^>]*>([^<]+)/i) || \n                    html.match(/<h1[^>]*>([^<]+)<\\/h1>/i);\n  result.titre = titleMatch ? \n    cleanText(titleMatch[1]).replace(/\\s*\\|\\s*Aides-territoires.*$/, '') : \n    'Titre non trouvé';\n\n  // 2. PORTEUR D'AIDE (correction pour structure avec lien)\n  const porteurPatterns = [\n    // Pattern principal basé sur la structure réelle\n    /Porteur\\(s\\)\\s*d'aide[^>]*>.*?<a[^>]*>([^<]+)<\\/a>/is,\n    /PORTEUR D'AIDE[^>]*>.*?<a[^>]*>([^<]+)<\\/a>/is,\n    // Pattern pour le lien direct vers partenaires\n    /<a[^>]*href=\"\\/partenaires\\/[^\"]*\"[^>]*>([^<]+)<\\/a>/i,\n    // Fallback sur l'alt de l'image\n    /<img[^>]*alt=\"logo\\s+([^\"]+)\"/i,\n    // Pattern plus générique\n    /class=\"[^\"]*porteur[^\"]*\"[^>]*>.*?<a[^>]*>([^<]+)<\\/a>/is\n  ];\n  \n  result.porteur_aide = '';\n  for (let pattern of porteurPatterns) {\n    const match = html.match(pattern);\n    if (match) {\n      let porteur = cleanText(match[1]);\n      // Nettoyer les mots parasites mais garder le nom\n      if (porteur.length > 2 && !porteur.toLowerCase().includes('ouvrir')) {\n        result.porteur_aide = porteur;\n        break;\n      }\n    }\n  }\n\n  // 3. DESCRIPTION (correction)\n  const descPatterns = [\n    /<meta[^>]*name=[\"']description[\"'][^>]*content=[\"']([^\"']+)/i,\n    /Description[^>]*>\\s*<[^>]*>\\s*([^<]+)/i,\n    /Description[^>]*>\\s*([^<]+)/i,\n    // Pattern spécifique pour \"La BPI participe...\"\n    /La\\s+BPI\\s+participe[^.]+\\./i\n  ];\n  \n  result.description = '';\n  for (let pattern of descPatterns) {\n    const match = html.match(pattern);\n    if (match) {\n      let desc = cleanText(match[1] || match[0]);\n      // Éviter les descriptions génériques\n      if (desc.length > 10 && \n          !desc.toLowerCase().includes('aides territoires') &&\n          !desc.toLowerCase().includes('trouvez des aides')) {\n        result.description = desc;\n        break;\n      }\n    }\n  }\n\n  // 4. TYPES DE FINANCEMENT (correction - nettoyage)\n  const financementTypes = [];\n  \n  // Patterns plus précis pour éviter la pollution\n  const typeTexts = ['Subvention', 'Avance récupérable', 'Ingénierie financière', 'Prêt'];\n  \n  typeTexts.forEach(typeText => {\n    // Chercher le type avec son détail\n    const pattern = new RegExp(`${typeText}[^>]*>\\\\s*([^<\\\\n]+)`, 'i');\n    const match = html.match(pattern);\n    \n    if (match) {\n      let detail = cleanText(match[1]);\n      // Nettoyer les détails parasites\n      if (detail && detail.length > 3 && \n          !detail.includes('target=') && \n          !detail.includes('href=') &&\n          !detail.includes('subventionnes')) {\n        financementTypes.push(detail);\n      }\n    } else if (html.toLowerCase().includes(typeText.toLowerCase())) {\n      // Si trouvé sans détail, ajouter juste le type\n      financementTypes.push(typeText);\n    }\n  });\n  \n  result.types_financement = [...new Set(financementTypes)]; // Dédupliquer\n\n  // 5. MONTANT/PLAFOND\n  const montantPatterns = [\n    /plafonnée?\\s*à\\s*([0-9\\s,\\.]+)\\s*[€euros]/i,\n    /montant[^0-9]*([0-9\\s,\\.]+)\\s*[€euros]/i,\n    /jusqu'à\\s*([0-9\\s,\\.]+)\\s*[€euros]/i,\n    /([0-9\\s,\\.]+)\\s*€/i\n  ];\n  \n  result.montant = '';\n  for (let pattern of montantPatterns) {\n    const match = html.match(pattern);\n    if (match) {\n      result.montant = match[0].trim();\n      break;\n    }\n  }\n\n  // 6. RÉCURRENCE\n  const recurrencePattern = /Récurrence[^>]*>([^<]+)/i;\n  const recurrenceMatch = html.match(recurrencePattern);\n  result.recurrence = recurrenceMatch ? cleanText(recurrenceMatch[1]) : '';\n\n  // 7. BÉNÉFICIAIRES (correction)\n  const beneficiairePatterns = [\n    /Bénéficiaires[^>]*>\\s*([^<\\n]+)/i,\n    /Entreprises? éligibles?[^>]*>\\s*([^<\\n]+)/i,\n    /Entreprise privée/i,\n    /class=\"[^\"]*beneficiaire[^\"]*\"[^>]*>\\s*([^<\\n]+)/i\n  ];\n  \n  result.beneficiaires = '';\n  for (let pattern of beneficiairePatterns) {\n    const match = html.match(pattern);\n    if (match) {\n      result.beneficiaires = cleanText(match[1] || match[0]);\n      if (result.beneficiaires.length > 3) break;\n    }\n  }\n\n  // 8. ZONE GÉOGRAPHIQUE (correction)\n  const zonePatterns = [\n    /Zone géographique[^>]*>\\s*([^<\\n]+)/i,\n    /Zone géographique couverte par l'aide[^>]*>\\s*([^<\\n]+)/i,\n    // Fallback pour \"France\" visible dans l'image\n    /France(?!\\s*(métropolitaine|relance))/i\n  ];\n  \n  result.zone_geographique = '';\n  for (let pattern of zonePatterns) {\n    const match = html.match(pattern);\n    if (match) {\n      result.zone_geographique = cleanText(match[1] || match[0]);\n      if (result.zone_geographique.length > 2) break;\n    }\n  }\n\n  // 9. DÉPENSES ÉLIGIBLES\n  const depensesPattern = /Dépenses éligibles[^>]*>(.*?)(?=<h|$)/is;\n  const depensesMatch = html.match(depensesPattern);\n  result.depenses_eligibles = depensesMatch ? \n    cleanText(depensesMatch[1]).substring(0, 1000) : '';\n\n  // 10. MODALITÉS D'INTERVENTION\n  const modalitesPattern = /Modalités d'intervention[^>]*>(.*?)(?=<h|$)/is;\n  const modalitesMatch = html.match(modalitesPattern);\n  result.modalites_intervention = modalitesMatch ? \n    cleanText(modalitesMatch[1]).substring(0, 1000) : '';\n\n  // 11. FINALITÉ\n  const finalitePattern = /Finalité[^>]*>(.*?)(?=<h|$)/is;\n  const finaliteMatch = html.match(finalitePattern);\n  result.finalite = finaliteMatch ? \n    cleanText(finaliteMatch[1]).substring(0, 1000) : '';\n\n  // 11. CRITÈRES D'ÉLIGIBILITÉ (correction)\n  const criteresPattern = /Critères d'éligibilité[^>]*>(.*?)(?=<h[1-6]|<section|<footer|$)/is;\n  const criteresMatch = html.match(criteresPattern);\n  let criteresText = '';\n  \n  if (criteresMatch) {\n    criteresText = cleanText(criteresMatch[1]);\n  } else {\n    // Fallback: chercher les patterns spécifiques visibles dans l'image\n    const criteresPatterns = [\n      /Dépenses\\/actions couvertes[^>]*>([^<]+)/i,\n      /Autres critères d'éligibilité[^>]*>([^<]+)/i,\n      /Vous innovez avec[^.]+\\./i\n    ];\n    \n    const criteresFragments = [];\n    criteresPatterns.forEach(pattern => {\n      const match = html.match(pattern);\n      if (match) {\n        criteresFragments.push(cleanText(match[0]));\n      }\n    });\n    criteresText = criteresFragments.join(' ');\n  }\n  \n  result.criteres_eligibilite = criteresText.substring(0, 1000);\n\n  // 13. THÉMATIQUES (correction - cibler uniquement la sidebar)\n  const thematiques = [];\n  \n  // Chercher spécifiquement dans la zone \"Thématiques\" de la sidebar\n  const thematiquesSectionPattern = /Thématiques[^>]*>(.*?)(?=<h[1-6]|<section|<footer|Dernière mise à jour)/is;\n  const thematiquesSectionMatch = html.match(thematiquesSectionPattern);\n  \n  if (thematiquesSectionMatch) {\n    const thematiqueContent = thematiquesSectionMatch[1];\n    \n    // Extraire les liens dans cette section spécifique\n    const thematiquePattern = /<a[^>]*href=\"[^\"]*\"[^>]*>([^<]+)<\\/a>/gi;\n    const thematiqueMatches = [...thematiqueContent.matchAll(thematiquePattern)];\n    \n    thematiqueMatches.forEach(match => {\n      const text = cleanText(match[1]);\n      // Filtrer pour garder seulement les vraies thématiques\n      if (text.length > 8 && text.length < 100 && \n          !text.toLowerCase().includes('connexion') &&\n          !text.toLowerCase().includes('inscription') &&\n          !text.toLowerCase().includes('contenu') &&\n          !text.toLowerCase().includes('pied') &&\n          !text.toLowerCase().includes('accueil') &&\n          !text.toLowerCase().includes('cartographie') &&\n          !text.toLowerCase().includes('portail') &&\n          !text.toLowerCase().includes('actualité') &&\n          !text.toLowerCase().includes('programme') &&\n          !text.toLowerCase().includes('europe') &&\n          !text.toLowerCase().includes('se connecter') &&\n          !text.toLowerCase().includes('trouver') &&\n          !text.toLowerCase().includes('diffuser')) {\n        thematiques.push(text);\n      }\n    });\n  } else {\n    // Fallback: chercher les thématiques par patterns spécifiques visibles\n    const thematiquesFallback = [\n      'Innovation, créativité et recherche',\n      'Information voyageur, billettique multimodale', \n      'Transports collectifs et optimisation des trafics routiers',\n      'Mobilité partagée',\n      'Logistique urbaine',\n      'Mobilité pour tous',\n      'Connaissance de la mobilité',\n      'Modes actifs : vélo, marche et aménagements associés',\n      'Limiter les déplacements subis'\n    ];\n    \n    // Vérifier lesquelles sont présentes dans le HTML\n    thematiquesFallback.forEach(thematique => {\n      if (html.toLowerCase().includes(thematique.toLowerCase())) {\n        thematiques.push(thematique);\n      }\n    });\n  }\n  \n  result.thematiques = [...new Set(thematiques)].slice(0, 15); // Dédupliquer et limiter\n\n  // 14. DERNIÈRE MISE À JOUR\n  const majPattern = /Dernière mise à jour[^>]*>([^<]+)/i;\n  const majMatch = html.match(majPattern);\n  result.derniere_maj = majMatch ? cleanText(majMatch[1]) : '';\n\n  // 15. URL PLUS D'INFORMATIONS (le fameux bouton)\n  let url_plus_infos = null;\n  \n  // Pattern spécifique pour le bouton avec classe origin_url_btn\n  const originUrlPattern = /<a[^>]*class=\"[^\"]*origin_url_btn[^\"]*\"[^>]*href=[\"']([^\"']+)[\"']/i;\n  const originUrlMatch = html.match(originUrlPattern);\n  \n  if (originUrlMatch) {\n    url_plus_infos = originUrlMatch[1];\n  } else {\n    // Fallback: chercher \"Plus d'informations\" avec flag multiline\n    const plusInfoPattern = /<a[^>]*href=[\"']([^\"']+)[\"'][^>]*>(.*?)<\\/a>/gis;\n    const plusInfoMatches = [...html.matchAll(plusInfoPattern)];\n    \n    for (let match of plusInfoMatches) {\n      const text = cleanText(match[2]);\n      const url = match[1];\n      \n      if (text.toLowerCase().includes('plus') && \n          text.toLowerCase().includes('info') &&\n          url.startsWith('http') && \n          !url.includes('aides-territoires')) {\n        url_plus_infos = url;\n        break;\n      }\n    }\n  }\n  \n  result.url_plus_infos = url_plus_infos || '';\n\n  // 16. CONTACT (correction - cibler le vrai contact de l'aide)\n  let contactInfo = '';\n  \n  // Supprimer d'abord tout le JSON-LD qui pollue\n  const htmlSansJsonLd = html.replace(/<script[^>]*type=[\"']application\\/ld\\+json[\"'][^>]*>.*?<\\/script>/gis, '');\n  \n  const contactPatterns = [\n    // Pattern principal pour \"Contactez directement la [ORGANISME]\"\n    /Contactez directement[^<]*<\\/a>/i,\n    /Contactez directement[^>]*>([^<]+)/i,\n    // Pattern pour les liens de contact externes (pas les liens relatifs)\n    /<a[^>]*href=\"(https?:\\/\\/[^\"]*)\"[^>]*>[^<]*[Cc]ontact[^<]*<\\/a>/i,\n    // Pattern pour le texte \"Contactez directement\" \n    /Contactez directement la ([^<\\n]+)/i,\n    // Pattern pour section Contact complète\n    /<h[1-6][^>]*>Contact<\\/h[1-6]>[^<]*<[^>]*>[^<]*<a[^>]*href=\"([^\"]*)\"[^>]*>([^<]+)<\\/a>/is\n  ];\n  \n  for (let pattern of contactPatterns) {\n    const match = htmlSansJsonLd.match(pattern);\n    if (match) {\n      // Si c'est une URL complète, la garder\n      if (match[1] && match[1].startsWith('http')) {\n        contactInfo = `Contact : ${match[2] || 'Lien externe'} (${match[1]})`;\n        break;\n      }\n      // Si c'est du texte, le garder\n      else if (match[1] && !match[1].startsWith('/')) {\n        contactInfo = cleanText(match[1] || match[0]);\n        break;\n      }\n      // Si c'est le match complet du texte \"Contactez directement\"\n      else if (match[0] && !match[0].includes('/contact/')) {\n        contactInfo = cleanText(match[0]);\n        break;\n      }\n    }\n  }\n  \n  // Si on a trouvé seulement un lien relatif générique, chercher autre chose\n  if (!contactInfo || contactInfo.includes('/contact/')) {\n    // Chercher un email spécifique\n    const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})/g;\n    const emails = htmlSansJsonLd.match(emailPattern) || [];\n    \n    if (emails.length > 0) {\n      contactInfo = `Email : ${emails[0]}`;\n    } else {\n      // Fallback : indiquer le type de contact trouvé\n      contactInfo = \"Contactez directement l'organisme porteur\";\n    }\n  }\n  \n  result.contact = contactInfo.substring(0, 200); // Limiter la taille\n  \n  // Extraire emails du contact nettoyé\n  const emailPattern = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})/g;\n  const emails = contactInfo.match(emailPattern) || [];\n  result.emails_contact = [...new Set(emails)]; // Dédupliquer\n\n  // 17. URL DE LA PAGE\n  result.url_source = inputData.url || '';\n\n  console.log('Extraction terminée:', Object.keys(result).length, 'champs extraits');\n  console.log('URL plus d\\'infos trouvée:', !!result.url_plus_infos);\n\n  return [{\n    json: {\n      ...result,\n      error: false,\n      extraction_date: new Date().toISOString()\n    }\n  }];\n\n} catch (error) {\n  console.error('Erreur dans le parser:', error);\n  return [{\n    json: {\n      error: true,\n      message: 'Erreur lors de l\\'extraction des données',\n      details: error.message\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        280
+      ],
+      "id": "719ed10d-ee6c-4cd7-bb95-9e4375b9ddfe",
+      "name": "Parser"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        340,
+        360
+      ],
+      "id": "3eb87937-1bf5-414a-9d5e-41f2f5717af7",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.url_plus_infos }}",
+                    "rightValue": ".pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "7011882c-900a-4c57-84fe-494aff4a3734"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Extract from File"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f371b0c1-15a4-4e3b-8369-055f0ce0544f",
+                    "leftValue": "={{ $json.url_plus_infos }}",
+                    "rightValue": ".PDF",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Extract from File"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d95563dd-5702-4fa1-922e-39ec43a0f839",
+                    "leftValue": "={{ $json.url_plus_infos }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "AI Agent"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2ac0c6f1-b443-4468-96b5-263727ecb264",
+                    "leftValue": "={{ $json.url_plus_infos }}",
+                    "rightValue": "http",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "URL_plus_info"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        120,
+        500
+      ],
+      "id": "31b088ad-c9a7-41c5-ba4c-35b4596935e2",
+      "name": "Switch"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate URL1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse": {
+      "main": [
+        [
+          {
+            "node": "Validate URL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL_plus_info": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        []
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "URL_plus_info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1b40dbda-f8d4-4395-b660-97335c23dd28",
+  "meta": {
+    "instanceId": "07ded2a5ddaa2e3ef818e39f2a91a69e11ab5e49fabe12ff8d8cad8daaff0acb"
+  },
+  "id": "QR8ZUQ0yzeLtNYGu",
+  "tags": []
+}

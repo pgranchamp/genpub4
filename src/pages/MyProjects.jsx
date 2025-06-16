@@ -28,75 +28,49 @@ const MyProjects = () => {
     fetchProjects();
   }, []);
 
-  // Composant pour afficher les mots-clés sous forme de tags
-  const KeywordTags = ({ keywords }) => {
-    if (!keywords || !Array.isArray(keywords) || keywords.length === 0) {
-      return null;
-    }
-
-    return (
-      <div className="flex flex-wrap gap-2 mt-2">
-        {keywords.map((keyword, index) => (
-          <span 
-            key={index} 
-            className="px-2 py-1 text-xs font-medium bg-gradient-genie text-white rounded-full"
-          >
-            {keyword}
-          </span>
-        ))}
-      </div>
-    );
-  };
-
   // Composant pour afficher un projet
   const ProjectCard = ({ project }) => {
-    // Essayer de parser les mots-clés s'ils sont stockés sous forme de chaîne JSON
-    let keywords = [];
-    if (project.keywords) {
-      try {
-        keywords = typeof project.keywords === 'string' ? JSON.parse(project.keywords) : project.keywords;
-      } catch (e) {
-        console.error('Erreur lors du parsing des mots-clés:', e);
-      }
-    }
+    const reformulationExtrait = (project.reformulation || project.description || '').split(' ').slice(0, 60).join(' ');
+    const needsTruncation = (project.reformulation || project.description || '').split(' ').length > 60;
 
     return (
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h3 className="text-xl font-bold text-genie-navy mb-2 font-inter">{project.title}</h3>
-        
-        {project.reformulation && (
-          <div className="mb-4">
-            <p className="text-gray-700">{project.reformulation}</p>
+      <div className="bg-white shadow-md rounded-lg p-6 mb-6 flex flex-col">
+        <div className="flex-grow">
+          <div className="flex justify-between items-start">
+            <h3 className="text-xl font-bold text-genie-navy mb-2 font-inter">{project.title}</h3>
+            <span className={`px-2 py-1 text-xs leading-5 font-semibold rounded-full ${project.status === 'aides_identifiees' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
+              {project.status === 'aides_identifiees' ? 'Aides identifiées' : 'En cours de reformulation'}
+            </span>
           </div>
-        )}
-        
-        {keywords && keywords.length > 0 && (
+          
           <div className="mb-4">
-            <KeywordTags keywords={keywords} />
+            <p className="text-gray-700 italic">{reformulationExtrait}{needsTruncation ? '...' : ''}</p>
           </div>
-        )}
+        </div>
         
-        <div className="flex flex-wrap gap-3 mt-4">
+        <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-gray-200">
           <Link 
             to={`/projects/${project.id}`} 
-            className="px-4 py-2 bg-gradient-genie text-white rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-genie-blue focus:ring-offset-2 font-inter"
-          >
-            Voir détails
-          </Link>
-          
-          <Link 
-            to={`/projects/${project.id}/files`} 
             className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-inter"
           >
-            Ajouter fichiers
+            Voir le projet
           </Link>
           
-          <Link 
-            to={`/projects/${project.id}/aides`} 
-            className="px-4 py-2 bg-genie-purple text-white rounded-md hover:bg-genie-purple/90 focus:outline-none focus:ring-2 focus:ring-genie-purple focus:ring-offset-2 font-inter"
-          >
-            Explorer les aides
-          </Link>
+          {project.status === 'aides_identifiees' ? (
+            <Link 
+              to={`/projects/${project.id}/aides`} 
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-inter"
+            >
+              Accéder aux aides
+            </Link>
+          ) : (
+            <Link 
+              to={`/projects/${project.id}/aides`} 
+              className="px-4 py-2 bg-genie-purple text-white rounded-md hover:bg-genie-purple/90 focus:outline-none focus:ring-2 focus:ring-genie-purple focus:ring-offset-2 font-inter"
+            >
+              Explorer les aides
+            </Link>
+          )}
         </div>
       </div>
     );
