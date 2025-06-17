@@ -40,7 +40,7 @@ const DashboardHome = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Invite de commande</h1>
       
       {error && (

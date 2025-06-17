@@ -53,10 +53,10 @@ router.get('/', authenticate, asyncHandler(async (req, res) => {
  */
 router.post('/', authenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
-  const { title, summary, description, organisation_id } = req.body;
+  const { title, summary, description } = req.body;
 
   try {
-    const dataToInsert = { title, summary, description, status: 'reformule', organisation_id: organisation_id };
+    const dataToInsert = { title, summary, description, status: 'reformule' };
     console.log('[POST /api/projects] Attempting to insert data:', JSON.stringify(dataToInsert, null, 2));
     
     // 1. Créer le projet dans la table 'projects'
@@ -88,22 +88,59 @@ router.post('/', authenticate, asyncHandler(async (req, res) => {
  * @access  Privé
  */
 router.get('/:id', authenticate, asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id: projectId } = req.params;
 
   try {
-    // Récupérer uniquement les données du projet
-    const project = await supabaseAdminRequest(
+    // 1. Récupérer les données du projet
+    const projects = await supabaseAdminRequest(
       'GET',
-      `projects?id=eq.${id}&select=*`
+      `projects?id=eq.${projectId}&select=*`
     );
 
-    if (!project || project.length === 0) {
+    if (!projects || projects.length === 0) {
       return res.status(404).json({ success: false, error: 'Projet non trouvé.' });
     }
+    const project = projects[0];
 
-    res.json({ success: true, data: project[0] });
+    // 2. Trouver le user_id associé au projet
+    const projectUsers = await supabaseAdminRequest(
+      'GET',
+      `projects_users?project_id=eq.${projectId}&select=user_id`
+    );
+
+    if (!projectUsers || projectUsers.length === 0) {
+      // Pas d'utilisateur lié, renvoyer le projet sans organisation
+      return res.json({ success: true, data: project });
+    }
+    const userId = projectUsers[0].user_id;
+
+    // 3. Trouver l'organisation_id associé à l'utilisateur
+    const userOrganisations = await supabaseAdminRequest(
+      'GET',
+      `users_organisations?user_id=eq.${userId}&select=organisation_id`
+    );
+
+    if (!userOrganisations || userOrganisations.length === 0) {
+      // Pas d'organisation liée, renvoyer le projet sans organisation
+      return res.json({ success: true, data: project });
+    }
+    const organisationId = userOrganisations[0].organisation_id;
+
+    // 4. Récupérer les détails de l'organisation
+    const organisations = await supabaseAdminRequest(
+      'GET',
+      `organisations?id=eq.${organisationId}&select=*`
+    );
+
+    // 5. Combiner les résultats
+    if (organisations && organisations.length > 0) {
+      project.organisation = organisations[0];
+    }
+
+    res.json({ success: true, data: project });
+
   } catch (error) {
-    console.error(`Erreur lors de la récupération du projet ${id}:`, error);
+    console.error(`Erreur lors de la récupération du projet ${projectId}:`, error);
     res.status(500).json({ success: false, error: 'Erreur serveur.' });
   }
 }));

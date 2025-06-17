@@ -2,11 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useOrganisation } from '../contexts/OrganisationContext';
 import { useNavigate } from 'react-router-dom';
-import { callOnboardingWorkflow } from '../services';
+import { callOnboardingWorkflow, getOrganisationStatus } from '../services';
 
 const OnboardingPage = () => {
   const { user } = useAuth();
-  const { organisation } = useOrganisation();
+  const { organisation, refreshOrganisation } = useOrganisation();
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState([]);
@@ -127,7 +127,7 @@ const OnboardingPage = () => {
       typeMessage("Oups, une erreur technique est survenue. Veuillez réessayer.", () => setIsChatActive(true));
       setIsTyping(false);
     }
-  }, [inputValue, currentWorkflow, user, organisation, handleWorkflowResponse, typeMessage]);
+  }, [inputValue, currentWorkflow, user, organisation, handleWorkflowResponse]);
 
   handleSendMessageRef.current = handleSendMessage;
 

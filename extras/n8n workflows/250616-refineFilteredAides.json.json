@@ -3,22 +3,8 @@
   "nodes": [
     {
       "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-      "typeVersion": 1.1,
-      "position": [
-        -840,
-        380
-      ],
-      "id": "b93f0ab0-2a63-41ed-972a-55aa97c19849",
-      "name": "When chat message received",
-      "webhookId": "663a9e88-211b-461a-8b03-2819f26df10b"
-    },
-    {
-      "parameters": {
         "promptType": "define",
-        "text": "=Tu es un expert en aides publiques et en financement de projets. Ton rôle est d'analyser la pertinence d'une aide publique par rapport à un projet spécifique.\n\nPROJET À ANALYSER :\n- Description du projet : {{ $('Parse').item.json.projet_reformulation }}\n- Mots-clés du projet : {{ $('Parse').item.json.mots_cles }}\n- Secteur d'activité de l'organisation : {{ $('Parse').item.json.key_elements_raw }}\n\nAIDE PUBLIQUE À ÉVALUER :\n- Titre de l'aide :{{ $('Parser').item.json.titre }} \n- Porteur de l'aide : {{ $('Parser').item.json.porteur_aide }}\n- Description : {{ $('Parser').item.json.description }}\n- Bénéficiaires éligibles : {{ $('Parser').item.json.beneficiaires }}\n- Types de financement : {{ $('Parser').item.json.types_financement }}\n- Montant : {{ $('Parser').item.json.montant }}\n- Dépenses éligibles : {{ $('Parser').item.json.depenses_eligibles }}\n- Modalités d'intervention : {{ $('Parser').item.json.modalites_intervention }}\n- Finalité : {{ $('Parser').item.json.finalite }}\n- Critères d'éligibilité : {{ $('Parser').item.json.criteres_eligibilite }}\n- Zone géographique : {{ $('Parser').item.json.zone_geographique }}\n- Thématiques de l'aide : {{ $('Parser').item.json.thematiques }}\n\nDÉTAIL COMPLÉMENTAIRE DE L'AIDE :\n{{ $json.corps_principal }}\nMISSION :\nAnalyse la compatibilité entre le projet et cette aide publique. Évalue le niveau de pertinence selon cette échelle :\n- \"PAS PERTINENTE DU TOUT\" : Aucune correspondance, secteurs ou objectifs incompatibles\n- \"PAS PERTINENTE\" : Correspondance faible, critères d'éligibilité non remplis\n- \"PERTINENTE\" : Correspondance correcte, aide utilisable avec quelques adaptations\n- \"TRÈS PERTINENTE\" : Correspondance excellente, aide parfaitement adaptée au projet\n\nRÉPONSE OBLIGATOIREMENT AU FORMAT JSON :\n{\n  \"niveau_pertinence\": \"[PAS PERTINENTE DU TOUT|PAS PERTINENTE|PERTINENTE|TRÈS PERTINENTE]\",\n  \"score_compatibilite\": [0-100],\n  \"justification\": \"Explication détaillée de ton analyse en 2-3 phrases\",\n  \"points_positifs\": [\"Point 1\", \"Point 2\", \"Point 3\"],\n  \"points_negatifs\": [\"Point 1\", \"Point 2\"],\n  \"recommandations\": \"Conseils pour améliorer la compatibilité ou confirmer l'adéquation\"\n}",
+        "text": "=Tu es un expert en aides publiques et en financement de projets. Ton rôle est d'analyser la pertinence d'une aide publique par rapport à un projet spécifique.\n\nPROJET À ANALYSER :\n- Description du projet : {{ $('Parse').item.json.projectContext.reformulation }}\n- Mots-clés du projet : {{ $('Parse').item.json.projectContext.keywords }}\n- Secteur d'activité de l'organisation : {{ $('Parse').item.json.projectContext.key_elements }}\n\nAIDE PUBLIQUE À ÉVALUER :\n- Titre de l'aide :{{ $('Parser').item.json.titre }} \n- Porteur de l'aide : {{ $('Parser').item.json.porteur_aide }}\n- Description : {{ $('Parser').item.json.description }}\n- Bénéficiaires éligibles : {{ $('Parser').item.json.beneficiaires }}\n- Types de financement : {{ $('Parser').item.json.types_financement }}\n- Montant : {{ $('Parser').item.json.montant }}\n- Dépenses éligibles : {{ $('Parser').item.json.depenses_eligibles }}\n- Modalités d'intervention : {{ $('Parser').item.json.modalites_intervention }}\n- Finalité : {{ $('Parser').item.json.finalite }}\n- Critères d'éligibilité : {{ $('Parser').item.json.criteres_eligibilite }}\n- Zone géographique : {{ $('Parser').item.json.zone_geographique }}\n- Thématiques de l'aide : {{ $('Parser').item.json.thematiques }}\n\nDÉTAIL COMPLÉMENTAIRE DE L'AIDE :\n{{ $json.corps_principal }}\nMISSION :\nAnalyse la compatibilité entre le projet et cette aide publique. Évalue le niveau de pertinence selon cette échelle :\n- \"PAS PERTINENTE DU TOUT\" : Aucune correspondance, secteurs ou objectifs incompatibles\n- \"PAS PERTINENTE\" : Correspondance faible, critères d'éligibilité non remplis\n- \"PERTINENTE\" : Correspondance correcte, aide utilisable avec quelques adaptations\n- \"TRÈS PERTINENTE\" : Correspondance excellente, aide parfaitement adaptée au projet\n\nRÉPONSE OBLIGATOIREMENT AU FORMAT JSON :\n{\n  \"titre_aide\": \"{{ $('Parser').item.json.titre }}\",\n  \"porteur_aide\": \"{{ $('Parser').item.json.porteur_aide }}\",\n  \"description_aide\": \"{{ $('Parser').item.json.description }}\",\n  \"beneficiaires\": \"{{ $('Parser').item.json.beneficiaires }}\",\n  \"types_financement\": \"{{ $('Parser').item.json.types_financement }}\",\n  \"montant\": \"{{ $('Parser').item.json.montant }}\",\n  \"depenses_eligibles\": \"{{ $('Parser').item.json.depenses_eligibles }}\",\n  \"modalites_intervention\": \"{{ $('Parser').item.json.modalites_intervention }}\",\n  \"finalite\": \"{{ $('Parser').item.json.finalite }}\",\n  \"criteres_eligibilite\": \"{{ $('Parser').item.json.criteres_eligibilite }}\",\n  \"zone_geographique\": \"{{ $('Parser').item.json.zone_geographique }}\",\n  \"thematiques\": \"{{ $('Parser').item.json.thematiques }}\",\n  \"niveau_pertinence\": \"[PAS PERTINENTE DU TOUT|PAS PERTINENTE|PERTINENTE|TRÈS PERTINENTE]\",\n  \"score_compatibilite\": [0-100],\n  \"justification\": \"Explication détaillée de ton analyse en 2-3 phrases\",\n  \"points_positifs\": [\"Point 1\", \"Point 2\", \"Point 3\"],\n  \"points_negatifs\": [\"Point 1\", \"Point 2\"],\n  \"recommandations\": \"Conseils pour améliorer la compatibilité ou confirmer l'adéquation\"\n}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -61,20 +47,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Validation URL universelle - Chat Trigger OU Webhook\nconst inputData = $input.first().json;\nlet inputUrl = '';\n\nconsole.log('Type de données reçues:', typeof inputData);\nconsole.log('Données brutes:', JSON.stringify(inputData, null, 2));\n\n// Détection automatique de la source\nif (inputData.chatInput) {\n  // Source : Chat Trigger\n  inputUrl = inputData.chatInput;\n  console.log('Source détectée: Chat Trigger');\n} else if (inputData.body && inputData.body.url) {\n  // Source : Webhook avec body.url\n  inputUrl = inputData.body.url;\n  console.log('Source détectée: Webhook (body.url)');\n} else if (inputData.url) {\n  // Source : Webhook direct avec url\n  inputUrl = inputData.url;\n  console.log('Source détectée: Webhook (url direct)');\n} else if (inputData.website) {\n  // Source : Webhook avec website\n  inputUrl = inputData.website;\n  console.log('Source détectée: Webhook (website)');\n} else {\n  // Fallback : essayer de trouver une URL dans les valeurs\n  const possibleUrl = Object.values(inputData).find(val => \n    typeof val === 'string' && \n    (val.includes('http') || val.includes('www.') || val.includes('.com') || val.includes('.org'))\n  );\n  \n  if (possibleUrl) {\n    inputUrl = possibleUrl;\n    console.log('Source détectée: URL trouvée dans les valeurs');\n  } else {\n    inputUrl = 'https://www.vivacite.org'; // URL par défaut pour test\n    console.log('Aucune URL trouvée, utilisation URL par défaut');\n  }\n}\n\nconsole.log('URL extraite:', inputUrl);\n\n// Validation et normalisation d'URL\ninputUrl = String(inputUrl).trim();\n\nif (!inputUrl || inputUrl === '') {\n  console.log('Erreur: URL vide après nettoyage');\n  return [{ \n    error: \"URL manquante ou invalide\", \n    validUrl: \"https://www.vivacite.org\",\n    source: \"fallback\"\n  }];\n}\n\n// Ajouter https:// si manquant\nif (!inputUrl.startsWith('http://') && !inputUrl.startsWith('https://')) {\n  if (inputUrl.startsWith('www.')) {\n    inputUrl = 'https://' + inputUrl;\n  } else if (inputUrl.includes('.')) {\n    inputUrl = 'https://' + inputUrl;\n  }\n}\n\n// Supprimer le trailing slash\ninputUrl = inputUrl.replace(/\\/$/, '');\n\nconsole.log('URL finale normalisée:', inputUrl);\n\n// Extraction du domaine\nconst domainMatch = inputUrl.match(/^https?:\\/\\/([^\\/]+)/);\nconst domain = domainMatch ? domainMatch[1] : 'unknown';\n\n// Retourner le résultat unifié\nreturn [{\n  validUrl: inputUrl,\n  domain: domain,\n  origin: inputUrl.split('/').slice(0, 3).join('/'),\n  sourceType: inputData.chatInput ? 'chat' : 'webhook'\n}];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 1,
-      "position": [
-        -400,
-        280
-      ],
-      "id": "ca364740-467f-4189-9487-3497b86a47ec",
-      "name": "Validate URL1"
-    },
-    {
-      "parameters": {
-        "url": "={{ $json.validUrl }}",
+        "url": "={{ $json.aideDetails.url }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -110,8 +83,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.3,
       "position": [
-        1296,
-        255
+        1300,
+        260
       ],
       "id": "abe72cb6-5a9d-4b14-bb55-93beb844d2fe",
       "name": "Respond to Webhook"
@@ -135,13 +108,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// Récupération des données depuis chatInput\nconst rawInput = $input.first().json;\nconsole.log('Données brutes reçues:', rawInput);\n\n// Vérifier si c'est déjà un objet ou une string\nlet inputData;\nif (typeof rawInput.chatInput === 'string') {\n  // C'est une string JSON, on la parse\n  try {\n    inputData = JSON.parse(rawInput.chatInput);\n  } catch (error) {\n    console.error('Erreur parsing JSON string:', error);\n    console.log('Contenu chatInput:', rawInput.chatInput);\n    return [{ error: 'JSON string invalide', raw_content: rawInput.chatInput }];\n  }\n} else if (typeof rawInput.chatInput === 'object') {\n  // C'est déjà un objet\n  inputData = rawInput.chatInput;\n} else {\n  // Peut-être que les données sont directement dans rawInput\n  inputData = rawInput;\n}\n\nconsole.log('InputData après parsing:', inputData);\n\n// Parser les key_elements qui sont problématiques\nlet keyElementsParsed = {};\ntry {\n  if (inputData.projectContext?.key_elements) {\n    // Corriger les guillemets non échappés dans key_elements\n    let keyElementsString = inputData.projectContext.key_elements;\n    \n    // Méthode 1: regex pour corriger les guillemets\n    keyElementsString = keyElementsString.replace(/\"/g, '\\\\\"');\n    keyElementsString = keyElementsString.replace(/^\\\\\"|\"$/g, '\"'); // Garder les guillemets de début/fin\n    \n    // Méthode 2: extraction manuelle si regex échoue\n    if (keyElementsString.includes('sectors')) {\n      const sectorsMatch = keyElementsString.match(/sectors['\":]([^\"]*?)(?=[\"',])/);\n      const missionsMatch = keyElementsString.match(/missions['\":]([^\"]*?)(?=[\"',])/);\n      const beneficiariesMatch = keyElementsString.match(/beneficiaries['\":]([^\"]*?)(?=[\"',])/);\n      const territoryMatch = keyElementsString.match(/territory['\":]([^\"]*?)(?=[\"'}])/);\n      \n      keyElementsParsed = {\n        sectors: sectorsMatch ? sectorsMatch[1] : '',\n        missions: missionsMatch ? missionsMatch[1] : '',\n        beneficiaries: beneficiariesMatch ? beneficiariesMatch[1] : '',\n        territory: territoryMatch ? territoryMatch[1] : ''\n      };\n    }\n  }\n} catch (error) {\n  console.log('Extraction manuelle des key_elements');\n  // Extraction manuelle en dernier recours\n  const keyElementsRaw = inputData.projectContext?.key_elements || '';\n  keyElementsParsed = {\n    sectors: 'Extraction manuelle nécessaire',\n    missions: 'Extraction manuelle nécessaire', \n    beneficiaries: 'Extraction manuelle nécessaire',\n    territory: 'Extraction manuelle nécessaire',\n    raw: keyElementsRaw\n  };\n}\n\n// Extraction simple des champs principaux\nconst result = {\n  // Informations sur l'aide\n  aide_id: inputData.aideDetails?.id,\n  aide_nom: inputData.aideDetails?.name,\n  aide_description: inputData.aideDetails?.description,\n  aide_url: inputData.aideDetails?.url,\n  \n  // Contexte du projet  \n  projet_id: inputData.projectContext?.projectId,\n  organisation_id: inputData.projectContext?.organisationId,\n  projet_reformulation: inputData.projectContext?.reformulation,\n  \n  // Mots-clés\n  mots_cles: inputData.projectContext?.keywords,\n  mots_cles_string: inputData.projectContext?.keywords?.join(', '),\n  \n  // Éléments clés parsés\n  secteurs: keyElementsParsed.sectors,\n  missions: keyElementsParsed.missions,\n  beneficiaires: keyElementsParsed.beneficiaries,\n  territoire: keyElementsParsed.territory,\n  \n  // Éléments clés bruts (au cas où)\n  key_elements_raw: inputData.projectContext?.key_elements\n};\n\nconsole.log('Champs extraits:', result);\n\nreturn [result];"
+        "jsCode": "// Parser universel pour Webhook1 ET chatInput (version corrigée)\nconst inputData = $input.first().json;\n\nconsole.log('=== PARSER UNIVERSEL ===');\nconsole.log('Type de données reçues:', typeof inputData);\nconsole.log('Clés disponibles:', Object.keys(inputData));\n\nlet outputData;\nlet sourceType = 'unknown';\n\ntry {\n  // DÉTECTION DE LA SOURCE PAR STRUCTURE DES DONNÉES\n  if (inputData.body && inputData.webhookUrl) {\n    // SOURCE: WEBHOOK1 direct\n    console.log('Source détectée: WEBHOOK1 (direct)');\n    outputData = inputData.body;\n    sourceType = 'webhook';\n    \n  } else if (inputData.chatInput !== undefined) {\n    // SOURCE: CHATINPUT  \n    console.log('Source détectée: CHATINPUT');\n    sourceType = 'chat';\n    \n    let chatData;\n    \n    // Parser le chatInput (toujours une string JSON)\n    if (typeof inputData.chatInput === 'string') {\n      chatData = JSON.parse(inputData.chatInput);\n      console.log('JSON string parsé avec succès');\n    } else {\n      chatData = inputData.chatInput;\n      console.log('Objet JSON déjà structuré');\n    }\n    \n    // Le chatInput contient un tableau avec les données webhook\n    if (Array.isArray(chatData) && chatData.length > 0) {\n      const firstItem = chatData[0];\n      console.log('Données extraites du tableau chatInput');\n      \n      if (firstItem.body) {\n        // Les vraies données sont dans body\n        outputData = firstItem.body;\n      } else {\n        // Fallback si structure différente\n        outputData = firstItem;\n      }\n    } else {\n      // Si ce n'est pas un tableau, utiliser directement\n      outputData = chatData;\n    }\n    \n  } else {\n    // SOURCE INCONNUE - Essayer de détecter\n    console.log('Source inconnue, tentative de détection...');\n    \n    if (inputData.aideDetails && inputData.projectContext) {\n      // Les données sont directement dans inputData\n      outputData = inputData;\n      console.log('Données détectées directement dans inputData');\n      sourceType = 'direct';\n    } else {\n      console.error('Format de données non reconnu');\n      return [{\n        json: {\n          error: true,\n          message: 'Format de données non reconnu',\n          availableKeys: Object.keys(inputData),\n          inputData: inputData\n        }\n      }];\n    }\n  }\n\n  // VALIDATION DE LA STRUCTURE\n  if (!outputData || !outputData.aideDetails || !outputData.projectContext) {\n    console.error('Structure de données incomplète');\n    console.log('OutputData reçu:', outputData);\n    \n    return [{\n      json: {\n        error: true,\n        message: 'Structure de données incomplète - aideDetails ou projectContext manquant',\n        receivedData: outputData,\n        sourceType: sourceType\n      }\n    }];\n  }\n\n  // RETOUR UNIFIÉ\n  console.log('✓ Parsing réussi');\n  console.log('Aide URL:', outputData.aideDetails?.url);\n  console.log('Projet ID:', outputData.projectContext?.projectId);\n\n  return [{\n    json: {\n      // Structure unifiée pour la suite du workflow\n      aideDetails: outputData.aideDetails,\n      projectContext: outputData.projectContext,\n      \n      // Métadonnées pour debug\n      _meta: {\n        sourceType: sourceType,\n        parsedAt: new Date().toISOString(),\n        hasKeyElements: !!outputData.projectContext?.key_elements\n      }\n    }\n  }];\n\n} catch (error) {\n  console.error('Erreur dans le parser universel:', error);\n  \n  return [{\n    json: {\n      error: true,\n      message: 'Erreur lors du parsing',\n      details: error.message,\n      inputData: inputData\n    }\n  }];\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -620,
-        280
+        -540,
+        300
       ],
       "id": "37eb13e0-9721-42e4-8310-6d1ba38ec80e",
       "name": "Parse"
@@ -174,19 +147,6 @@
       "id": "84adc1da-5c3c-4ed1-a22b-64b27603333f",
       "name": "URL_plus_info",
       "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "numberInputs": 3
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        -840,
-        715
-      ],
-      "id": "4b18238c-d90a-4332-811e-ad11cb11b1eb",
-      "name": "Merge"
     },
     {
       "parameters": {
@@ -341,21 +301,24 @@
       ],
       "id": "31b088ad-c9a7-41c5-ba4c-35b4596935e2",
       "name": "Switch"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -860,
+        380
+      ],
+      "id": "b93f0ab0-2a63-41ed-972a-55aa97c19849",
+      "name": "chatInput",
+      "webhookId": "663a9e88-211b-461a-8b03-2819f26df10b"
     }
   ],
   "pinData": {},
   "connections": {
-    "When chat message received": {
-      "main": [
-        [
-          {
-            "node": "Parse",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "AI Agent": {
       "main": [
         [
@@ -373,17 +336,6 @@
           {
             "node": "AI Agent",
             "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Validate URL1": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request1",
-            "type": "main",
             "index": 0
           }
         ]
@@ -422,7 +374,7 @@
       "main": [
         [
           {
-            "node": "Validate URL1",
+            "node": "HTTP Request1",
             "type": "main",
             "index": 0
           }
@@ -438,11 +390,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        []
       ]
     },
     "Code": {
@@ -514,14 +461,28 @@
           }
         ]
       ]
+    },
+    "chatInput": {
+      "main": [
+        [
+          {
+            "node": "Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "saveManualExecutions": false,
+    "callerPolicy": "workflowsFromSameOwner"
   },
-  "versionId": "1b40dbda-f8d4-4395-b660-97335c23dd28",
+  "versionId": "53d601ec-9d22-4fd5-be76-cba65d39cbad",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "07ded2a5ddaa2e3ef818e39f2a91a69e11ab5e49fabe12ff8d8cad8daaff0acb"
   },
   "id": "QR8ZUQ0yzeLtNYGu",

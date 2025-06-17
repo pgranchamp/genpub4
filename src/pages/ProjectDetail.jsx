@@ -22,7 +22,9 @@ const ProjectDetail = () => {
         if (projectData && projectData.id_categories_aides_territoire) {
           const allCategories = await getCategoriesList();
           const flatCategories = allCategories.flatMap(group => group.categories);
-          const selectedIds = JSON.parse(projectData.id_categories_aides_territoire);
+          const selectedIds = Array.isArray(projectData.id_categories_aides_territoire)
+            ? projectData.id_categories_aides_territoire
+            : JSON.parse(projectData.id_categories_aides_territoire);
           const names = selectedIds.map(id => {
             const found = flatCategories.find(cat => cat.id === id);
             return found ? found.categorie : `ID ${id}`;
@@ -78,7 +80,7 @@ const ProjectDetail = () => {
   }
   
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl">
       <div className="mb-6">
         <h1 className="text-2xl font-extrabold text-genie-navy font-inter">{project.title}</h1>
       </div>
@@ -91,7 +93,7 @@ const ProjectDetail = () => {
           {/* Sinon, afficher les résultats et le bouton de recherche d'aides */}
           <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
             <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-bold text-genie-navy font-inter">Résumé</h3>
+              <h3 className="text-lg leading-6 font-bold text-genie-navy font-inter">Description</h3>
             </div>
             <div className="border-t border-gray-200">
               <div className="px-4 py-5 sm:p-6 whitespace-pre-wrap">
@@ -107,7 +109,7 @@ const ProjectDetail = () => {
               </div>
               <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
                 <div className="flex flex-wrap gap-2">
-                  {JSON.parse(project.keywords).map((keyword, index) => (
+                  {(typeof project.keywords === 'string' ? JSON.parse(project.keywords) : project.keywords).map((keyword, index) => (
                     <span key={index} className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                       {keyword}
                     </span>

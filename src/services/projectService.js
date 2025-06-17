@@ -41,22 +41,15 @@ export const getProject = async (projectId) => {
 /**
  * Crée un nouveau projet
  * @param {Object} projectData - Les données du projet
- * @param {string|number} organisationId - L'ID de l'organisation
  * @returns {Promise<Object>} Le projet créé
  * @throws {Error} Si la création échoue
  */
-export const createProject = async (projectData, organisationId) => {
+export const createProject = async (projectData) => {
   try {
-    // Ajouter l'ID de l'organisation aux données du projet
-    const dataWithOrg = {
-      ...projectData,
-      organisation_id: organisationId
-    };
-    
     // Utiliser un chemin relatif
     const response = await fetchWithAuth(`/api/projects`, {
       method: 'POST',
-      body: JSON.stringify(dataWithOrg)
+      body: JSON.stringify(projectData)
     });
     return response.data;
   } catch (error) {

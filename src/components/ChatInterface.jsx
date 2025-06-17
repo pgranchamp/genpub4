@@ -24,14 +24,13 @@ const ChatInterface = ({ project, onAnalysisComplete }) => {
       const payload = {
         message: inputValue,
         step: conversationState,
-        project_id: project.id,
-        organisation_id: project.organisation_id,
+        projectId: project.id,
         // L'URL ngrok est maintenant lue depuis les variables d'environnement de Vite
         ngrok_tunnel_url: import.meta.env.VITE_NGROK_TUNNEL_URL
       };
 
       // Le nom du workflow n8n à appeler
-      const workflowName = 'project-chatbot'; 
+      const workflowName = 'project-analyzer'; 
 
       const response = await callOnboardingWorkflow(workflowName, payload);
       

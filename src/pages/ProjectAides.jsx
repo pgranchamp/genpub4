@@ -62,11 +62,15 @@ const ProjectAides = () => {
   const [stats, setStats] = useState({ total: 0, preselection: 0, aTraiter: 0 });
   const [aidesSelectionnees, setAidesSelectionnees] = useState([]);
   const [aidesTraitees, setAidesTraitees] = useState([]);
-  const hasStreamBeenInitiated = useRef(false); // Le verrou
+  const effectRan = useRef(false);
 
   useEffect(() => {
-    if (!projectId || !isAuthenticated || hasStreamBeenInitiated.current) return;
-    hasStreamBeenInitiated.current = true; // On active le verrou
+    // Verrou pour empêcher le double appel en mode développement avec React.StrictMode
+    if (effectRan.current === true && import.meta.env.MODE === 'development') {
+      return;
+    }
+    
+    if (!projectId || !isAuthenticated) return;
 
     const streamAides = async () => {
       try {
@@ -97,7 +101,7 @@ const ProjectAides = () => {
           organisationType: projectDetails.organisation?.type,
           perimeterCode: projectDetails.organisation?.perimeter_code,
           projectId: projectDetails.id,
-          organisationId: projectDetails.organisation_id,
+          organisationId: projectDetails.organisation?.id,
         };
 
         const token = getStoredToken();
@@ -138,6 +142,10 @@ const ProjectAides = () => {
     };
 
     streamAides();
+
+    return () => {
+      effectRan.current = true;
+    };
   }, [projectId, isAuthenticated]);
 
   const renderContent = () => {

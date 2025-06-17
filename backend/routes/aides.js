@@ -69,6 +69,7 @@ import { refineSingleAide } from '../services/aideRefinementService.js';
 import { supabaseAdminRequest } from '../utils/supabaseClient.js';
 
 router.post('/refine-and-stream', authenticate, asyncHandler(async (req, res) => {
+  console.log('[STREAM] /refine-and-stream called. Body:', req.body);
   const { projectContext, keywords, key_elements, id_categories_aides_territoire, organisationType, perimeterCode, projectId, organisationId } = req.body;
 
   // 1. Validation des entrées
@@ -103,8 +104,11 @@ router.post('/refine-and-stream', authenticate, asyncHandler(async (req, res) =>
       organization_type_slugs: mapOrganisationTypeToOrganizationTypeSlugs(organisationType),
       perimeter_codes: perimeterCode ? [perimeterCode] : undefined,
     };
+    console.log('[STREAM] Search params for Aides Territoires:', searchParams);
 
     const allAides = await searchAidesTerritoires(searchParams);
+    console.log(`[STREAM] Found ${allAides.length} aides from Aides Territoires.`);
+
     const filteredAidesResult = await filterAidesFromAPI(projectContext, keywords, allAides);
     const aidesToRefine = filteredAidesResult.filter(aide => aide.decision === 'à voir');
 
@@ -125,54 +129,59 @@ router.post('/refine-and-stream', authenticate, asyncHandler(async (req, res) =>
       try {
         // a. Préparer le payload pour N8N
         const n8nProjectContext = { projectId, organisationId, reformulation: projectContext, keywords, key_elements };
-        const aideDetails = { 
-          name: aide.title, // Correction: la propriété est 'title', pas 'name' à ce stade
-          description: aide.description, 
-          // Construire une URL absolue
-          url: `https://aides-territoires.beta.gouv.fr${aide.url}` 
+        const aideDetails = {
+          id: aide.id,
+          name: aide.title,
+          description: aide.description,
+          url: `https://aides-territoires.beta.gouv.fr${aide.url}`
         };
 
         // b. Appeler le workflow N8N
         const n8nResponse = await refineSingleAide(aideDetails, n8nProjectContext);
-        const refinedData = n8nResponse[0]?.response || {}; // Accéder à l'objet de réponse principal
+        
+        // c. Parser la réponse de n8n
+        const pertinenceString = n8nResponse?.pertinence;
+        if (!pertinenceString || typeof pertinenceString !== 'string') {
+          console.log(`[refine-and-stream] Champ 'pertinence' manquant ou invalide dans la réponse N8N pour l'aide "${aide.title}", ignorée.`);
+          continue;
+        }
+        const refinedData = JSON.parse(pertinenceString);
 
-        // Condition pour ne traiter que les aides pertinentes
+        // d. Condition pour ne traiter que les aides pertinentes
         const pertinence = refinedData.niveau_pertinence || '';
-        if (pertinence.toLowerCase() === 'faible' || pertinence.toLowerCase() === 'nulle') {
-          console.log(`[refine-and-stream] Aide "${aide.title}" jugée non pertinente, ignorée.`);
-          continue; // Passe à l'itération suivante de la boucle
+        if (pertinence.toLowerCase().includes('pas pertinente') || pertinence.toLowerCase() === 'faible' || pertinence.toLowerCase() === 'nulle') {
+          console.log(`[refine-and-stream] Aide "${aide.title}" jugée non pertinente ("${pertinence}"), ignorée.`);
+          continue;
         }
 
-        // c. Préparer l'objet complet à insérer dans la table projects_aides
+        // e. Préparer l'objet complet à insérer dans la table projects_aides
         const dataToStore = {
           project_id: projectId,
           title: aide.title,
           url: `https://aides-territoires.beta.gouv.fr${aide.url}`,
-          porteur: refinedData.body?.porteur_aide || aide.porteur || null,
-          details: refinedData.body?.description_aide || aide.description,
+          porteur_aide: n8nResponse?.response?.body?.porteur_aide || aide.financers?.[0]?.name || 'Non spécifié',
+          description_aide: aide.description,
           id_aide_ext: aide.id.toString(),
-          // Données de n8n
           niveau_pertinence: refinedData.niveau_pertinence || null,
           score_compatibilite: refinedData.score_compatibilite || null,
           justification: refinedData.justification || null,
-          points_positifs: refinedData.points_positifs || null,
-          points_negatifs: refinedData.points_negatifs || null,
+          points_positifs: refinedData.points_positifs ? JSON.stringify(refinedData.points_positifs) : null,
+          points_negatifs: refinedData.points_negatifs ? JSON.stringify(refinedData.points_negatifs) : null,
           recommandations: refinedData.recommandations || null,
         };
 
-        // d. Insérer la nouvelle ligne et récupérer les données insérées
+        // f. Insérer la nouvelle ligne et récupérer les données insérées
         const insertedData = await supabaseAdminRequest(
           'POST',
           'projects_aides',
           dataToStore
         );
         
-        // e. Envoyer la ligne complète (avec son nouvel UUID) au client
+        // g. Envoyer la ligne complète (avec son nouvel UUID) au client
         res.write(`data: ${JSON.stringify(insertedData[0])}\n\n`);
 
       } catch (aideError) {
         console.error(`[refine-and-stream] Erreur lors du traitement de l'aide ${aide.id}:`, aideError);
-        // Envoyer une notification d'erreur pour cette aide spécifique au client
         res.write(`data: ${JSON.stringify({ id: aide.id, error: true, message: aideError.message })}\n\n`);
       }
     }

@@ -74,9 +74,7 @@ const signupSchema = Joi.object({
       'string.length': 'Le SIRET doit contenir 14 chiffres',
       'string.pattern.base': 'Le SIRET ne doit contenir que des chiffres'
     }),
-    website_url: Joi.string().pattern(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'domain').allow('', null).messages({
-      'string.pattern.name': 'Le format du site web est invalide (ex: domaine.fr)'
-    }),
+    website_url: Joi.string().allow('', null),
     adresse_ligne1: Joi.string().required().messages({
       'any.required': 'L\'adresse (ligne 1) de l\'organisation est requise'
     }),

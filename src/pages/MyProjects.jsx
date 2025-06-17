@@ -30,6 +30,20 @@ const MyProjects = () => {
 
   // Composant pour afficher un projet
   const ProjectCard = ({ project }) => {
+    const getStatusInfo = (status) => {
+      switch (status) {
+        case 'reformule':
+          return { text: 'À reformuler', className: 'bg-yellow-100 text-yellow-800' };
+        case 'analyzed':
+          return { text: 'Analysé', className: 'bg-blue-100 text-blue-800' };
+        case 'aides_identifiees':
+          return { text: 'Aides identifiées', className: 'bg-green-100 text-green-800' };
+        default:
+          return { text: 'Inconnu', className: 'bg-gray-100 text-gray-800' };
+      }
+    };
+
+    const statusInfo = getStatusInfo(project.status);
     const reformulationExtrait = (project.reformulation || project.description || '').split(' ').slice(0, 60).join(' ');
     const needsTruncation = (project.reformulation || project.description || '').split(' ').length > 60;
 
@@ -38,8 +52,8 @@ const MyProjects = () => {
         <div className="flex-grow">
           <div className="flex justify-between items-start">
             <h3 className="text-xl font-bold text-genie-navy mb-2 font-inter">{project.title}</h3>
-            <span className={`px-2 py-1 text-xs leading-5 font-semibold rounded-full ${project.status === 'aides_identifiees' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
-              {project.status === 'aides_identifiees' ? 'Aides identifiées' : 'En cours de reformulation'}
+            <span className={`px-2 py-1 text-xs leading-5 font-semibold rounded-full ${statusInfo.className}`}>
+              {statusInfo.text}
             </span>
           </div>
           
