@@ -39,7 +39,26 @@ export const getProject = async (projectId) => {
 };
 
 /**
- * Crée un nouveau projet
+ * Crée un nouveau projet et lance immédiatement son analyse.
+ * @param {string} description - La description initiale du projet.
+ * @returns {Promise<Object>} Le projet nouvellement créé et analysé.
+ * @throws {Error} Si le processus échoue.
+ */
+export const createAndAnalyzeProject = async (description) => {
+  try {
+    const response = await fetchWithAuth(`/api/projects/create-and-analyze`, {
+      method: 'POST',
+      body: JSON.stringify({ description })
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la création et analyse du projet:', error);
+    throw error;
+  }
+};
+
+/**
+ * Crée un nouveau projet (méthode legacy, pourrait être dépréciée)
  * @param {Object} projectData - Les données du projet
  * @returns {Promise<Object>} Le projet créé
  * @throws {Error} Si la création échoue

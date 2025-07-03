@@ -27,7 +27,7 @@ const DashboardLayout = () => {
             }
             end
           >
-            Invite de commande
+            Tableau de bord
           </NavLink>
           <NavLink
             to="/dashboard/organization"

@@ -1,209 +1,271 @@
 import express from 'express';
-const router = express.Router();
 import asyncHandler from 'express-async-handler';
 import { authenticate } from '../middleware/auth.js';
 import { searchAidesTerritoires } from '../services/aidesTerritoiresService.js';
-import { filterAidesFromAPI } from '../services/analysis/projectAnalyzer.js'; // Assurez-vous que cette fonction est bien dans ce fichier
-
-/**
- * @route   POST /aides/search-and-filter
- * @desc    Rechercher et filtrer les aides en une seule étape
- * @access  Privé
- */
-router.post('/search-and-filter', authenticate, asyncHandler(async (req, res) => {
-  const { projectContext, keywords, key_elements, id_categories_aides_territoire, organisationType, perimeterCode } = req.body;
-
-  if (!projectContext || !keywords || !key_elements || !id_categories_aides_territoire) {
-    return res.status(400).json({ error: 'Les champs projectContext, keywords, key_elements et id_categories_aides_territoire sont requis.' });
-  }
-
-  const mapOrganisationTypeToOrganizationTypeSlugs = (orgType) => {
-    const lowerOrgType = orgType?.toLowerCase();
-    switch (lowerOrgType) {
-      case 'association': return ['association'];
-      case 'entreprise':
-      case 'entreprise_privee': return ['private-sector'];
-      case 'commune': return ['commune'];
-      case 'epci': return ['epci'];
-      case 'departement': return ['department'];
-      case 'region': return ['region'];
-      default: return [];
-    }
-  };
-
-  try {
-    // 1. Construire les paramètres pour l'API Aides-Territoires
-    const searchParams = {
-      category_ids: id_categories_aides_territoire,
-    };
-
-    if (organisationType) {
-      searchParams.organization_type_slugs = mapOrganisationTypeToOrganizationTypeSlugs(organisationType);
-    }
-
-    if (perimeterCode) {
-      searchParams.perimeter_codes = [perimeterCode];
-    }
-
-    // 2. Récupérer les aides
-    const allAides = await searchAidesTerritoires(searchParams);
-
-    // 3. Filtrer les aides avec OpenAI (en utilisant la fonction existante)
-    // Note: filterAidesFromAPI doit être adaptée pour ne pas dépendre du frontend
-    const filteredAides = await filterAidesFromAPI(projectContext, keywords, allAides);
-
-    res.json({ success: true, data: filteredAides });
-
-  } catch (error) {
-    console.error('Erreur dans /search-and-filter:', error);
-    res.status(500).json({ success: false, error: 'Erreur lors de la recherche et du filtrage des aides.' });
-  }
-}));
-
-/**
- * @route   POST /aides/refine-and-stream
- * @desc    Recherche, filtre et raffine les aides en streamant les résultats
- * @access  Privé
- */
-import { refineSingleAide } from '../services/aideRefinementService.js';
+import { selectAidesWithN8N } from '../services/aideSelectionService.js';
+import { query as queryNeon } from '../utils/neonClient.js';
+import { refineAidesBatch } from '../services/aideRefinementService.js';
 import { supabaseAdminRequest } from '../utils/supabaseClient.js';
 
-router.post('/refine-and-stream', authenticate, asyncHandler(async (req, res) => {
-  console.log('[STREAM] /refine-and-stream called. Body:', req.body);
-  const { projectContext, keywords, key_elements, id_categories_aides_territoire, organisationType, perimeterCode, projectId, organisationId } = req.body;
+const router = express.Router();
 
-  // 1. Validation des entrées
-  if (!projectContext || !keywords || !key_elements || !id_categories_aides_territoire || !projectId || !organisationId) {
-    return res.status(400).json({ error: 'Les champs projectContext, keywords, key_elements, id_categories_aides_territoire, projectId et organisationId sont requis.' });
+// --- JOB DE SÉLECTION (Phase 1) ---
+
+router.post('/start-selection-job', authenticate, asyncHandler(async (req, res) => {
+  console.log('[start-selection-job] Received body:', JSON.stringify(req.body, null, 2));
+  const { projectContext, keywords, key_elements, id_categories_aides_territoire, organisationType, perimeterCode, projectId } = req.body;
+
+  const jobResult = await queryNeon('INSERT INTO jobs (project_id, status, type) VALUES ($1, $2, $3) RETURNING id', [projectId, 'starting', 'selection']);
+  const jobId = jobResult.rows[0].id;
+  console.log(`[JOB ${jobId}] Démarrage du job de SÉLECTION pour le projet ${projectId}`);
+
+  await queryNeon('DELETE FROM first_selection_results WHERE job_id = $1', [jobId]);
+  console.log(`[JOB ${jobId}] Anciens résultats de sélection nettoyés.`);
+
+  const searchParams = {
+    category_ids: id_categories_aides_territoire,
+    organization_type_slugs: mapOrganisationTypeToOrganizationTypeSlugs(organisationType),
+  };
+
+  if (perimeterCode) {
+    // Utiliser uniquement le code département pour une recherche plus fiable
+    const departmentCode = perimeterCode.substring(0, 2);
+    searchParams.perimeter_codes = [departmentCode];
   }
+  let allAides = await searchAidesTerritoires(searchParams);
+  console.log(`[JOB ${jobId}] ${allAides.length} aides trouvées sur Aides-Territoires.`);
 
-  // 2. Configuration des headers pour le Server-Sent Events (SSE)
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  res.flushHeaders();
+  // Filtrer pour ne garder que les aides actives
+  const activeAides = allAides.filter(aide => aide.is_live === true);
+  console.log(`[JOB ${jobId}] ${activeAides.length} aides restantes après filtrage "is_live".`);
+  allAides = activeAides;
 
-  try {
-    // 3. Logique de recherche et de filtrage initial (Phase 1)
-    const mapOrganisationTypeToOrganizationTypeSlugs = (orgType) => {
-      const lowerOrgType = orgType?.toLowerCase();
-      switch (lowerOrgType) {
-        case 'association': return ['association'];
-        case 'entreprise':
-        case 'entreprise_privee': return ['private-sector'];
-        case 'commune': return ['commune'];
-        case 'epci': return ['epci'];
-        case 'departement': return ['department'];
-        case 'region': return ['region'];
-        default: return [];
-      }
-    };
+  const lightweightAides = allAides.map(aide => ({
+    id: aide.id,
+    url: `https://aides-territoires.beta.gouv.fr${aide.url}`,
+    name: aide.name || aide.name_initial,
+    raw_data: aide,
+  }));
 
-    const searchParams = {
-      category_ids: id_categories_aides_territoire,
-      organization_type_slugs: mapOrganisationTypeToOrganizationTypeSlugs(organisationType),
-      perimeter_codes: perimeterCode ? [perimeterCode] : undefined,
-    };
-    console.log('[STREAM] Search params for Aides Territoires:', searchParams);
+  const chunkSize = 10;
+  const aideChunks = [];
+  for (let i = 0; i < lightweightAides.length; i += chunkSize) {
+    aideChunks.push(lightweightAides.slice(i, i + chunkSize));
+  }
+  console.log(`[JOB ${jobId}] Découpage en ${aideChunks.length} lots de ${chunkSize} aides.`);
 
-    const allAides = await searchAidesTerritoires(searchParams);
-    console.log(`[STREAM] Found ${allAides.length} aides from Aides Territoires.`);
+  await queryNeon('UPDATE jobs SET total_aides = $1, total_batches = $2, status = $3 WHERE id = $4', [lightweightAides.length, aideChunks.length, 'processing', jobId]);
 
-    const filteredAidesResult = await filterAidesFromAPI(projectContext, keywords, allAides);
-    const aidesToRefine = filteredAidesResult.filter(aide => aide.decision === 'à voir');
+  res.status(202).json({
+    message: 'Job de sélection démarré. Traitement des lots en cours.',
+    jobId: jobId,
+    totalAides: lightweightAides.length,
+  });
 
-    console.log(`[refine-and-stream] Début du traitement en streaming pour ${aidesToRefine.length} aides.`);
+  (async () => {
+    try {
+      const processingPromises = aideChunks.map((chunk, index) => {
+        const batchId = `${jobId}-${index + 1}`;
+        return selectAidesWithN8N(jobId, batchId, key_elements, projectContext, keywords, chunk);
+      });
+      await Promise.all(processingPromises);
+      console.log(`[JOB ${jobId}] Traitement de tous les lots de sélection terminé.`);
+      
+      await queryNeon('UPDATE jobs SET status = $1 WHERE id = $2', ['selection_done', jobId]);
+      await supabaseAdminRequest('PATCH', `projects?id=eq.${projectId}`, { status: 'aides_elargies' });
+      console.log(`[JOB ${jobId}] Statut du job mis à jour à "selection_done" et projet à "aides_elargies".`);
+    } catch (error) {
+      console.error(`[JOB ${jobId}] Erreur majeure lors du traitement des lots de sélection:`, error);
+      await queryNeon('UPDATE jobs SET status = $1 WHERE id = $2', ['failed', jobId]);
+    }
+  })();
+}));
 
-    // Envoyer un premier message de statut au client
-    const initialStatus = {
-      type: 'status',
-      totalAidesTrouvees: allAides.length,
-      aidesAPreselectionner: filteredAidesResult.length,
-      aidesSelectionnees: aidesToRefine.map(a => a.title)
-    };
-    res.write(`data: ${JSON.stringify(initialStatus)}\n\n`);
 
+// --- JOB DE RAFFINEMENT (Phase 2) ---
 
-    // 4. Boucle de traitement, raffinement et streaming (Phase 2)
-    for (const aide of aidesToRefine) {
-      try {
-        // a. Préparer le payload pour N8N
-        const n8nProjectContext = { projectId, organisationId, reformulation: projectContext, keywords, key_elements };
-        const aideDetails = {
-          id: aide.id,
-          name: aide.title,
-          description: aide.description,
-          url: `https://aides-territoires.beta.gouv.fr${aide.url}`
-        };
+router.post('/start-refinement-job', authenticate, asyncHandler(async (req, res) => {
+    const { selectionJobId, projectId, projectContext, keywords, key_elements } = req.body;
 
-        // b. Appeler le workflow N8N
-        const n8nResponse = await refineSingleAide(aideDetails, n8nProjectContext);
-        
-        // c. Parser la réponse de n8n
-        const pertinenceString = n8nResponse?.pertinence;
-        if (!pertinenceString || typeof pertinenceString !== 'string') {
-          console.log(`[refine-and-stream] Champ 'pertinence' manquant ou invalide dans la réponse N8N pour l'aide "${aide.title}", ignorée.`);
-          continue;
-        }
-        const refinedData = JSON.parse(pertinenceString);
+    console.log(`[REFINEMENT] Démarrage du processus de raffinement pour le projet ${projectId} (basé sur le job de sélection ${selectionJobId})`);
 
-        // d. Condition pour ne traiter que les aides pertinentes
-        const pertinence = refinedData.niveau_pertinence || '';
-        if (pertinence.toLowerCase().includes('pas pertinente') || pertinence.toLowerCase() === 'faible' || pertinence.toLowerCase() === 'nulle') {
-          console.log(`[refine-and-stream] Aide "${aide.title}" jugée non pertinente ("${pertinence}"), ignorée.`);
-          continue;
-        }
+    // 1. Récupérer les aides pertinentes depuis Neon
+    const pertinentAidesResult = await queryNeon("SELECT * FROM first_selection_results WHERE job_id = $1 AND decision = 'à voir'", [selectionJobId]);
+    const aidesToRefineRaw = pertinentAidesResult.rows;
+    console.log(`[REFINEMENT] ${aidesToRefineRaw.length} aides à raffiner.`);
 
-        // e. Préparer l'objet complet à insérer dans la table projects_aides
-        const dataToStore = {
-          project_id: projectId,
-          title: aide.title,
-          url: `https://aides-territoires.beta.gouv.fr${aide.url}`,
-          porteur_aide: n8nResponse?.response?.body?.porteur_aide || aide.financers?.[0]?.name || 'Non spécifié',
-          description_aide: aide.description,
-          id_aide_ext: aide.id.toString(),
-          niveau_pertinence: refinedData.niveau_pertinence || null,
-          score_compatibilite: refinedData.score_compatibilite || null,
-          justification: refinedData.justification || null,
-          points_positifs: refinedData.points_positifs ? JSON.stringify(refinedData.points_positifs) : null,
-          points_negatifs: refinedData.points_negatifs ? JSON.stringify(refinedData.points_negatifs) : null,
-          recommandations: refinedData.recommandations || null,
-        };
-
-        // f. Insérer la nouvelle ligne et récupérer les données insérées
-        const insertedData = await supabaseAdminRequest(
-          'POST',
-          'projects_aides',
-          dataToStore
-        );
-        
-        // g. Envoyer la ligne complète (avec son nouvel UUID) au client
-        res.write(`data: ${JSON.stringify(insertedData[0])}\n\n`);
-
-      } catch (aideError) {
-        console.error(`[refine-and-stream] Erreur lors du traitement de l'aide ${aide.id}:`, aideError);
-        res.write(`data: ${JSON.stringify({ id: aide.id, error: true, message: aideError.message })}\n\n`);
-      }
+    if (aidesToRefineRaw.length === 0) {
+        return res.status(200).json({ message: "Aucune aide à raffiner." });
     }
 
-    // 5. Mettre à jour le statut du projet
-    await supabaseAdminRequest(
-      'PATCH',
-      `projects?id=eq.${projectId}`,
-      { status: 'aides_identifiees' }
-    );
-    console.log(`[refine-and-stream] Statut du projet ${projectId} mis à jour.`);
+    // 2. Le contexte est maintenant reçu directement du frontend.
 
-    // 6. Fin du stream
-    res.write('event: end\ndata: Stream terminé\n\n');
-    console.log('[refine-and-stream] Stream terminé.');
-    res.end();
+    // 3. Créer un nouveau job pour le raffinement
+    const chunkSize = 2;
+    const aideChunks = [];
+    for (let i = 0; i < aidesToRefineRaw.length; i += chunkSize) {
+        aideChunks.push(aidesToRefineRaw.slice(i, i + chunkSize));
+    }
+    const totalBatches = aideChunks.length;
 
-  } catch (error) {
-    console.error('[refine-and-stream] Erreur globale dans le processus de streaming:', error);
-    res.write(`event: error\ndata: ${JSON.stringify({ message: 'Une erreur serveur est survenue.' })}\n\n`);
-    res.end();
-  }
+    const refinementJobResult = await queryNeon('INSERT INTO jobs (project_id, status, type, total_aides, total_batches) VALUES ($1, $2, $3, $4, $5) RETURNING id', [projectId, 'refining', 'refinement', aidesToRefineRaw.length, totalBatches]);
+    const refinementJobId = refinementJobResult.rows[0].id;
+    
+    // 4. Renvoyer la réponse immédiate au frontend
+    res.status(202).json({
+        message: 'Job de raffinement démarré.',
+        refinementJobId: refinementJobId,
+    });
+
+    // 5. Lancer le raffinement en arrière-plan
+    (async () => {
+        try {
+            const n8nProjectContext = { 
+                projectId, 
+                projectContext: projectContext || '', 
+                keywords: keywords || [], 
+                key_elements: key_elements || [] 
+            };
+            
+            const aidesToRefineFormatted = aidesToRefineRaw.map(aide => ({
+                id: aide.aide_id_ext,
+                name: aide.aide_title,
+                description: aide.raw_data?.description,
+                origin_url: aide.aide_url,
+                aid_types: aide.raw_data?.aid_types,
+                financers: aide.raw_data?.financers,
+                raw_data: aide.raw_data,
+            }));
+
+            const formattedChunks = [];
+            for (let i = 0; i < aidesToRefineFormatted.length; i += chunkSize) {
+                formattedChunks.push(aidesToRefineFormatted.slice(i, i + chunkSize));
+            }
+
+            console.log(`[REFINEMENT JOB ${refinementJobId}] Envoi de ${totalBatches} lots à n8n.`);
+            
+            const processingPromises = formattedChunks.map(async (chunk, index) => {
+                const batchName = `${refinementJobId}-${index + 1}`;
+                const result = await refineAidesBatch(chunk, n8nProjectContext, refinementJobId, batchName);
+                if (result && result.status === 'completed') {
+                    console.log(`[REFINEMENT JOB ${refinementJobId}] Lot ${batchName} terminé. Incrémentation du compteur.`);
+                    await queryNeon('UPDATE jobs SET batches_completed = batches_completed + 1 WHERE id = $1', [refinementJobId]);
+                } else {
+                    console.error(`[REFINEMENT JOB ${refinementJobId}] Le lot ${batchName} a échoué ou n'a pas renvoyé de statut "completed".`, result);
+                }
+            });
+
+            await Promise.all(processingPromises);
+            console.log(`[REFINEMENT JOB ${refinementJobId}] Traitement de tous les lots terminé.`);
+
+            // Finalisation du job
+            await supabaseAdminRequest('PATCH', `projects?id=eq.${projectId}`, { status: 'aides_affinees' });
+            await queryNeon('UPDATE jobs SET status = $1 WHERE id = $2', ['refinement_done', refinementJobId]);
+            console.log(`[REFINEMENT JOB ${refinementJobId}] Statut du job mis à jour à "refinement_done" et projet à "aides_affinees".`);
+
+        } catch (error) {
+            console.error(`[REFINEMENT JOB ${refinementJobId}] Erreur majeure lors de l'envoi des lots:`, error);
+            await queryNeon('UPDATE jobs SET status = $1 WHERE id = $2', ['failed', refinementJobId]);
+        }
+    })();
 }));
+
+
+// --- ROUTES DE STATUT ET DE RÉSULTATS ---
+
+/**
+ * @route   GET /aides/last-selection-job/:projectId
+ * @desc    Récupère le dernier job de sélection pour un projet.
+ * @access  Privé
+ */
+router.get('/last-selection-job/:projectId', authenticate, asyncHandler(async (req, res) => {
+    const { projectId } = req.params;
+    const jobResult = await queryNeon(
+        "SELECT id FROM jobs WHERE project_id = $1 AND type = 'selection' ORDER BY created_at DESC LIMIT 1",
+        [projectId]
+    );
+
+    if (jobResult.rows.length > 0) {
+        res.json({ jobId: jobResult.rows[0].id });
+    } else {
+        res.status(404).json({ error: 'Aucun job de sélection trouvé pour ce projet.' });
+    }
+}));
+
+/**
+ * @route   GET /aides/analysis-results/:projectId
+ * @desc    Récupère les résultats d'analyse pour un projet.
+ * @access  Privé
+ */
+router.get('/aides/analysis-results/:projectId', authenticate, asyncHandler(async (req, res) => {
+    const { projectId } = req.params;
+    const analysisResults = await queryNeon('SELECT * FROM aide_analyses WHERE project_id = $1 ORDER BY score_compatibilite DESC', [projectId]);
+    res.json(analysisResults.rows);
+}));
+
+
+/**
+ * @route   GET /aides/job-status/:jobId
+ * @desc    Sonde l'état d'un job et gère la synchronisation finale.
+ * @access  Privé
+ */
+router.get('/job-status/:jobId', authenticate, asyncHandler(async (req, res) => {
+    const { jobId } = req.params;
+    
+    const jobResult = await queryNeon('SELECT * FROM jobs WHERE id = $1', [jobId]);
+    if (jobResult.rows.length === 0) {
+        return res.status(404).json({ error: 'Job non trouvé.' });
+    }
+    const job = jobResult.rows[0];
+
+    let progress = {};
+    let isComplete = ['selection_done', 'refinement_done', 'failed'].includes(job.status);
+    let results = [];
+
+    if (job.type === 'selection') {
+        const resultsResult = await queryNeon('SELECT * FROM first_selection_results WHERE job_id = $1 ORDER BY created_at ASC', [jobId]);
+        results = resultsResult.rows;
+        progress = {
+            processed_aides: results.length,
+            total_aides: job.total_aides || 0,
+        };
+    } else if (job.type === 'refinement') {
+        const REFINEMENT_CHUNK_SIZE = 2; // Doit correspondre à la taille définie dans start-refinement-job
+        const processed_aides = (job.batches_completed || 0) * REFINEMENT_CHUNK_SIZE;
+        
+        progress = {
+            processed_aides: Math.min(processed_aides, job.total_aides), // S'assurer de ne pas dépasser le total
+            total_aides: job.total_aides || 0,
+        };
+
+        // La finalisation est maintenant gérée dans la route start-refinement-job
+    }
+
+    res.json({
+        jobId,
+        isComplete,
+        status: job.status,
+        progress,
+        results, // Rétablir le renvoi des résultats
+    });
+}));
+
+
+// --- HELPER ---
+
+const mapOrganisationTypeToOrganizationTypeSlugs = (orgType) => {
+  const lowerOrgType = orgType?.toLowerCase();
+  switch (lowerOrgType) {
+    case 'association': return ['association'];
+    case 'entreprise':
+    case 'entreprise_privee': return ['private-sector'];
+    case 'commune': return ['commune'];
+    case 'epci': return ['epci'];
+    case 'departement': return ['department'];
+    case 'region': return ['region'];
+    case 'particulier': return ['private-person'];
+    default: return [];
+  }
+};
 
 export default router;

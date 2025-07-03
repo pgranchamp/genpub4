@@ -19,6 +19,7 @@ import SubmitProject from './pages/SubmitProject';
 import ProjectDetail from './pages/ProjectDetail';
 import ProjectAides from './pages/ProjectAides';
 import TestAidesTerritoires from './pages/TestAidesTerritoires'; // Importer la page de test
+import TestCurl from './pages/TestCurl'; // Importer la nouvelle page de test
 import OnboardingPage from './pages/OnboardingPage'; // Importer la nouvelle page
 import InvitePage from './pages/InvitePage';
 import './App.css';
@@ -104,11 +105,7 @@ const router = createBrowserRouter([
         element: <ProjectAides />
       },
       {
-        path: 'test-aides', // Nouvelle route pour la page de test
-        element: <TestAidesTerritoires />
-      },
-      {
-        path: 'onboarding', // Nouvelle route pour la page d'onboarding
+        path: 'onboarding', // Route conservée pour le processus post-signup
         element: <OnboardingPage />
       }
     ]
@@ -116,6 +113,14 @@ const router = createBrowserRouter([
   {
     path: '*',
     element: <Navigate to="/" replace />
+  },
+  {
+    path: '/test-aides', // Nouvelle route pour la page de test
+    element: <TestAidesTerritoires />
+  },
+  {
+    path: '/test-curl',
+    element: <TestCurl />
   }
 ]);
 

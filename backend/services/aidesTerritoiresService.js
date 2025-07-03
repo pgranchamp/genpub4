@@ -4,6 +4,7 @@
  */
 
 import fetch from 'node-fetch';
+import process from 'process';
 
 const AIDES_TERRITOIRES_API_BASE = 'https://aides-territoires.beta.gouv.fr/api';
 
@@ -12,28 +13,53 @@ let aidesTokenExpiry = null;
 
 const getAidesToken = async () => {
   const now = new Date();
-  if (aidesToken && aidesTokenExpiry && aidesTokenExpiry > now) {
+  if (aidesToken && aidesTokenExpiry && now < aidesTokenExpiry) {
+    console.log('[Backend] Utilisation du token Aides Territoires mis en cache.');
     return aidesToken;
   }
 
-  console.log('[Backend] Obtention d\'un nouveau token Aides Territoires...');
-  const response = await fetch(`${AIDES_TERRITOIRES_API_BASE}/connexion/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Impossible d\'obtenir le token Aides Territoires');
+  console.log('[Backend] Le token est manquant, invalide ou expiré. Obtention d\'un nouveau token...');
+  
+  if (!process.env.AIDES_TERRITOIRES_API_KEY) {
+    console.error('[Backend] Erreur critique: AIDES_TERRITOIRES_API_KEY n\'est pas défini dans les variables d\'environnement.');
+    throw new Error('La clé API pour Aides Territoires n\'est pas configurée.');
   }
 
-  const data = await response.json();
-  aidesToken = data.token;
-  aidesTokenExpiry = new Date(new Date().getTime() + 23 * 60 * 60 * 1000); // 23 heures
-  console.log('[Backend] Nouveau token obtenu.');
-  return aidesToken;
+  try {
+    const response = await fetch(`${AIDES_TERRITOIRES_API_BASE}/connexion/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-AUTH-TOKEN': process.env.AIDES_TERRITOIRES_API_KEY,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error(`[Backend] Échec de l'obtention du token Aides Territoires. Statut: ${response.status}, Body: ${errorBody}`);
+      throw new Error(`Impossible d'obtenir le token Aides Territoires. Statut: ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (!data.token) {
+        console.error('[Backend] La réponse de l\'API de connexion ne contient pas de token.');
+        throw new Error('Réponse invalide de l\'API de connexion Aides Territoires.');
+    }
+
+    aidesToken = data.token;
+    // Expiration dans 23 heures pour forcer un renouvellement avant l'expiration réelle de 24h
+    aidesTokenExpiry = new Date(new Date().getTime() + 23 * 60 * 60 * 1000); 
+    console.log('[Backend] Nouveau token Aides Territoires obtenu avec succès.');
+    return aidesToken;
+
+  } catch (error) {
+    console.error('[Backend] Erreur lors de la tentative d\'obtention du token:', error);
+    // Réinitialiser pour forcer une nouvelle tentative au prochain appel
+    aidesToken = null;
+    aidesTokenExpiry = null;
+    // Propager l'erreur pour que l'appelant sache que l'opération a échoué
+    throw error;
+  }
 };
 
 /**

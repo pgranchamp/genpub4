@@ -56,7 +56,12 @@ export {
   determineMaxAidesForOpenAI,
   getCategoriesList,
   analyserProjetComplet,
-  rechercherAidesOptimisees
+  rechercherAidesOptimisees,
+  startSelectionJob,
+  getJobStatus,
+  getLastSelectionJob,
+  startRefinementJob,
+  getSavedAides
 } from './aidesService';
 
 // Exporter les fonctions OpenAI

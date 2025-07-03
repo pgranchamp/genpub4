@@ -3,6 +3,7 @@ const router = express.Router();
 import asyncHandler from 'express-async-handler';
 import { authenticate } from '../middleware/auth.js';
 import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import { analyzeProjectWorkflow } from '../services/analysis/projectAnalyzer.js';
 
 /**
  * @route   GET /api/projects
@@ -47,8 +48,46 @@ router.get('/', authenticate, asyncHandler(async (req, res) => {
 }));
 
 /**
+ * @route   POST /api/projects/create-and-analyze
+ * @desc    Créer un projet, lancer son analyse et le renvoyer.
+ * @access  Privé
+ */
+router.post('/create-and-analyze', authenticate, asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const { description } = req.body;
+
+  if (!description) {
+    return res.status(400).json({ success: false, error: 'La description est requise.' });
+  }
+
+  try {
+    // 1. Créer le projet initial
+    const initialData = {
+      title: `Nouveau projet - ${new Date().toLocaleDateString()}`,
+      description: description,
+      status: 'en_cours_analyse'
+    };
+    const [newProject] = await supabaseAdminRequest('POST', 'projects', initialData);
+    const projectId = newProject.id;
+
+    // 2. Lier le projet à l'utilisateur
+    await supabaseAdminRequest('POST', 'projects_users', { user_id: userId, project_id: projectId });
+
+    // 3. Lancer l'analyse (cette fonction gère l'appel n8n et la mise à jour)
+    const analyzedProject = await analyzeProjectWorkflow(projectId, userId);
+
+    res.status(201).json({ success: true, data: analyzedProject });
+
+  } catch (error) {
+    console.error(`Erreur lors de la création et analyse du projet pour l'utilisateur ${userId}:`, error);
+    res.status(500).json({ success: false, error: error.message || 'Erreur serveur.' });
+  }
+}));
+
+
+/**
  * @route   POST /api/projects
- * @desc    Créer un nouveau projet
+ * @desc    Créer un nouveau projet (Legacy)
  * @access  Privé
  */
 router.post('/', authenticate, asyncHandler(async (req, res) => {
@@ -56,7 +95,8 @@ router.post('/', authenticate, asyncHandler(async (req, res) => {
   const { title, summary, description } = req.body;
 
   try {
-    const dataToInsert = { title, summary, description, status: 'reformule' };
+    // Le statut initial est 'projet_cree'. L'analyse le passera à 'projet_analyse'.
+    const dataToInsert = { title, summary, description, status: 'projet_cree' };
     console.log('[POST /api/projects] Attempting to insert data:', JSON.stringify(dataToInsert, null, 2));
     
     // 1. Créer le projet dans la table 'projects'
@@ -155,9 +195,10 @@ router.get('/:projectId/aides', authenticate, asyncHandler(async (req, res) => {
   const { projectId } = req.params;
 
   try {
+    // On ne récupère que les aides jugées pertinentes (en excluant 'Faible' et 'Nulle')
     const aides = await supabaseAdminRequest(
       'GET',
-      `projects_aides?project_id=eq.${projectId}`
+      `projects_aides?project_id=eq.${projectId}&niveau_pertinence=not.in.("Faible","Nulle")`
     );
 
     res.json({ success: true, data: aides });

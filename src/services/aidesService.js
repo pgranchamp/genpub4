@@ -10,6 +10,20 @@ import {
   selectAidCategories 
 } from './openaiService';
 
+export const getLastSelectionJob = async (projectId) => {
+  try {
+    const response = await fetchWithAuth(`/api/aides/last-selection-job/${projectId}`);
+    return response;
+  } catch (error) {
+    console.error(`Erreur lors de la récupération du dernier job pour le projet ${projectId}:`, error);
+    // Si 404, ce n'est pas une erreur bloquante, on renvoie null.
+    if (error.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
+
 // URL de base de l'API Aides Territoires
 const AIDES_TERRITOIRES_API_BASE = 'https://aides-territoires.beta.gouv.fr/api';
 const AIDES_TERRITOIRES_API = `${AIDES_TERRITOIRES_API_BASE}/aids/`;
@@ -51,6 +65,25 @@ export const getAidesToken = async () => {
     return aidesToken;
   } catch (error) {
     console.error('Erreur lors de l\'obtention du token Aides Territoires:', error);
+    throw error;
+  }
+};
+
+/**
+ * Démarre un job de raffinement pour un job de sélection terminé.
+ * @param {object} payload - Le payload contenant { selectionJobId, projectContext, projectId, organisationId }.
+ * @returns {Promise<object>} La réponse du backend, contenant le refinementJobId.
+ */
+export const startRefinementJob = async (payload) => {
+  try {
+    console.log('[aidesService] Démarrage du job de raffinement.');
+    const response = await fetchWithAuth(`/api/aides/start-refinement-job`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return response;
+  } catch (error) {
+    console.error('Erreur lors du démarrage du job de raffinement:', error);
     throw error;
   }
 };
@@ -429,64 +462,41 @@ export const searchAndFilterAides = async (projectContext) => {
 };
 
 /**
- * Se connecte au backend pour recevoir un flux d'aides raffinées via SSE.
- * @param {object} projectContext - Le contexte du projet à envoyer.
- * @param {function} onData - Callback exécuté pour chaque aide reçue.
- * @param {function} onError - Callback exécuté en cas d'erreur.
- * @param {function} onEnd - Callback exécuté à la fin du flux.
- * @returns {function} Une fonction pour annuler la connexion.
+ * Démarre un job de sélection d'aides asynchrone sur le backend.
+ * @param {object} projectContext - Le contexte du projet.
+ * @returns {Promise<object>} La réponse du backend, contenant le jobId.
  */
-import { fetchEventSource } from '@microsoft/fetch-event-source';
-
-export const refineAndStreamAides = (projectContext, token, onData, onError, onEnd) => {
-  const ctrl = new AbortController();
-
-  if (!token) {
-    onError(new Error("Le token d'authentification est manquant."));
-    return () => {}; // Retourne une fonction vide
+export const startSelectionJob = async (projectContext) => {
+  try {
+    console.log('[aidesService] Démarrage du job de sélection asynchrone.');
+    const response = await fetchWithAuth(`/api/aides/start-selection-job`, {
+      method: 'POST',
+      body: JSON.stringify(projectContext),
+    });
+    return response; // La réponse contient { message, jobId, totalBatches, totalAides }
+  } catch (error) {
+    console.error('Erreur lors du démarrage du job de sélection:', error);
+    throw error;
   }
+};
 
-  fetchEventSource(`/api/aides/refine-and-stream`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify(projectContext),
-    signal: ctrl.signal,
-    
-    onmessage(ev) {
-      if (ev.event === 'end') {
-        console.log('[refineAndStreamAides] Fin du flux reçue.');
-        onEnd();
-        ctrl.abort(); // Termine la connexion proprement
-      } else if (ev.event === 'error') {
-        console.error('[refineAndStreamAides] Erreur de flux reçue:', ev.data);
-        onError(JSON.parse(ev.data));
-      } else {
-        // C'est un message de donnée standard
-        onData(JSON.parse(ev.data));
-      }
-    },
-    
-    onclose() {
-      console.log('[refineAndStreamAides] La connexion a été fermée par le serveur.');
-      // Ne pas appeler onEnd() ici, car l'événement 'end' le gère déjà.
-    },
-
-    onerror(err) {
-      console.error('[refineAndStreamAides] Erreur de connexion fatale:', err);
-      onError(err);
-      ctrl.abort(); // S'assurer que tout est arrêté
-      // Il est important de ne pas relancer l'erreur ici pour éviter que la librairie ne tente de se reconnecter indéfiniment.
+/**
+ * Récupère le statut et les résultats d'un job de sélection.
+ * @param {string|number} jobId - L'ID du job à sonder.
+ * @returns {Promise<object>} Le statut et les résultats du job.
+ */
+export const getJobStatus = async (jobId) => {
+  try {
+    // Pas de log ici pour ne pas polluer les consoles lors du polling
+    const response = await fetchWithAuth(`/api/aides/job-status/${jobId}`);
+    return response;
+  } catch (error) {
+    // Ne pas logger les erreurs de polling pour éviter le bruit, sauf si c'est une erreur serveur majeure
+    if (error.status >= 500) {
+      console.error(`Erreur lors de la récupération du statut du job ${jobId}:`, error);
     }
-  });
-
-  // Retourne une fonction pour permettre au composant d'annuler le fetch si nécessaire (ex: unmount)
-  return () => {
-    console.log('[refineAndStreamAides] Annulation de la connexion SSE demandée.');
-    ctrl.abort();
-  };
+    throw error;
+  }
 };
 
 /**

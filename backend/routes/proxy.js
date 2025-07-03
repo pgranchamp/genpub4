@@ -52,7 +52,7 @@ router.post('/aides-territoires/token', authenticate, asyncHandler(async (req, r
  * @desc    Rechercher des aides via l'API Aides Territoires
  * @access  Privé
  */
-router.get('/aides-territoires/aids', authenticate, asyncHandler(async (req, res) => {
+router.get('/aides-territoires/aids', asyncHandler(async (req, res) => {
   try {
     // Récupérer le token
     console.log('Proxy: Obtention d\'un token pour la recherche d\'aides');
@@ -130,6 +130,7 @@ router.get('/aides-territoires/aids', authenticate, asyncHandler(async (req, res
     // Le traitement spécial pour perimeter_codes est supprimé.
     // Nouvelle logique pour gérer correctement tous les paramètres, y compris ceux qui doivent être des tableaux avec []
     
+    console.log('Proxy: req.query before processing:', JSON.stringify(req.query, null, 2));
     Object.keys(req.query).forEach(key => {
       const value = req.query[key];
       if (key === 'perimeter_codes' && Array.isArray(value)) {
@@ -144,9 +145,9 @@ router.get('/aides-territoires/aids', authenticate, asyncHandler(async (req, res
           url.searchParams.append('organization_type_slugs[]', slug);
         });
       } else if (key === 'category_ids' && Array.isArray(value)) {
-        // Aides Territoires attend category_ids (sans []) pour plusieurs valeurs
+        // Aides Territoires attend category_ids[] pour plusieurs valeurs
          value.forEach(id => {
-          url.searchParams.append('category_ids', id);
+          url.searchParams.append('category_ids[]', id);
         });
       }
       // Pour les autres paramètres qui sont des tableaux mais n'ont pas de traitement spécial

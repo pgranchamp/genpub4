@@ -4,7 +4,6 @@
 import express from 'express';
 const router = express.Router();
 import { supabaseAdminRequest } from '../utils/supabaseClient.js';
-import { authenticate } from '../middleware/auth.js';
 import asyncHandler from 'express-async-handler';
 
 /**
@@ -12,7 +11,7 @@ import asyncHandler from 'express-async-handler';
  * @desc    Récupérer tous les groupes et leurs catégories d'aides territoire
  * @access  Privé
  */
-router.get('/aides-territoire', authenticate, asyncHandler(async (req, res) => {
+router.get('/aides-territoire', asyncHandler(async (req, res) => {
   try {
     console.log('Récupération des groupes et catégories d\'aides depuis Supabase');
     

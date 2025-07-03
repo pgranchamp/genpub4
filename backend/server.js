@@ -13,7 +13,6 @@ import projectsRoutes from './routes/projects.js';
 import proxyRoutes from './routes/proxy.js';
 import categoriesRoutes from './routes/categories.js';
 import onboardingRoutes from './routes/onboarding.js';
-import projectAnalysisRoutes from './routes/projectAnalysis.js';
 import aidesRoutes from './routes/aides.js';
 
 // Configuration
@@ -37,7 +36,6 @@ app.use('/api/projects', projectsRoutes);
 app.use('/api/proxy', proxyRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/onboarding', onboardingRoutes); // Utiliser la nouvelle route
-app.use('/api/project-analysis', projectAnalysisRoutes);
 app.use('/api/aides', aidesRoutes);
 
 // Route de base

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useOrganisation } from '../contexts/OrganisationContext';
 import { useNavigate } from 'react-router-dom';
-import { callOnboardingWorkflow, getOrganisationStatus } from '../services';
+import { callOnboardingWorkflow } from '../services';
 
 const OnboardingPage = () => {
   const { user } = useAuth();
@@ -66,27 +66,28 @@ const OnboardingPage = () => {
     const responseText = data?.response;
     const nextAction = data?.next_action;
     const actions = data?.actions || [];
-  
-    const handleNextAction = async () => {
+
+    const onTypingComplete = () => {
       if (nextAction === 'switch_to_onboarding_chat') {
         console.log("Bascule vers le workflow 'onboarding-chat'");
         setCurrentWorkflow('onboarding-chat');
-        
-        // Forcer le rechargement de la page pour garantir des données fraîches.
-        // C'est une solution de contournement en attendant de trouver la cause du problème de state.
-        window.location.reload();
-
+        // Déclencher silencieusement le premier message du nouveau workflow
+        handleSendMessageRef.current('start_chat', true); 
       } else if (nextAction === 'onboarding-end') {
-        setTimeout(() => navigate('/dashboard'), 2000);
+        // L'organisation a été mise à jour, rafraîchissons les données
+        refreshOrganisation();
+        // Rediriger vers le dashboard
+        setTimeout(() => navigate('/dashboard'), 1500);
       }
     };
-  
+
     if (responseText) {
-      typeMessage(responseText, handleNextAction, actions);
+      typeMessage(responseText, onTypingComplete, actions);
     } else {
-      handleNextAction();
+      // S'il n'y a pas de texte à taper, exécuter l'action suivante directement
+      onTypingComplete();
     }
-  }, [typeMessage, navigate]);
+  }, [typeMessage, navigate, refreshOrganisation]);
   
   const handleSendMessage = useCallback(async (messageOverride = null, isSilent = false, organisationData = null) => {
     const messageToSend = messageOverride !== null ? messageOverride : inputValue;
@@ -132,8 +133,10 @@ const OnboardingPage = () => {
   handleSendMessageRef.current = handleSendMessage;
 
   useEffect(() => {
+    // S'assure que l'onboarding ne démarre qu'une seule fois
     if (user && organisation && !hasInitiated.current) {
       hasInitiated.current = true;
+      // Démarre le premier workflow
       handleSendMessageRef.current('start_onboarding_zero', true);
     }
   }, [user, organisation]);
