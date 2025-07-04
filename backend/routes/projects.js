@@ -1,8 +1,8 @@
 import express from 'express';
 const router = express.Router();
 import asyncHandler from 'express-async-handler';
-import { authenticate } from '../middleware/auth.js';
-import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import { supabaseAuthenticate } from '../middleware/supabaseAuth.js';
+import { supabaseAdmin } from '../utils/supabaseClient.js';
 import { analyzeProjectWorkflow } from '../services/analysis/projectAnalyzer.js';
 
 /**
@@ -10,39 +10,21 @@ import { analyzeProjectWorkflow } from '../services/analysis/projectAnalyzer.js'
  * @desc    Récupérer tous les projets de l'utilisateur authentifié
  * @access  Privé
  */
-router.get('/', authenticate, asyncHandler(async (req, res) => {
+router.get('/', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
   console.log('[GET /api/projects] Authenticated User ID:', userId);
 
   try {
-    // 1. Récupérer les IDs des projets de l'utilisateur depuis la table de liaison
-    console.log(`[GET /api/projects] Fetching project links for user: ${userId}`);
-    const projectLinks = await supabaseAdminRequest(
-      'GET',
-      `projects_users?user_id=eq.${userId}&select=project_id`
-    );
+    const { data: projects, error } = await supabaseAdmin
+      .from('projects')
+      .select('*')
+      .eq('user_id', userId);
 
-    console.log('[GET /api/projects] Found project links:', projectLinks);
+    if (error) throw error;
 
-    if (!projectLinks || projectLinks.length === 0) {
-      console.log('[GET /api/projects] No projects found for this user. Returning empty array.');
-      return res.json({ success: true, data: [] });
-    }
-
-    const projectIds = projectLinks.map(link => link.project_id);
-    console.log('[GET /api/projects] Project IDs to fetch:', projectIds);
-
-    // 2. Récupérer les détails de ces projets
-    console.log(`[GET /api/projects] Fetching details for projects: ${projectIds.join(',')}`);
-    const projects = await supabaseAdminRequest(
-      'GET',
-      `projects?id=in.(${projectIds.join(',')})&select=*`
-    );
-
-    res.json({ success: true, data: projects });
+    res.json({ success: true, data: projects || [] });
   } catch (error) {
     console.error(`Erreur lors de la récupération des projets pour l'utilisateur ${userId}:`, error.message);
-    // Renvoyer le message d'erreur technique au client pour le débogage
     res.status(500).json({ success: false, error: `Erreur serveur: ${error.message}` });
   }
 }));
@@ -52,7 +34,7 @@ router.get('/', authenticate, asyncHandler(async (req, res) => {
  * @desc    Créer un projet, lancer son analyse et le renvoyer.
  * @access  Privé
  */
-router.post('/create-and-analyze', authenticate, asyncHandler(async (req, res) => {
+router.post('/create-and-analyze', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { description } = req.body;
 
@@ -65,15 +47,20 @@ router.post('/create-and-analyze', authenticate, asyncHandler(async (req, res) =
     const initialData = {
       title: `Nouveau projet - ${new Date().toLocaleDateString()}`,
       description: description,
-      status: 'en_cours_analyse'
+      status: 'en_cours_analyse',
+      user_id: userId
     };
-    const [newProject] = await supabaseAdminRequest('POST', 'projects', initialData);
+    const { data: newProjectData, error: newProjectError } = await supabaseAdmin
+      .from('projects')
+      .insert(initialData)
+      .select();
+    
+    if (newProjectError) throw newProjectError;
+    
+    const [newProject] = newProjectData;
     const projectId = newProject.id;
 
-    // 2. Lier le projet à l'utilisateur
-    await supabaseAdminRequest('POST', 'projects_users', { user_id: userId, project_id: projectId });
-
-    // 3. Lancer l'analyse (cette fonction gère l'appel n8n et la mise à jour)
+    // 2. Lancer l'analyse (cette fonction gère l'appel n8n et la mise à jour)
     const analyzedProject = await analyzeProjectWorkflow(projectId, userId);
 
     res.status(201).json({ success: true, data: analyzedProject });
@@ -90,30 +77,22 @@ router.post('/create-and-analyze', authenticate, asyncHandler(async (req, res) =
  * @desc    Créer un nouveau projet (Legacy)
  * @access  Privé
  */
-router.post('/', authenticate, asyncHandler(async (req, res) => {
+router.post('/', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { title, summary, description } = req.body;
 
   try {
     // Le statut initial est 'projet_cree'. L'analyse le passera à 'projet_analyse'.
-    const dataToInsert = { title, summary, description, status: 'projet_cree' };
+    const dataToInsert = { title, summary, description, status: 'projet_cree', user_id: userId };
     console.log('[POST /api/projects] Attempting to insert data:', JSON.stringify(dataToInsert, null, 2));
     
     // 1. Créer le projet dans la table 'projects'
-    const newProject = await supabaseAdminRequest(
-      'POST',
-      'projects',
-      dataToInsert
-    );
+    const { data: newProject, error } = await supabaseAdmin
+      .from('projects')
+      .insert(dataToInsert)
+      .select();
 
-    const projectId = newProject[0].id;
-
-    // 2. Lier le projet à l'utilisateur dans la table 'projects_users'
-    await supabaseAdminRequest(
-      'POST',
-      'projects_users',
-      { user_id: userId, project_id: projectId }
-    );
+    if (error) throw error;
 
     res.status(201).json({ success: true, data: newProject[0] });
   } catch (error) {
@@ -127,54 +106,35 @@ router.post('/', authenticate, asyncHandler(async (req, res) => {
  * @desc    Récupérer un projet spécifique par son ID
  * @access  Privé
  */
-router.get('/:id', authenticate, asyncHandler(async (req, res) => {
+router.get('/:id', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const { id: projectId } = req.params;
+  const userId = req.user.id;
 
   try {
-    // 1. Récupérer les données du projet
-    const projects = await supabaseAdminRequest(
-      'GET',
-      `projects?id=eq.${projectId}&select=*`
-    );
+    // 1. Récupérer les données du projet et vérifier que l'utilisateur y a accès
+    const { data: projects, error: projectError } = await supabaseAdmin
+      .from('projects')
+      .select('*')
+      .eq('id', projectId)
+      .eq('user_id', userId);
+
+    if (projectError) throw projectError;
 
     if (!projects || projects.length === 0) {
-      return res.status(404).json({ success: false, error: 'Projet non trouvé.' });
+      return res.status(404).json({ success: false, error: 'Projet non trouvé ou accès non autorisé.' });
     }
     const project = projects[0];
 
-    // 2. Trouver le user_id associé au projet
-    const projectUsers = await supabaseAdminRequest(
-      'GET',
-      `projects_users?project_id=eq.${projectId}&select=user_id`
-    );
+    // 2. Récupérer l'utilisateur et son organisation
+    const { data: users, error: userError } = await supabaseAdmin
+      .from('users')
+      .select('*, organisation:organisations(*)')
+      .eq('id', userId);
 
-    if (!projectUsers || projectUsers.length === 0) {
-      // Pas d'utilisateur lié, renvoyer le projet sans organisation
-      return res.json({ success: true, data: project });
-    }
-    const userId = projectUsers[0].user_id;
+    if (userError) throw userError;
 
-    // 3. Trouver l'organisation_id associé à l'utilisateur
-    const userOrganisations = await supabaseAdminRequest(
-      'GET',
-      `users_organisations?user_id=eq.${userId}&select=organisation_id`
-    );
-
-    if (!userOrganisations || userOrganisations.length === 0) {
-      // Pas d'organisation liée, renvoyer le projet sans organisation
-      return res.json({ success: true, data: project });
-    }
-    const organisationId = userOrganisations[0].organisation_id;
-
-    // 4. Récupérer les détails de l'organisation
-    const organisations = await supabaseAdminRequest(
-      'GET',
-      `organisations?id=eq.${organisationId}&select=*`
-    );
-
-    // 5. Combiner les résultats
-    if (organisations && organisations.length > 0) {
-      project.organisation = organisations[0];
+    if (users && users.length > 0 && users[0].organisation) {
+      project.organisation = users[0].organisation;
     }
 
     res.json({ success: true, data: project });
@@ -191,15 +151,18 @@ router.get('/:id', authenticate, asyncHandler(async (req, res) => {
  * @desc    Récupérer les aides enregistrées pour un projet spécifique
  * @access  Privé
  */
-router.get('/:projectId/aides', authenticate, asyncHandler(async (req, res) => {
+router.get('/:projectId/aides', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const { projectId } = req.params;
 
   try {
     // On ne récupère que les aides jugées pertinentes (en excluant 'Faible' et 'Nulle')
-    const aides = await supabaseAdminRequest(
-      'GET',
-      `projects_aides?project_id=eq.${projectId}&niveau_pertinence=not.in.("Faible","Nulle")`
-    );
+    const { data: aides, error } = await supabaseAdmin
+      .from('projects_aides')
+      .select('*')
+      .eq('project_id', projectId)
+      .not('niveau_pertinence', 'in', '("Faible","Nulle")');
+
+    if (error) throw error;
 
     res.json({ success: true, data: aides });
   } catch (error) {

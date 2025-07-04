@@ -1,17 +1,17 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
-import { authenticate } from '../middleware/auth.js';
+import { supabaseAuthenticate } from '../middleware/supabaseAuth.js';
 import { searchAidesTerritoires } from '../services/aidesTerritoiresService.js';
 import { selectAidesWithN8N } from '../services/aideSelectionService.js';
 import { query as queryNeon } from '../utils/neonClient.js';
 import { refineAidesBatch } from '../services/aideRefinementService.js';
-import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import { supabaseAdmin } from '../utils/supabaseClient.js';
 
 const router = express.Router();
 
 // --- JOB DE SÉLECTION (Phase 1) ---
 
-router.post('/start-selection-job', authenticate, asyncHandler(async (req, res) => {
+router.post('/start-selection-job', supabaseAuthenticate, asyncHandler(async (req, res) => {
   console.log('[start-selection-job] Received body:', JSON.stringify(req.body, null, 2));
   const { projectContext, keywords, key_elements, id_categories_aides_territoire, organisationType, perimeterCode, projectId } = req.body;
 
@@ -72,7 +72,11 @@ router.post('/start-selection-job', authenticate, asyncHandler(async (req, res) 
       console.log(`[JOB ${jobId}] Traitement de tous les lots de sélection terminé.`);
       
       await queryNeon('UPDATE jobs SET status = $1 WHERE id = $2', ['selection_done', jobId]);
-      await supabaseAdminRequest('PATCH', `projects?id=eq.${projectId}`, { status: 'aides_elargies' });
+      const { error } = await supabaseAdmin
+        .from('projects')
+        .update({ status: 'aides_elargies' })
+        .eq('id', projectId);
+      if (error) throw error;
       console.log(`[JOB ${jobId}] Statut du job mis à jour à "selection_done" et projet à "aides_elargies".`);
     } catch (error) {
       console.error(`[JOB ${jobId}] Erreur majeure lors du traitement des lots de sélection:`, error);
@@ -84,7 +88,7 @@ router.post('/start-selection-job', authenticate, asyncHandler(async (req, res) 
 
 // --- JOB DE RAFFINEMENT (Phase 2) ---
 
-router.post('/start-refinement-job', authenticate, asyncHandler(async (req, res) => {
+router.post('/start-refinement-job', supabaseAuthenticate, asyncHandler(async (req, res) => {
     const { selectionJobId, projectId, projectContext, keywords, key_elements } = req.body;
 
     console.log(`[REFINEMENT] Démarrage du processus de raffinement pour le projet ${projectId} (basé sur le job de sélection ${selectionJobId})`);
@@ -159,7 +163,11 @@ router.post('/start-refinement-job', authenticate, asyncHandler(async (req, res)
             console.log(`[REFINEMENT JOB ${refinementJobId}] Traitement de tous les lots terminé.`);
 
             // Finalisation du job
-            await supabaseAdminRequest('PATCH', `projects?id=eq.${projectId}`, { status: 'aides_affinees' });
+            const { error } = await supabaseAdmin
+              .from('projects')
+              .update({ status: 'aides_affinees' })
+              .eq('id', projectId);
+            if (error) throw error;
             await queryNeon('UPDATE jobs SET status = $1 WHERE id = $2', ['refinement_done', refinementJobId]);
             console.log(`[REFINEMENT JOB ${refinementJobId}] Statut du job mis à jour à "refinement_done" et projet à "aides_affinees".`);
 
@@ -178,7 +186,7 @@ router.post('/start-refinement-job', authenticate, asyncHandler(async (req, res)
  * @desc    Récupère le dernier job de sélection pour un projet.
  * @access  Privé
  */
-router.get('/last-selection-job/:projectId', authenticate, asyncHandler(async (req, res) => {
+router.get('/last-selection-job/:projectId', supabaseAuthenticate, asyncHandler(async (req, res) => {
     const { projectId } = req.params;
     const jobResult = await queryNeon(
         "SELECT id FROM jobs WHERE project_id = $1 AND type = 'selection' ORDER BY created_at DESC LIMIT 1",
@@ -197,7 +205,7 @@ router.get('/last-selection-job/:projectId', authenticate, asyncHandler(async (r
  * @desc    Récupère les résultats d'analyse pour un projet.
  * @access  Privé
  */
-router.get('/aides/analysis-results/:projectId', authenticate, asyncHandler(async (req, res) => {
+router.get('/aides/analysis-results/:projectId', supabaseAuthenticate, asyncHandler(async (req, res) => {
     const { projectId } = req.params;
     const analysisResults = await queryNeon('SELECT * FROM aide_analyses WHERE project_id = $1 ORDER BY score_compatibilite DESC', [projectId]);
     res.json(analysisResults.rows);
@@ -209,7 +217,7 @@ router.get('/aides/analysis-results/:projectId', authenticate, asyncHandler(asyn
  * @desc    Sonde l'état d'un job et gère la synchronisation finale.
  * @access  Privé
  */
-router.get('/job-status/:jobId', authenticate, asyncHandler(async (req, res) => {
+router.get('/job-status/:jobId', supabaseAuthenticate, asyncHandler(async (req, res) => {
     const { jobId } = req.params;
     
     const jobResult = await queryNeon('SELECT * FROM jobs WHERE id = $1', [jobId]);

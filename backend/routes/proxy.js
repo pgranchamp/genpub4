@@ -5,16 +5,17 @@
 import express from 'express';
 const router = express.Router();
 import asyncHandler from 'express-async-handler';
+import process from 'node:process';
 // Importer fetch depuis node-fetch
 import fetch from 'node-fetch'; // .default n'est généralement pas nécessaire avec l'import ES6 pour node-fetch v3+
-import { authenticate } from '../middleware/auth.js'; // Ajout de .js
+import { supabaseAuthenticate } from '../middleware/supabaseAuth.js'; // Ajout de .js
 
 /**
  * @route   POST /proxy/aides-territoires/token
  * @desc    Obtenir un token JWT pour l'API Aides Territoires
  * @access  Privé
  */
-router.post('/aides-territoires/token', authenticate, asyncHandler(async (req, res) => {
+router.post('/aides-territoires/token', supabaseAuthenticate, asyncHandler(async (req, res) => {
   try {
     console.log('Proxy: Obtention d\'un token Aides Territoires');
     const response = await fetch('https://aides-territoires.beta.gouv.fr/api/connexion/', {
@@ -245,7 +246,7 @@ router.get('/aides-territoires/aids', asyncHandler(async (req, res) => {
  * @desc    Récupérer les informations d'un financeur par son ID
  * @access  Privé
  */
-router.get('/aides-territoires/backers/:id', authenticate, asyncHandler(async (req, res) => {
+router.get('/aides-territoires/backers/:id', supabaseAuthenticate, asyncHandler(async (req, res) => {
   try {
     // Récupérer le token
     console.log(`Proxy: Obtention d'un token pour récupérer le financeur ${req.params.id}`);

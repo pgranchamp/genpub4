@@ -3,13 +3,14 @@
  * Connecté à Supabase (PostgreSQL)
  */
 import 'dotenv/config';
+import process from 'node:process';
 import express from 'express';
 import cors from 'cors';
 
 // Routes
-import authRoutes from './routes/auth.js';
 import organisationsRoutes from './routes/organisations.js';
 import projectsRoutes from './routes/projects.js';
+import usersRoutes from './routes/users.js';
 import proxyRoutes from './routes/proxy.js';
 import categoriesRoutes from './routes/categories.js';
 import onboardingRoutes from './routes/onboarding.js';
@@ -30,9 +31,9 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/auth', authRoutes);
 app.use('/api/organisations', organisationsRoutes);
 app.use('/api/projects', projectsRoutes);
+app.use('/api/users', usersRoutes);
 app.use('/api/proxy', proxyRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/onboarding', onboardingRoutes); // Utiliser la nouvelle route

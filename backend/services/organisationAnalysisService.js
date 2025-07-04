@@ -2,7 +2,8 @@
  * Service pour l'analyse de l'organisation via des services externes (ex: n8n)
  */
 import fetch from 'node-fetch';
-import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import process from 'node:process';
+import { supabaseAdmin } from '../utils/supabaseClient.js';
 
 /**
  * Analyse le site web d'une organisation via un webhook n8n et stocke les résultats.
@@ -51,9 +52,13 @@ const analyzeAndStoreKeyElements = async (organisationId, websiteUrl) => {
 
       // 4. Mettre à jour l'enregistrement de l'organisation dans Supabase
       console.log(`[AnalysisService] Mise à jour de l'organisation ${organisationId} avec les éléments clés.`);
-      await supabaseAdminRequest('PATCH', `organisations?id=eq.${organisationId}`, {
-        key_elements: keyElements,
-      });
+      const { error } = await supabaseAdmin
+        .from('organisations')
+        .update({ key_elements: keyElements })
+        .eq('id', organisationId);
+
+      if (error) throw error;
+      
       console.log(`[AnalysisService] Organisation ${organisationId} mise à jour avec succès.`);
     } else {
       console.log(`[AnalysisService] L'URL (${websiteUrl}) n'a pas été validée par n8n. Aucune mise à jour effectuée.`);

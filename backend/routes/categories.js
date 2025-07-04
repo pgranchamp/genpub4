@@ -3,7 +3,7 @@
  */
 import express from 'express';
 const router = express.Router();
-import { supabaseAdminRequest } from '../utils/supabaseClient.js';
+import { supabaseAdmin } from '../utils/supabaseClient.js';
 import asyncHandler from 'express-async-handler';
 
 /**
@@ -16,10 +16,12 @@ router.get('/aides-territoire', asyncHandler(async (req, res) => {
     console.log('Récupération des groupes et catégories d\'aides depuis Supabase');
     
     // Requête à Supabase pour récupérer les catégories
-    const categories = await supabaseAdminRequest('GET', 'categories_aides_territoire', null, {
-      select: 'id,categorie,groupe'
-    });
+    const { data: categories, error } = await supabaseAdmin
+      .from('categories_aides_territoire')
+      .select('id,categorie,groupe');
     
+    if (error) throw error;
+
     if (!categories) {
       console.error('Erreur Supabase lors de la récupération des catégories');
       return res.status(500).json({

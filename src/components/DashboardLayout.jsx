@@ -2,12 +2,21 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const DashboardLayout = () => {
-  const { logout } = useAuth();
+  const { logout, forceLogout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    console.log('[DashboardLayout] 🚪 Début handleLogout');
+    try {
+      await logout();
+      navigate('/login');
+      console.log('[DashboardLayout] ✅ Logout terminé avec succès');
+    } catch (error) {
+      console.error('[DashboardLayout] ❌ Erreur logout:', error);
+      // En cas d'erreur, utiliser forceLogout
+      console.log('[DashboardLayout] 🚨 Fallback vers forceLogout');
+      await forceLogout();
+    }
   };
 
   return (

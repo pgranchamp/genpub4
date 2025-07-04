@@ -3,7 +3,7 @@ import process from 'node:process';
 const router = express.Router();
 import asyncHandler from 'express-async-handler';
 import fetch from 'node-fetch';
-import { authenticate } from '../middleware/auth.js';
+import { supabaseAuthenticate } from '../middleware/supabaseAuth.js';
 
 const N8N_BASE_URL = process.env.N8N_BASE_URL;
 
@@ -12,7 +12,7 @@ const N8N_BASE_URL = process.env.N8N_BASE_URL;
  * @desc    Relayer un message au workflow d'onboarding n8n
  * @access  Privé
  */
-router.post('/message', authenticate, asyncHandler(async (req, res) => {
+router.post('/message', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const { workflow, payload } = req.body;
 
   if (!workflow || !payload) {

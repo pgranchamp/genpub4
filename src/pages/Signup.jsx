@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { signup as apiSignup } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
+import { signup } from '../services/authService';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -20,10 +19,11 @@ const Signup = () => {
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
-  const { signup } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+    console.log('[Signup] HandleSubmit triggered');
     setLoading(true);
     setError('');
 
@@ -68,14 +68,18 @@ const Signup = () => {
         return;
       }
 
-      const userData = await apiSignup(email, password, firstName, lastName, organisationData);
+      console.log('[Signup] Calling signup service...');
+      await signup(email, password, firstName, lastName, organisationData);
+      console.log('[Signup] Signup service call finished.');
       
-      await signup(userData);
+      // L'AuthContext gère la mise à jour de l'état, on peut naviguer
+      console.log('[Signup] Navigating to /onboarding');
       navigate('/onboarding');
     } catch (err) {
-      console.error('Erreur d\'inscription:', err);
-      setError('Erreur lors de la création du compte. Cet email est peut-être déjà utilisé.');
+      console.error('[Signup] Erreur d\'inscription capturée:', err);
+      setError(err.message || 'Erreur lors de la création du compte. Cet email est peut-être déjà utilisé.');
     } finally {
+      console.log('[Signup] Finally block, setting loading to false.');
       setLoading(false);
     }
   };

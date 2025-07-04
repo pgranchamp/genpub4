@@ -15,9 +15,10 @@ export {
 export {
   login,
   signup,
+  logout,
   forgotPassword,
-  resetPassword,
-  getMe
+  updateUserPassword,
+  getUserProfile
 } from './authService';
 
 // Exporter les fonctions de gestion des organisations

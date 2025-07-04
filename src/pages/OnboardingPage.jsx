@@ -72,7 +72,7 @@ const OnboardingPage = () => {
         console.log("Bascule vers le workflow 'onboarding-chat'");
         setCurrentWorkflow('onboarding-chat');
         // Déclencher silencieusement le premier message du nouveau workflow
-        handleSendMessageRef.current('start_chat', true); 
+        handleSendMessageRef.current('switch_to_onboarding_chat', true); 
       } else if (nextAction === 'onboarding-end') {
         // L'organisation a été mise à jour, rafraîchissons les données
         refreshOrganisation();

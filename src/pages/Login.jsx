@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
-import { login as apiLogin } from '../services/api';
+import { useState, useEffect } from 'react';
+import { useNavigate, Navigate, Link, useLocation } from 'react-router-dom';
+import { login } from '../services/authService';
 import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
@@ -8,9 +8,21 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
+
+  // Vérifier si l'utilisateur vient de réinitialiser son mot de passe
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    if (urlParams.get('password_updated') === 'true') {
+      setSuccessMessage('Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter.');
+      // Nettoyer l'URL
+      navigate('/login', { replace: true });
+    }
+  }, [location.search, navigate]);
 
   // Si l'utilisateur est déjà connecté, rediriger vers le dashboard
   if (isAuthenticated) {
@@ -23,17 +35,11 @@ const Login = () => {
     setError('');
 
     try {
-      // Appel à l'API pour se connecter
-      const userData = await apiLogin(email, password);
-      
-      // Mise à jour du contexte d'authentification
-      await login(userData);
-      
-      // Redirection vers le dashboard
+      await login(email, password);
+      // La redirection est gérée automatiquement par le contexte d'authentification
       navigate('/dashboard');
     } catch (err) {
-      console.error('Erreur de connexion:', err);
-      setError('Identifiants incorrects. Veuillez réessayer.');
+      setError(err.message || 'Identifiants incorrects. Veuillez réessayer.');
     } finally {
       setLoading(false);
     }
@@ -50,6 +56,12 @@ const Login = () => {
             Connectez-vous à votre compte
           </p>
         </div>
+        
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{successMessage}</span>
+          </div>
+        )}
         
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">

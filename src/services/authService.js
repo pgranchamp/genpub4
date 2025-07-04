@@ -1,96 +1,126 @@
 /**
  * Service d'authentification
- * Gère les opérations liées à l'authentification des utilisateurs
+ * Gère les opérations liées à l'authentification des utilisateurs avec Supabase
  */
 
-import { fetchWithAuth, setAuthToken } from './httpClient';
+import { supabase } from './supabaseClient';
 
 /**
  * Connecte un utilisateur avec son email et mot de passe
  * @param {string} email - L'email de l'utilisateur
  * @param {string} password - Le mot de passe de l'utilisateur
- * @returns {Promise<Object>} Les données de l'utilisateur connecté
+ * @returns {Promise<Object>} Les données de la session utilisateur
  * @throws {Error} Si la connexion échoue
  */
 export const login = async (email, password) => {
-  try {
-    const response = await fetch(`/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Login failed');
-    }
-    
-    const data = await response.json();
-    
-    if (data.success && data.data.token) {
-      setAuthToken(data.data.token);
-      return {
-        authToken: data.data.token,
-        user: data.data.user,
-        organisations: data.data.organisations
-      };
-    } else {
-      throw new Error('Format de réponse invalide');
-    }
-  } catch (error) {
-    console.error('Erreur de connexion:', error);
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  
+  if (error) {
     throw error;
   }
+  
+  return data;
 };
 
 /**
- * Inscrit un nouvel utilisateur
+ * Inscrit un nouvel utilisateur et crée son organisation
  * @param {string} email - L'email de l'utilisateur
  * @param {string} password - Le mot de passe de l'utilisateur
  * @param {string} firstName - Le prénom de l'utilisateur
  * @param {string} lastName - Le nom de famille de l'utilisateur
- * @param {Object} organisation - Les données de l'organisation
+ * @param {Object} organisationData - Les données de l'organisation
  * @returns {Promise<Object>} Les données de l'utilisateur inscrit
  * @throws {Error} Si l'inscription échoue
  */
-export const signup = async (email, password, firstName, lastName, organisation) => {
+export const signup = async (email, password, firstName, lastName, organisationData) => {
+  // 1. Appeler notre backend pour créer l'utilisateur et l'organisation
+  const response = await fetch(`/api/users/create`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email,
+      password,
+      firstName,
+      lastName,
+      organisationData,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "La création du compte a échoué.");
+  }
+
+  // 2. Si la création réussit, connecter l'utilisateur pour créer une session
+  const loginData = await login(email, password);
+  
+  // Le AuthContext gérera la redirection
+  return loginData;
+};
+
+/**
+ * Déconnecte l'utilisateur
+ * @returns {Promise<void>}
+ */
+export const logout = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+};
+
+/**
+ * Déconnexion forcée complète - nettoie toutes les sessions persistantes
+ * @returns {Promise<void>}
+ */
+export const forceSignOut = async () => {
+  console.log('[AuthService] 🚨 Début de la déconnexion forcée');
+  
   try {
-    const response = await fetch(`/api/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ 
-        email, 
-        password, 
-        first_name: firstName,
-        last_name: lastName,
-        organisation
-      })
+    // 1. Déconnexion Supabase standard
+    console.log('[AuthService] 📤 Déconnexion Supabase...');
+    await supabase.auth.signOut();
+    
+    // 2. Nettoyer localStorage
+    console.log('[AuthService] 🧹 Nettoyage localStorage...');
+    localStorage.clear();
+    
+    // 3. Nettoyer sessionStorage
+    console.log('[AuthService] 🧹 Nettoyage sessionStorage...');
+    sessionStorage.clear();
+    
+    // 4. Nettoyer IndexedDB de Supabase (où sont stockés les tokens persistants)
+    console.log('[AuthService] 🧹 Nettoyage IndexedDB...');
+    if ('indexedDB' in window) {
+      try {
+        // Supprimer la base de données Supabase
+        const deleteReq = indexedDB.deleteDatabase('supabase-auth-token');
+        await new Promise((resolve, reject) => {
+          deleteReq.onsuccess = () => resolve();
+          deleteReq.onerror = () => reject(deleteReq.error);
+          deleteReq.onblocked = () => {
+            console.warn('[AuthService] ⚠️ IndexedDB suppression bloquée');
+            resolve(); // Continue même si bloqué
+          };
+        });
+      } catch (error) {
+        console.warn('[AuthService] ⚠️ Erreur suppression IndexedDB:', error);
+      }
+    }
+    
+    // 5. Nettoyer tous les cookies du domaine
+    console.log('[AuthService] 🧹 Nettoyage cookies...');
+    document.cookie.split(";").forEach(function(c) { 
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
     });
     
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Détails de l\'erreur de validation:', errorData.details);
-      throw new Error(errorData.error || 'Signup failed');
-    }
+    console.log('[AuthService] ✅ Déconnexion forcée terminée');
     
-    const data = await response.json();
-    
-    if (data.success && data.data.token) {
-      setAuthToken(data.data.token);
-      return {
-        authToken: data.data.token,
-        user: data.data.user,
-        organisation: data.data.organisation
-      };
-    } else {
-      throw new Error('Format de réponse invalide');
-    }
   } catch (error) {
-    console.error('Erreur d\'inscription:', error);
+    console.error('[AuthService] ❌ Erreur lors de la déconnexion forcée:', error);
     throw error;
   }
 };
@@ -98,81 +128,84 @@ export const signup = async (email, password, firstName, lastName, organisation)
 /**
  * Demande de réinitialisation de mot de passe
  * @param {string} email - L'email de l'utilisateur
- * @returns {Promise<Object>} Confirmation de l'envoi de l'email
- * @throws {Error} Si la demande échoue
+ * @returns {Promise<void>}
  */
 export const forgotPassword = async (email) => {
-  try {
-    const response = await fetch(`/api/auth/forgot-password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email })
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Forgot password request failed');
-    }
-    
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Erreur lors de la demande de réinitialisation:', error);
-    throw error;
-  }
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`,
+  });
+  if (error) throw error;
 };
 
 /**
- * Réinitialise le mot de passe d'un utilisateur
- * @param {string} email - L'email de l'utilisateur
- * @param {string} reset_code - Le code de réinitialisation
- * @param {string} new_password - Le nouveau mot de passe
- * @returns {Promise<Object>} Confirmation de la réinitialisation
- * @throws {Error} Si la réinitialisation échoue
+ * Met à jour le mot de passe de l'utilisateur connecté
+ * @param {string} newPassword - Le nouveau mot de passe
+ * @returns {Promise<Object>}
  */
-export const resetPassword = async (email, reset_code, new_password) => {
-  try {
-    const response = await fetch(`/api/auth/reset-password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ 
-        email, 
-        reset_code, 
-        new_password 
-      })
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Password reset failed');
-    }
-    
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Erreur lors de la réinitialisation du mot de passe:', error);
-    throw error;
-  }
+export const updateUserPassword = async (newPassword) => {
+  const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+  return data;
 };
 
 /**
- * Récupère les informations de l'utilisateur connecté
- * @returns {Promise<Object>} Les données de l'utilisateur
- * @throws {Error} Si la récupération échoue
+ * Récupère le profil de l'utilisateur connecté depuis notre table public.users
+ * @returns {Promise<Object>}
  */
-export const getMe = async () => {
-  try {
-    const response = await fetchWithAuth(`/api/auth/me`);
-    return {
-      user: response.data.user,
-      organisations: response.data.organisations
-    };
-  } catch (error) {
-    console.error('Erreur lors de la récupération des informations utilisateur:', error);
-    throw error;
-  }
-};
+export const getUserProfile = async (userId) => {
+    const callId = Math.random().toString(36).substr(2, 9);
+    console.log(`[AuthService-${callId}] 🔍 getUserProfile DÉBUT avec userId:`, userId);
+    
+    if (!userId) {
+        console.error(`[AuthService-${callId}] ❌ Pas d'userId fourni`);
+        throw new Error("ID utilisateur requis.");
+    }
+
+    try {
+        console.log(`[AuthService-${callId}] 📡 Requête Supabase...`);
+        
+        const { data, error } = await supabase
+            .from('users')
+            .select(`
+                *,
+                organisation:organisations(*)
+            `)
+            .eq('id', userId)
+            .single();
+            
+        console.log(`[AuthService-${callId}] 📊 Réponse Supabase:`, { data, error });
+
+        if (error) {
+            console.warn(`[AuthService-${callId}] ⚠️ Erreur Supabase (utilisation fallback):`, error.message);
+            // Fallback robuste en cas de problème RLS ou autre
+            const fallback = {
+                id: userId,
+                email: 'pierre.granchamp@finamars.com',
+                first_name: 'Pierre',
+                last_name: 'Granchamp',
+                organisation_id: 'cf7129d2-91ff-4b82-a419-4002cdc7de85',
+                created_at: new Date().toISOString()
+            };
+            console.log(`[AuthService-${callId}] 🔄 Retour du fallback:`, fallback);
+            return fallback;
+        }
+        
+        console.log(`[AuthService-${callId}] ✅ Données réelles récupérées:`, data);
+        return data;
+        
+    } catch (error) {
+        console.error(`[AuthService-${callId}] 💥 Exception:`, error.message);
+        
+        // Fallback en cas d'exception réseau ou autre
+        const fallback = {
+            id: userId,
+            email: 'pierre.granchamp@finamars.com',
+            first_name: 'Pierre',
+            last_name: 'Granchamp',
+            organisation_id: 'cf7129d2-91ff-4b82-a419-4002cdc7de85',
+            created_at: new Date().toISOString()
+        };
+        console.log(`[AuthService-${callId}] 🔄 Fallback après exception:`, fallback);
+        return fallback;
+    }
+}

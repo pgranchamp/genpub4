@@ -1,48 +1,44 @@
 /**
  * Client HTTP pour les requêtes API
- * Fournit des fonctions de base pour les requêtes HTTP avec authentification
+ * Fournit des fonctions de base pour les requêtes HTTP avec authentification Supabase
  */
-
-// Plus besoin de API_BASE_URL ici, les appels seront relatifs au domaine courant.
-// La configuration du proxy Vite gérera la redirection en développement.
-
-// Gestion du token d'authentification
-let authToken = null;
 
 /**
- * Définit le token d'authentification et le stocke dans le localStorage
- * @param {string} token - Le token JWT
+ * Récupère le token d'authentification Supabase
+ * @returns {Promise<string|null>} Le token JWT Supabase ou null si non trouvé
  */
-export const setAuthToken = (token) => {
-  authToken = token;
-  localStorage.setItem('authToken', token);
+export const getSupabaseToken = async () => {
+  try {
+    // Essayer de récupérer le token depuis le localStorage directement
+    const keys = Object.keys(localStorage).filter(key => key.includes('supabase.auth.token'));
+    if (keys.length > 0) {
+      const authData = JSON.parse(localStorage.getItem(keys[0]) || '{}');
+      return authData?.access_token || null;
+    }
+    
+    // Fallback : essayer avec une clé générique
+    const genericKey = Object.keys(localStorage).find(key => key.includes('auth-token'));
+    if (genericKey) {
+      const authData = JSON.parse(localStorage.getItem(genericKey) || '{}');
+      return authData?.access_token || null;
+    }
+    
+    return null;
+  } catch (error) {
+    console.warn('Erreur lors de la récupération du token:', error);
+    return null;
+  }
 };
 
 /**
- * Récupère le token d'authentification stocké dans le localStorage
- * @returns {string|null} Le token JWT ou null si non trouvé
- */
-export const getStoredToken = () => {
-  return localStorage.getItem('authToken');
-};
-
-/**
- * Supprime le token d'authentification du localStorage et de la mémoire
- */
-export const clearAuthToken = () => {
-  authToken = null;
-  localStorage.removeItem('authToken');
-};
-
-/**
- * Effectue une requête HTTP avec authentification vers notre propre backend.
- * @param {string} path - Le chemin de l'API (ex: '/api/proxy/some-route')
+ * Effectue une requête HTTP avec authentification Supabase vers notre propre backend.
+ * @param {string} path - Le chemin de l'API (ex: '/api/organisations/me')
  * @param {Object} options - Les options de la requête fetch
  * @returns {Promise<Object>} La réponse JSON
  * @throws {Error} Si la requête échoue
  */
 export const fetchWithAuth = async (path, options = {}) => {
-  const token = authToken || getStoredToken();
+  const token = await getSupabaseToken();
   const headers = { ...options.headers }; // Initialiser avec les headers optionnels
 
   // Ne pas définir Content-Type si le corps est FormData, le navigateur s'en charge.
@@ -54,11 +50,6 @@ export const fetchWithAuth = async (path, options = {}) => {
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  
-  // Si Content-Type est application/json et que le corps n'est pas FormData,
-  // s'assurer que le corps est stringifié s'il ne l'est pas déjà.
-  // Note: projectService.js s'occupe déjà de JSON.stringify pour les corps non-FormData.
-  // Cette logique est donc simplifiée ici.
 
   // En production sur Vercel, fetch(path) fonctionnera car le frontend et l'API sont sur le même domaine.
   // En développement, le proxy Vite interceptera les requêtes vers 'path' (si configuré pour /api/*).
@@ -71,3 +62,8 @@ export const fetchWithAuth = async (path, options = {}) => {
   
   return await response.json();
 };
+
+// Fonctions de compatibilité (non utilisées avec Supabase mais gardées pour éviter les erreurs)
+export const setAuthToken = () => {};
+export const getStoredToken = () => null;
+export const clearAuthToken = () => {};

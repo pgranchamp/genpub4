@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { forgotPassword } from '../services/api';
+import { forgotPassword } from '../services/authService';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [resetCode, setResetCode] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,17 +15,11 @@ const ForgotPassword = () => {
     setSuccess(false);
 
     try {
-      // Appel à l'API pour demander un code de réinitialisation
-      const response = await forgotPassword(email);
+      await forgotPassword(email);
       setSuccess(true);
-      
-      // En mode développement, on peut récupérer le code directement
-      if (response.reset_code) {
-        setResetCode(response.reset_code);
-      }
     } catch (err) {
       console.error('Erreur lors de la demande de réinitialisation:', err);
-      setError('Une erreur est survenue. Veuillez vérifier votre email et réessayer.');
+      setError(err.message || 'Une erreur est survenue. Veuillez vérifier votre email et réessayer.');
     } finally {
       setLoading(false);
     }
@@ -53,19 +46,13 @@ const ForgotPassword = () => {
         {success ? (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
             <p className="font-bold">Demande envoyée</p>
-            <p className="block sm:inline">Un code de réinitialisation a été envoyé à votre adresse email.</p>
-            {resetCode && (
-              <p className="mt-2 text-sm">
-                <span className="font-bold">Code de réinitialisation (mode développement) : </span>
-                {resetCode}
-              </p>
-            )}
+            <p className="block sm:inline">Si un compte existe pour cet email, un lien de réinitialisation a été envoyé.</p>
             <div className="mt-4">
               <Link 
-                to="/reset-password" 
+                to="/login" 
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Continuer vers la réinitialisation
+                Retour à la connexion
               </Link>
             </div>
           </div>
@@ -94,7 +81,7 @@ const ForgotPassword = () => {
                 disabled={loading}
                 className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
-                {loading ? 'Envoi en cours...' : 'Envoyer le code de réinitialisation'}
+                {loading ? 'Envoi en cours...' : 'Envoyer le lien de réinitialisation'}
               </button>
             </div>
             

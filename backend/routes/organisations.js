@@ -4,327 +4,122 @@
 import express from 'express';
 const router = express.Router();
 import asyncHandler from 'express-async-handler';
-import { supabaseAdminRequest } from '../utils/supabaseClient.js';
-import { authenticate } from '../middleware/auth.js';
-import { authenticateService } from '../middleware/authService.js';
-import { validate, schemas } from '../middleware/validate.js';
+import { supabaseAdmin } from '../utils/supabaseClient.js';
+import { supabaseAuthenticate } from '../middleware/supabaseAuth.js';
+import { analyzeAndStoreKeyElements } from '../services/organisationAnalysisService.js';
 
 /**
- * @route   POST /organisations
- * @desc    Créer une nouvelle organisation
- * @access  Privé
+ * @route   POST /api/organisations/setup
+ * @desc    Finaliser l'inscription en créant une organisation et en la liant à l'utilisateur
+ * @access  Privé (requiert un token Supabase valide)
  */
-router.post('/', authenticate, validate(schemas.organisationSchema), asyncHandler(async (req, res) => {
-  const { name, type, siret, address } = req.body;
-  const userId = req.user.id;
+router.post('/setup', supabaseAuthenticate, asyncHandler(async (req, res) => {
+  console.log('[/api/organisations/setup] Requête reçue');
+  const { userId, organisation } = req.body;
+  console.log('[/api/organisations/setup] Body:', req.body);
+  const authUserId = req.user.id;
 
-  // 1. Créer l'organisation
-  const organisationData = {
-    name,
-    type: type || null,
-    siret: siret || null,
-    address: address || null
-  };
-
-  const newOrganisation = await supabaseAdminRequest('POST', 'organisations', organisationData);
-  
-  if (!newOrganisation || !newOrganisation[0] || !newOrganisation[0].id) {
-    return res.status(500).json({
-      success: false,
-      error: 'Erreur lors de la création de l\'organisation',
-      code: 'SERVER_ERROR'
-    });
+  // Sécurité : Vérifier que l'ID utilisateur de la requête correspond à celui du token
+  if (userId !== authUserId) {
+    return res.status(403).json({ success: false, error: 'Interdit. L\'ID utilisateur ne correspond pas au token.' });
   }
 
-  const organisationId = newOrganisation[0].id;
+  try {
+    // 1. Créer l'organisation
+    const { data: newOrganisationData, error: orgError } = await supabaseAdmin
+      .from('organisations')
+      .insert(organisation)
+      .select();
 
-  // 2. Associer l'utilisateur à l'organisation (table de liaison)
-  const userOrganisationData = {
-    user_id: userId,
-    organisation_id: organisationId,
-    role: 'admin' // Rôle par défaut pour le créateur
-  };
+    if (orgError) throw orgError;
+    const newOrganisation = newOrganisationData[0];
 
-  await supabaseAdminRequest('POST', 'users_organisations', userOrganisationData);
+    // 2. Lier l'organisation à l'utilisateur
+    const { error: userUpdateError } = await supabaseAdmin
+      .from('users')
+      .update({ organisation_id: newOrganisation.id })
+      .eq('id', userId);
 
-  // 3. Retourner les informations de l'organisation créée
-  res.status(201).json({
-    success: true,
-    data: {
-      id: organisationId,
-      name,
-      type: type || null,
-      siret: siret || null,
-      address: address || null,
-      created_at: newOrganisation[0].created_at
+    if (userUpdateError) {
+      // Rollback: supprimer l'organisation si la liaison échoue
+      await supabaseAdmin.from('organisations').delete().eq('id', newOrganisation.id);
+      throw userUpdateError;
     }
-  });
+    
+    // Lancer l'analyse du site web en arrière-plan
+    if (newOrganisation.website_url) {
+      analyzeAndStoreKeyElements(newOrganisation.id, newOrganisation.website_url)
+        .catch(err => console.error(`Erreur non bloquante lors de l'analyse du site web pour l'organisation ${newOrganisation.id}:`, err));
+    }
+
+    res.status(201).json({ success: true, data: newOrganisation });
+
+  } catch (error) {
+    console.error(`Erreur lors de la configuration de l'organisation pour l'utilisateur ${userId}:`, error);
+    res.status(500).json({ success: false, error: 'Erreur serveur lors de la création de l\'organisation.' });
+  }
 }));
 
 /**
- * @route   GET /organisations
- * @desc    Récupérer les organisations de l'utilisateur connecté
+ * @route   GET /api/organisations/me
+ * @desc    Récupérer l'organisation de l'utilisateur connecté
  * @access  Privé
  */
-router.get('/', authenticate, asyncHandler(async (req, res) => {
+router.get('/me', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
-  // 1. Récupérer les associations utilisateur-organisations
-  const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
-    select: 'organisation_id,role',
-    user_id: `eq.${userId}`
-  });
+  const { data: user, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('organisation_id')
+    .eq('id', userId)
+    .single();
 
-  if (!userOrganisations || userOrganisations.length === 0) {
-    return res.json({
-      success: true,
-      data: []
-    });
+  if (userError || !user || !user.organisation_id) {
+    return res.status(404).json({ success: false, error: 'Organisation non trouvée pour cet utilisateur.' });
   }
 
-  // 2. Récupérer les détails des organisations
-  const organisationIds = userOrganisations.map(uo => uo.organisation_id);
-  const organisationIdsQuery = `in.(${organisationIds.join(',')})`;
-  
-  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
-    select: '*',
-    id: organisationIdsQuery
-  });
+  const { data: organisation, error: orgError } = await supabaseAdmin
+    .from('organisations')
+    .select('*')
+    .eq('id', user.organisation_id)
+    .single();
 
-  // 3. Ajouter le rôle à chaque organisation
-  const organisationsWithRole = organisations.map(org => {
-    const userOrg = userOrganisations.find(uo => uo.organisation_id === org.id);
-    return {
-      ...org,
-      role: userOrg ? userOrg.role : null
-    };
-  });
+  if (orgError) throw orgError;
 
-  res.json({
-    success: true,
-    data: organisationsWithRole
-  });
+  res.json({ success: true, data: organisation });
 }));
 
 /**
- * @route   GET /organisations/me
- * @desc    Récupérer l'organisation principale de l'utilisateur connecté
- * @access  Privé
+ * @route   PATCH /api/organisations/:id
+ * @desc    Mettre à jour une organisation
+ * @access  Privé (seul un membre de l'organisation peut la modifier)
  */
-router.get('/me', authenticate, asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-
-  // 1. Récupérer la première association utilisateur-organisation
-  const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
-    select: 'organisation_id,role',
-    user_id: `eq.${userId}`,
-    limit: 1
-  });
-
-  if (!userOrganisations || userOrganisations.length === 0) {
-    return res.status(404).json({
-      success: false,
-      error: 'Aucune organisation associée à cet utilisateur',
-      code: 'NO_ORGANISATION_FOUND'
-    });
-  }
-
-  const { organisation_id, role } = userOrganisations[0];
-
-  // 2. Récupérer les détails complets de l'organisation
-  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
-    select: '*',
-    id: `eq.${organisation_id}`
-  });
-
-  if (!organisations || organisations.length === 0) {
-    return res.status(404).json({
-      success: false,
-      error: 'Organisation non trouvée',
-      code: 'NOT_FOUND'
-    });
-  }
-
-  // 3. Ajouter le rôle de l'utilisateur à l'objet organisation
-  const organisation = {
-    ...organisations[0],
-    role
-  };
-
-  res.json({
-    success: true,
-    data: organisation
-  });
-}));
-
-/**
- * @route   GET /organisations/:id
- * @desc    Récupérer une organisation par son ID
- * @access  Privé
- */
-router.get('/:id', authenticate, asyncHandler(async (req, res) => {
+router.patch('/:id', supabaseAuthenticate, asyncHandler(async (req, res) => {
   const organisationId = req.params.id;
   const userId = req.user.id;
+  const updateData = req.body;
 
-  // 1. Vérifier si l'utilisateur a accès à cette organisation
-  const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
-    select: 'role',
-    user_id: `eq.${userId}`,
-    organisation_id: `eq.${organisationId}`
-  });
+  // 1. Vérifier que l'utilisateur appartient bien à l'organisation qu'il tente de modifier
+  const { data: user, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('organisation_id')
+    .eq('id', userId)
+    .single();
 
-  if (!userOrganisations || userOrganisations.length === 0) {
-    return res.status(403).json({
-      success: false,
-      error: 'Vous n\'avez pas accès à cette organisation',
-      code: 'FORBIDDEN'
-    });
+  if (userError || user.organisation_id !== organisationId) {
+    return res.status(403).json({ success: false, error: 'Accès interdit. Vous n\'appartenez pas à cette organisation.' });
   }
 
-  // 2. Récupérer les détails de l'organisation
-  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
-    select: '*',
-    id: `eq.${organisationId}`
-  });
+  // 2. Mettre à jour l'organisation
+  const { data: updatedOrganisation, error: updateError } = await supabaseAdmin
+    .from('organisations')
+    .update(updateData)
+    .eq('id', organisationId)
+    .select();
 
-  if (!organisations || organisations.length === 0) {
-    return res.status(404).json({
-      success: false,
-      error: 'Organisation non trouvée',
-      code: 'NOT_FOUND'
-    });
-  }
+  if (updateError) throw updateError;
 
-  // 3. Ajouter le rôle de l'utilisateur
-  const organisation = {
-    ...organisations[0],
-    role: userOrganisations[0].role
-  };
-
-  res.json({
-    success: true,
-    data: organisation
-  });
-}));
-
-/**
- * @route   PATCH /organisations/:id
- * @desc    Mettre à jour une organisation par son ID
- * @access  Privé
- */
-router.patch('/:id', authenticate, asyncHandler(async (req, res) => {
-  const organisationId = req.params.id;
-  const userId = req.user.id;
-  const { nom, type, adresse, siret } = req.body;
-
-  // 1. Vérifier si l'utilisateur a accès à cette organisation
-  const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
-    select: 'role',
-    user_id: `eq.${userId}`,
-    organisation_id: `eq.${organisationId}`
-  });
-
-  if (!userOrganisations || userOrganisations.length === 0) {
-    return res.status(403).json({
-      success: false,
-      error: 'Vous n\'avez pas accès à cette organisation',
-      code: 'FORBIDDEN'
-    });
-  }
-
-  // 2. Vérifier si l'utilisateur a les droits pour modifier l'organisation (admin ou membre)
-  const userRole = userOrganisations[0].role;
-  if (userRole !== 'admin' && userRole !== 'member') {
-    return res.status(403).json({
-      success: false,
-      error: 'Vous n\'avez pas les droits pour modifier cette organisation',
-      code: 'FORBIDDEN'
-    });
-  }
-
-  // 3. Préparer les données à mettre à jour
-  const updateData = {};
-  if (nom !== undefined) updateData.name = nom;
-  if (type !== undefined) updateData.type = type;
-  if (adresse !== undefined) updateData.address = adresse;
-  if (siret !== undefined) updateData.siret = siret;
-
-  // 4. Mettre à jour l'organisation
-  const updatedOrganisation = await supabaseAdminRequest('PATCH', `organisations?id=eq.${organisationId}`, updateData);
-
-  if (!updatedOrganisation || updatedOrganisation.length === 0) {
-    return res.status(500).json({
-      success: false,
-      error: 'Erreur lors de la mise à jour de l\'organisation',
-      code: 'SERVER_ERROR'
-    });
-  }
-
-  // 5. Récupérer les détails mis à jour de l'organisation
-  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
-    select: '*',
-    id: `eq.${organisationId}`
-  });
-
-  if (!organisations || organisations.length === 0) {
-    return res.status(404).json({
-      success: false,
-      error: 'Organisation non trouvée après mise à jour',
-      code: 'NOT_FOUND'
-    });
-  }
-
-  // 6. Ajouter le rôle de l'utilisateur
-  const organisation = {
-    ...organisations[0],
-    role: userRole
-  };
-
-  res.json({
-    success: true,
-    data: organisation
-  });
-}));
-
-// Route de test pour le middleware de service
-router.post('/test-service-auth', authenticateService, (req, res) => {
-  res.json({ success: true, message: 'Token de service authentifié avec succès.' });
-});
-
-/**
- * @route   GET /organisations/me/status
- * @desc    Vérifier le statut de l'analyse de l'organisation de l'utilisateur
- * @access  Privé
- */
-router.get('/me/status', authenticate, asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-
-  // Récupérer l'organisation principale de l'utilisateur
-  const userOrganisations = await supabaseAdminRequest('GET', 'users_organisations', null, {
-    select: 'organisation_id',
-    user_id: `eq.${userId}`,
-    is_default: 'eq.true'
-  });
-
-  if (!userOrganisations || userOrganisations.length === 0) {
-    return res.status(404).json({ success: false, error: 'Organisation par défaut non trouvée.' });
-  }
-
-  const organisationId = userOrganisations[0].organisation_id;
-
-  // Vérifier si les key_elements sont remplis
-  const organisations = await supabaseAdminRequest('GET', 'organisations', null, {
-    select: 'key_elements',
-    id: `eq.${organisationId}`
-  });
-
-  if (!organisations || organisations.length === 0) {
-    return res.status(404).json({ success: false, error: 'Organisation non trouvée.' });
-  }
-
-  const analysisComplete = !!organisations[0].key_elements;
-
-  res.json({ success: true, analysisComplete });
+  res.json({ success: true, data: updatedOrganisation[0] });
 }));
 
 export default router;

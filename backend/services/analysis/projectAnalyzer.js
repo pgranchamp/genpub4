@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import 'dotenv/config';
-import { supabaseAdminRequest } from '../../utils/supabaseClient.js';
+import process from 'node:process';
+import { supabaseAdmin } from '../../utils/supabaseClient.js';
 
 const N8N_BASE_URL = process.env.N8N_BASE_URL;
 
@@ -14,24 +15,27 @@ export const analyzeProjectWorkflow = async (projectId, userId) => {
   console.log(`[ProjectAnalyzer] Démarrage de l'analyse pour le projet ${projectId}`);
 
   // 1. Récupérer les détails du projet (description)
-  const projects = await supabaseAdminRequest('GET', `projects?id=eq.${projectId}&select=id,description`);
-  if (!projects || projects.length === 0) {
-    throw new Error(`Projet ${projectId} non trouvé.`);
-  }
-  const project = projects[0];
+  const { data: project, error: projectError } = await supabaseAdmin
+    .from('projects')
+    .select('id, description')
+    .eq('id', projectId)
+    .single();
+  if (projectError) throw projectError;
 
   // 2. Récupérer le contexte de l'organisation
-  const userOrgs = await supabaseAdminRequest('GET', `users_organisations?user_id=eq.${userId}&select=organisation_id`);
-  if (!userOrgs || userOrgs.length === 0) {
-    throw new Error(`Aucune organisation trouvée pour l'utilisateur ${userId}.`);
-  }
-  const organisationId = userOrgs[0].organisation_id;
-
-  const orgs = await supabaseAdminRequest('GET', `organisations?id=eq.${organisationId}&select=key_elements`);
-  if (!orgs || orgs.length === 0) {
-    throw new Error(`Détails de l'organisation ${organisationId} non trouvés.`);
-  }
-  const organisation = orgs[0];
+  const { data: user, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('organisation_id')
+    .eq('id', userId)
+    .single();
+  if (userError || !user.organisation_id) throw userError || new Error(`Aucune organisation trouvée pour l'utilisateur ${userId}.`);
+  
+  const { data: organisation, error: orgError } = await supabaseAdmin
+    .from('organisations')
+    .select('key_elements')
+    .eq('id', user.organisation_id)
+    .single();
+  if (orgError) throw orgError;
 
   // 3. Construire le payload pour n8n
   const payload = {
@@ -74,8 +78,15 @@ export const analyzeProjectWorkflow = async (projectId, userId) => {
     status: 'projet_analyse',
   };
 
-  const [updatedProject] = await supabaseAdminRequest('PATCH', `projects?id=eq.${projectId}`, updatedData);
+  const { data: updatedProject, error } = await supabaseAdmin
+    .from('projects')
+    .update(updatedData)
+    .eq('id', projectId)
+    .select();
+
+  if (error) throw error;
+
   console.log(`[ProjectAnalyzer] Projet ${projectId} mis à jour avec succès.`);
 
-  return updatedProject;
+  return updatedProject[0];
 };

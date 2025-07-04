@@ -22,6 +22,7 @@ import TestAidesTerritoires from './pages/TestAidesTerritoires'; // Importer la 
 import TestCurl from './pages/TestCurl'; // Importer la nouvelle page de test
 import OnboardingPage from './pages/OnboardingPage'; // Importer la nouvelle page
 import InvitePage from './pages/InvitePage';
+import ForceLogout from './pages/ForceLogout'; // Page de déconnexion forcée
 import './App.css';
 
 // Création du routeur avec routes imbriquées
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
   {
     path: '/test-curl',
     element: <TestCurl />
+  },
+  {
+    path: '/force-logout',
+    element: <ForceLogout />
   }
 ]);
 
