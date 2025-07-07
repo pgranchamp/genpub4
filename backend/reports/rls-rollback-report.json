@@ -1,0 +1,27 @@
+{
+  "disabled": [],
+  "alreadyDisabled": [],
+  "errors": [
+    {
+      "table": "users",
+      "error": "Erreur de vérification du statut"
+    },
+    {
+      "table": "organisations",
+      "error": "Erreur de vérification du statut"
+    },
+    {
+      "table": "projects",
+      "error": "Erreur de vérification du statut"
+    },
+    {
+      "table": "projects_aides",
+      "error": "Erreur de vérification du statut"
+    },
+    {
+      "table": "categories_aides_territoire",
+      "error": "Erreur de vérification du statut"
+    }
+  ],
+  "timestamp": "2025-07-07T12:18:25.235Z"
+}

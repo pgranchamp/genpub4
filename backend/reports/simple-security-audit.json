@@ -1,18 +1,18 @@
 {
-  "timestamp": "2025-07-07T12:03:56.873Z",
+  "timestamp": "2025-07-07T12:13:32.093Z",
   "tables": {
     "users": {
       "exists": true,
       "select": {
         "success": true,
         "error": null,
-        "responseTime": 95,
+        "responseTime": 90,
         "sampleRecords": 2
       },
       "count": {
         "success": true,
         "error": null,
-        "responseTime": 72,
+        "responseTime": 51,
         "totalRecords": 2
       },
       "status": "ACCESSIBLE",
@@ -23,13 +23,13 @@
       "select": {
         "success": true,
         "error": null,
-        "responseTime": 93,
+        "responseTime": 110,
         "sampleRecords": 2
       },
       "count": {
         "success": true,
         "error": null,
-        "responseTime": 122,
+        "responseTime": 100,
         "totalRecords": 2
       },
       "status": "ACCESSIBLE",
@@ -40,13 +40,13 @@
       "select": {
         "success": true,
         "error": null,
-        "responseTime": 67,
+        "responseTime": 246,
         "sampleRecords": 3
       },
       "count": {
         "success": true,
         "error": null,
-        "responseTime": 117,
+        "responseTime": 113,
         "totalRecords": 6
       },
       "status": "ACCESSIBLE",
@@ -57,13 +57,13 @@
       "select": {
         "success": true,
         "error": null,
-        "responseTime": 102,
+        "responseTime": 57,
         "sampleRecords": 0
       },
       "count": {
         "success": true,
         "error": null,
-        "responseTime": 122,
+        "responseTime": 82,
         "totalRecords": 0
       },
       "status": "ACCESSIBLE",
@@ -80,7 +80,7 @@
       "count": {
         "success": true,
         "error": null,
-        "responseTime": 88,
+        "responseTime": 94,
         "totalRecords": 87
       },
       "status": "ACCESSIBLE",

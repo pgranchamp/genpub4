@@ -13,6 +13,9 @@
     "security:rls": "node scripts/rls-checker.js",
     "security:permissions": "node scripts/permissions-test.js",
     "security:monitor": "node scripts/security-monitor.js",
+    "security:simple": "node scripts/simple-security-audit.js",
+    "security:rollback": "node scripts/disable-rls-rollback.js",
+    "security:rollback-simple": "node scripts/disable-rls-simple.js",
     "security:all": "npm run security:audit && npm run security:rls && npm run security:permissions"
   },
   "dependencies": {

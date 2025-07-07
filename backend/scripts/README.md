@@ -17,10 +17,12 @@ La suite comprend 4 outils principaux :
 
 ```bash
 # Depuis le dossier backend/
+npm run security:simple       # Audit rapide (recommandé)
 npm run security:audit        # Audit général
 npm run security:rls          # Vérification RLS
 npm run security:permissions  # Tests permissions
 npm run security:monitor      # Monitoring temps réel
+npm run security:rollback-simple  # Rollback RLS (génère SQL)
 npm run security:all          # Tous les audits (sauf monitoring)
 ```
 
@@ -176,6 +178,35 @@ npm run security:permissions
 # Démarrer le monitoring en production
 npm run security:monitor
 ```
+
+## 🔙 Script de Rollback RLS
+
+### Rollback Simple (`disable-rls-simple.js`)
+
+**Objectif** : Générer les commandes SQL pour désactiver RLS en cas de problème
+
+**Fonctionnalités** :
+- 🔍 Vérification du statut RLS actuel
+- 📝 Génération des commandes SQL de rollback
+- 💾 Sauvegarde des rapports et fichiers SQL
+- 🎯 Instructions claires pour l'exécution
+
+**Utilisation** :
+```bash
+npm run security:rollback-simple
+```
+
+**Sortie** :
+- `backend/reports/disable-rls-commands.sql` - **Fichier SQL à exécuter**
+- `backend/reports/rls-rollback-simple.json` - Rapport détaillé
+- `backend/reports/rls-rollback-simple-summary.txt` - Résumé
+
+**Procédure de rollback** :
+1. Exécuter le script : `npm run security:rollback-simple`
+2. Ouvrir Supabase Dashboard > SQL Editor
+3. Copier/coller le contenu de `disable-rls-commands.sql`
+4. Exécuter les commandes SQL
+5. Vérifier avec : `npm run security:simple`
 
 ## 🚨 Actions critiques identifiées
 

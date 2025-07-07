@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-07-07T12:19:36.607Z",
+  "currentStatus": {
+    "users": "disabled",
+    "organisations": "disabled",
+    "projects": "disabled",
+    "projects_aides": "disabled",
+    "categories_aides_territoire": "disabled"
+  },
+  "sqlCommands": [
+    "ALTER TABLE users DISABLE ROW LEVEL SECURITY;",
+    "ALTER TABLE organisations DISABLE ROW LEVEL SECURITY;",
+    "ALTER TABLE projects DISABLE ROW LEVEL SECURITY;",
+    "ALTER TABLE projects_aides DISABLE ROW LEVEL SECURITY;",
+    "ALTER TABLE categories_aides_territoire DISABLE ROW LEVEL SECURITY;"
+  ],
+  "tablesWithRLS": [],
+  "tablesWithoutRLS": [
+    "users",
+    "organisations",
+    "projects",
+    "projects_aides",
+    "categories_aides_territoire"
+  ],
+  "tablesWithErrors": []
+}

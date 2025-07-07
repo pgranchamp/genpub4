@@ -1,0 +1,30 @@
+
+RAPPORT DE ROLLBACK RLS - 07/07/2025 14:18:25
+=========================================================
+
+📊 RÉSUMÉ:
+- Tables avec RLS désactivé: 0
+- Tables déjà désactivées: 0  
+- Tables en erreur: 5
+
+✅ TABLES RLS DÉSACTIVÉ:
+  Aucune
+
+🔓 TABLES DÉJÀ DÉSACTIVÉES:
+  Aucune
+
+❌ ERREURS:
+  - users: Erreur de vérification du statut
+  - organisations: Erreur de vérification du statut
+  - projects: Erreur de vérification du statut
+  - projects_aides: Erreur de vérification du statut
+  - categories_aides_territoire: Erreur de vérification du statut
+
+📝 COMMANDES SQL MANUELLES (si nécessaire):
+  Aucune
+
+🔄 POUR RÉACTIVER RLS:
+  npm run security:enable-rls
+
+📋 POUR VÉRIFIER LE STATUT:
+  npm run security:simple

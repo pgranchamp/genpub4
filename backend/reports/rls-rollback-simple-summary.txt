@@ -1,0 +1,33 @@
+
+RAPPORT DE ROLLBACK RLS SIMPLE - 07/07/2025 14:19:36
+==============================================================
+
+📊 STATUT ACTUEL:
+- Tables avec RLS activé: 0
+- Tables avec RLS désactivé: 5  
+- Tables en erreur: 0
+
+🔒 TABLES AVEC RLS ACTIVÉ:
+  Aucune
+
+🔓 TABLES AVEC RLS DÉSACTIVÉ:
+  - users
+  - organisations
+  - projects
+  - projects_aides
+  - categories_aides_territoire
+
+❌ TABLES EN ERREUR:
+  Aucune
+
+📝 FICHIER SQL GÉNÉRÉ:
+  /Users/Pierre/Library/CloudStorage/GoogleDrive-pierre.granchamp@finamars.com/Mon Drive/Finamars/IA/Apps/Génie Public V4/backend/reports/disable-rls-commands.sql
+
+🎯 INSTRUCTIONS DE ROLLBACK:
+1. Ouvrir Supabase Dashboard > SQL Editor
+2. Copier/coller le contenu du fichier SQL généré
+3. Exécuter les commandes une par une ou toutes ensemble
+4. Vérifier avec: npm run security:simple
+
+🔄 POUR RÉACTIVER RLS PLUS TARD:
+  Utiliser: npm run security:enable-rls
