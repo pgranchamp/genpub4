@@ -33,6 +33,7 @@ router.post('/message', supabaseAuthenticate, asyncHandler(async (req, res) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.N8N_SERVICE_API_KEY}`
       },
       body: JSON.stringify(enrichedPayload),
     });

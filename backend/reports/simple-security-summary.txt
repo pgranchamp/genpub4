@@ -1,0 +1,23 @@
+🔍 RAPPORT AUDIT SÉCURITÉ SIMPLE
+================================
+Date: 07/07/2025 14:03:56
+Niveau de risque: CRITIQUE
+
+📊 RÉSUMÉ:
+- Tables analysées: 5
+- Tables accessibles (RLS désactivé): 5
+- Tables protégées (RLS activé): 0
+- Tables en erreur: 0
+
+🚨 ACTIONS PRIORITAIRES:
+- users: Activer RLS: ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+- organisations: Activer RLS: ALTER TABLE organisations ENABLE ROW LEVEL SECURITY;
+- projects: Activer RLS: ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+- projects_aides: Activer RLS: ALTER TABLE projects_aides ENABLE ROW LEVEL SECURITY;
+- categories_aides_territoire: Activer RLS: ALTER TABLE categories_aides_territoire ENABLE ROW LEVEL SECURITY;
+
+📋 PROCHAINES ÉTAPES:
+1. Activer RLS sur les tables non protégées
+2. Créer des policies appropriées
+3. Tester les permissions après activation
+4. Configurer le monitoring de sécurité

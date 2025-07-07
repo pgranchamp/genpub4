@@ -1,0 +1,134 @@
+{
+  "timestamp": "2025-07-07T12:03:56.873Z",
+  "tables": {
+    "users": {
+      "exists": true,
+      "select": {
+        "success": true,
+        "error": null,
+        "responseTime": 95,
+        "sampleRecords": 2
+      },
+      "count": {
+        "success": true,
+        "error": null,
+        "responseTime": 72,
+        "totalRecords": 2
+      },
+      "status": "ACCESSIBLE",
+      "rlsStatus": "DÉSACTIVÉ"
+    },
+    "organisations": {
+      "exists": true,
+      "select": {
+        "success": true,
+        "error": null,
+        "responseTime": 93,
+        "sampleRecords": 2
+      },
+      "count": {
+        "success": true,
+        "error": null,
+        "responseTime": 122,
+        "totalRecords": 2
+      },
+      "status": "ACCESSIBLE",
+      "rlsStatus": "DÉSACTIVÉ"
+    },
+    "projects": {
+      "exists": true,
+      "select": {
+        "success": true,
+        "error": null,
+        "responseTime": 67,
+        "sampleRecords": 3
+      },
+      "count": {
+        "success": true,
+        "error": null,
+        "responseTime": 117,
+        "totalRecords": 6
+      },
+      "status": "ACCESSIBLE",
+      "rlsStatus": "DÉSACTIVÉ"
+    },
+    "projects_aides": {
+      "exists": true,
+      "select": {
+        "success": true,
+        "error": null,
+        "responseTime": 102,
+        "sampleRecords": 0
+      },
+      "count": {
+        "success": true,
+        "error": null,
+        "responseTime": 122,
+        "totalRecords": 0
+      },
+      "status": "ACCESSIBLE",
+      "rlsStatus": "DÉSACTIVÉ"
+    },
+    "categories_aides_territoire": {
+      "exists": true,
+      "select": {
+        "success": true,
+        "error": null,
+        "responseTime": 60,
+        "sampleRecords": 3
+      },
+      "count": {
+        "success": true,
+        "error": null,
+        "responseTime": 88,
+        "totalRecords": 87
+      },
+      "status": "ACCESSIBLE",
+      "rlsStatus": "DÉSACTIVÉ"
+    }
+  },
+  "summary": {
+    "totalTables": 5,
+    "accessibleTables": 5,
+    "protectedTables": 0,
+    "errorTables": 0,
+    "riskLevel": "CRITIQUE"
+  },
+  "recommendations": [
+    {
+      "priority": "CRITIQUE",
+      "table": "users",
+      "issue": "RLS désactivé",
+      "action": "Activer RLS: ALTER TABLE users ENABLE ROW LEVEL SECURITY;",
+      "risk": "Accès non contrôlé aux données"
+    },
+    {
+      "priority": "CRITIQUE",
+      "table": "organisations",
+      "issue": "RLS désactivé",
+      "action": "Activer RLS: ALTER TABLE organisations ENABLE ROW LEVEL SECURITY;",
+      "risk": "Accès non contrôlé aux données"
+    },
+    {
+      "priority": "CRITIQUE",
+      "table": "projects",
+      "issue": "RLS désactivé",
+      "action": "Activer RLS: ALTER TABLE projects ENABLE ROW LEVEL SECURITY;",
+      "risk": "Accès non contrôlé aux données"
+    },
+    {
+      "priority": "CRITIQUE",
+      "table": "projects_aides",
+      "issue": "RLS désactivé",
+      "action": "Activer RLS: ALTER TABLE projects_aides ENABLE ROW LEVEL SECURITY;",
+      "risk": "Accès non contrôlé aux données"
+    },
+    {
+      "priority": "CRITIQUE",
+      "table": "categories_aides_territoire",
+      "issue": "RLS désactivé",
+      "action": "Activer RLS: ALTER TABLE categories_aides_territoire ENABLE ROW LEVEL SECURITY;",
+      "risk": "Accès non contrôlé aux données"
+    }
+  ]
+}

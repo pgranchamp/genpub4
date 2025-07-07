@@ -30,6 +30,7 @@ export const selectAidesWithN8N = async (jobId, batchId, key_elements, projectCo
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.N8N_SERVICE_API_KEY}`
       },
       body: JSON.stringify(payload),
     });

@@ -272,8 +272,21 @@ const ProjectDetail = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8 text-left">
-        <h1 className="text-3xl font-extrabold text-gray-900">{project.title}</h1>
-        <p className="text-sm text-gray-500 mt-1">Statut : <span className="font-semibold">{project.status}</span></p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-extrabold text-gray-900">{project.title}</h1>
+            <p className="text-sm text-gray-500 mt-1">Statut : <span className="font-semibold">{project.status}</span></p>
+          </div>
+          <button
+            onClick={() => navigate(`/projects/${project.id}/edit`)}
+            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Modifier le projet
+          </button>
+        </div>
       </div>
 
       {project.summary && renderCard("Résumé du projet", <p className="whitespace-pre-wrap text-gray-700">{project.summary}</p>, true)}

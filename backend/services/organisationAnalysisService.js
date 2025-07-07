@@ -24,6 +24,7 @@ const analyzeAndStoreKeyElements = async (organisationId, websiteUrl) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.N8N_SERVICE_API_KEY}`
       },
       body: JSON.stringify({ url: websiteUrl }),
     });

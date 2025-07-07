@@ -17,6 +17,7 @@ import ContactForm from './pages/ContactForm';
 import CreateOrganization from './pages/CreateOrganization';
 import SubmitProject from './pages/SubmitProject';
 import ProjectDetail from './pages/ProjectDetail';
+import EditProject from './pages/EditProject';
 import ProjectAides from './pages/ProjectAides';
 import TestAidesTerritoires from './pages/TestAidesTerritoires'; // Importer la page de test
 import TestCurl from './pages/TestCurl'; // Importer la nouvelle page de test
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: 'projects/:id',
         element: <ProjectDetail />
+      },
+      {
+        path: 'projects/:id/edit',
+        element: <EditProject />
       },
       {
         path: 'projects/:projectId/aides', 

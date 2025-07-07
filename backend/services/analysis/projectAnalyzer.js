@@ -50,7 +50,10 @@ export const analyzeProjectWorkflow = async (projectId, userId) => {
 
   const n8nResponse = await fetch(webhookUrl, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.N8N_SERVICE_API_KEY}`
+    },
     body: JSON.stringify(payload),
   });
 

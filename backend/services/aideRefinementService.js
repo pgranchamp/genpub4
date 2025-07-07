@@ -29,6 +29,7 @@ export const refineAidesBatch = async (aides, projectContext, refinementJobId, b
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.N8N_SERVICE_API_KEY}`
       },
       body: JSON.stringify(payload),
     });
@@ -92,6 +93,7 @@ export const refineSingleAide = async (aideDetails, projectContext) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.N8N_SERVICE_API_KEY}`
       },
       body: JSON.stringify(payload),
     });

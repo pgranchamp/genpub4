@@ -102,6 +102,80 @@ router.post('/', supabaseAuthenticate, asyncHandler(async (req, res) => {
 }));
 
 /**
+ * @route   PATCH /api/projects/:id
+ * @desc    Mettre à jour un projet spécifique
+ * @access  Privé
+ */
+router.patch('/:id', supabaseAuthenticate, asyncHandler(async (req, res) => {
+  const { id: projectId } = req.params;
+  const userId = req.user.id;
+  const { title, reformulation, keywords, id_categories_aides_territoire } = req.body;
+
+  try {
+    // Validation des données
+    if (title && !title.trim()) {
+      return res.status(400).json({ success: false, error: 'Le titre ne peut pas être vide.' });
+    }
+
+    // Validation des catégories (limite de 8)
+    if (id_categories_aides_territoire) {
+      let categoryIds;
+      try {
+        categoryIds = typeof id_categories_aides_territoire === 'string' 
+          ? JSON.parse(id_categories_aides_territoire) 
+          : id_categories_aides_territoire;
+      } catch {
+        return res.status(400).json({ success: false, error: 'Format des catégories invalide.' });
+      }
+
+      if (Array.isArray(categoryIds) && categoryIds.length > 8) {
+        return res.status(400).json({ success: false, error: 'Maximum 8 catégories autorisées.' });
+      }
+    }
+
+    // Vérifier que le projet appartient à l'utilisateur
+    const { data: existingProjects, error: checkError } = await supabaseAdmin
+      .from('projects')
+      .select('id')
+      .eq('id', projectId)
+      .eq('user_id', userId);
+
+    if (checkError) throw checkError;
+
+    if (!existingProjects || existingProjects.length === 0) {
+      return res.status(404).json({ success: false, error: 'Projet non trouvé ou accès non autorisé.' });
+    }
+
+    // Préparer les données à mettre à jour
+    const updateData = {};
+    if (title !== undefined) updateData.title = title.trim();
+    if (reformulation !== undefined) updateData.reformulation = reformulation;
+    if (keywords !== undefined) updateData.keywords = keywords;
+    if (id_categories_aides_territoire !== undefined) updateData.id_categories_aides_territoire = id_categories_aides_territoire;
+
+    // Mettre à jour le projet
+    const { data: updatedProject, error: updateError } = await supabaseAdmin
+      .from('projects')
+      .update(updateData)
+      .eq('id', projectId)
+      .eq('user_id', userId)
+      .select();
+
+    if (updateError) throw updateError;
+
+    if (!updatedProject || updatedProject.length === 0) {
+      return res.status(404).json({ success: false, error: 'Projet non trouvé après mise à jour.' });
+    }
+
+    res.json({ success: true, data: updatedProject[0] });
+
+  } catch (error) {
+    console.error(`Erreur lors de la mise à jour du projet ${projectId}:`, error);
+    res.status(500).json({ success: false, error: 'Erreur serveur lors de la mise à jour du projet.' });
+  }
+}));
+
+/**
  * @route   GET /api/projects/:id
  * @desc    Récupérer un projet spécifique par son ID
  * @access  Privé
